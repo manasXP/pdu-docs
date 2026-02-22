@@ -61,6 +61,16 @@ For medical/precision applications like your robotics work, prioritize SiC-based
 - [[09-Protection and Safety]] -- OVP/OCP/OTP/short-circuit/ground-fault protection design, insulation coordination, surge immunity, hipot requirements, safety compliance matrix (IEC 61851-23, IEC 62368-1, UL 2202)
 - [[12-Project-Management/__init|12-Project Management]] -- 9 epics, 123 stories across all disciplines: design review, prototype build, firmware bring-up, system integration, Rev B, firmware maturation, certification, validation, production release. Includes [[Budget Estimate]], [[Risk Register]], [[Commissioning Procedure]], Gantt timeline, milestones, and gate review process
 
+## Repositories
+
+| Repo | URL | Contents |
+|------|-----|----------|
+| **pdu-docs** | https://github.com/manasXP/pdu-docs | Design documentation, KiCad schematics/PCB, project management (this workspace) |
+| **pdu-firmware** | https://github.com/manasXP/pdu-firmware | STM32G474RE embedded C — HRTIM, PFC/LLC control, CAN stacking, OCPP interface |
+
+> [!note] Workspace sync
+> This Obsidian vault syncs via iCloud. The `pdu-docs` git repo tracks the same `__Workspaces/PDU/` folder for version control and collaboration. KiCad project files live under `kicad/` in the repo.
+
 ## Research
 
 - [[3-Phase PFC Topology Selection]] -- Vienna rectifier vs B6, Swiss rectifier, two-level VSI
