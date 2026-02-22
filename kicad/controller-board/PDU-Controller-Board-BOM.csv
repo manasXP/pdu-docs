@@ -1,0 +1,57 @@
+value,footprint,quantity,references
+4.7uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,2,"['C35', 'C9']"
+20pF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,2,"['CY4', 'CY2']"
+20pF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,2,"['CY3', 'CY1']"
+100uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['C34']
+4.7uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['C33']
+100uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['C32']
+100nF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,5,"['C31', 'C13', 'C10', 'C6', 'C3']"
+100nF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,5,"['C30', 'C27', 'C12', 'C5', 'C2']"
+100nF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,5,"['C29', 'C11', 'C7', 'C4', 'C1']"
+1uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['C28']
+10nF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,2,"['C26', 'C23']"
+10nF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,2,"['C25', 'C22']"
+10nF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,2,"['C24', 'C21']"
+100pF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,2,"['C20', 'C17']"
+100pF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,2,"['C19', 'C16']"
+100pF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,2,"['C18', 'C15']"
+10uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['C14']
+1uF,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['C8']
+PLC_Coupler,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['T1']
+PESD2CAN,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['D1']
+2A_PTC,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['F1']
+220R,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['FB3']
+330R,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['FB2']
+220R,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['FB1']
+10k,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,3,"['R26', 'R17', 'R14']"
+10k,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,3,"['R25', 'R16', 'R13']"
+1k,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,2,"['R24', 'R21']"
+1k,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,2,"['R23', 'R20']"
+1k,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,2,"['R22', 'R19']"
+10k,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,2,"['R18', 'R15']"
+120,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['R_TERM']
+33,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,4,"['R12', 'R9', 'R6', 'R3']"
+33,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,4,"['R11', 'R8', 'R5', 'R2']"
+33,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,4,"['R10', 'R7', 'R4', 'R1']"
+Fan_Conn,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['J1']
+SMA_PLC,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['P7']
+RJ45_ETH,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['P6']
+Power_Conn,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['P5']
+CAN_Conn,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['P4']
+Analog_Sense,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['P3']
+LLC_PWM,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['P2']
+PFC_PWM,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['P1']
+25MHz,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['Y2']
+8MHz,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['Y1']
+24LC128,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['U9']
+TPS7A20_3V3A,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['U8']
+OPA2376,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['U7']
+OPA2376,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['U6']
+OPA2376,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['U5']
+QCA7000,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['U4']
+W5500,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,1,['U3']
+TCAN330,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['U2']
+STM32G474RETx,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['U1']
+MountingHole_3.2mm,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000540> >,2,"['MH', 'MH']"
+MountingHole_3.2mm,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000570> >,1,['MH']
+MountingHole_3.2mm,<pcbnew.LIB_ID; proxy of <Swig Object of type 'LIB_ID *' at 0x177000510> >,1,['MH']

@@ -17,10 +17,11 @@ Design documentation for a **30 kW DC fast-charging power module** intended for 
 
 ## Multi-Board Architecture
 
-The PDU is split into 4 separate PCBs interconnected by power bus bars and signal harnesses:
+The PDU is split into 5 separate PCBs interconnected by power bus bars and signal harnesses:
 
 | Board | Function | Layers | Size |
 |-------|----------|--------|------|
+| **Power Entry** | AC input protection (NTC inrush, bypass relays), DC output contactor | 2 | 150 × 120 mm |
 | **AC-DC** | Vienna Rectifier PFC — EMI filter, 3-phase rectification, DC bus caps | 6 | 250 × 180 mm |
 | **DC-DC** | LLC Resonant converter — primary bridge, transformers, secondary rectifier | 6 | 250 × 180 mm |
 | **Controller** | STM32G474RE, CAN bus, analog conditioning, OCPP/ISO 15118 | 4 | 120 × 100 mm |
@@ -40,13 +41,22 @@ pdu-docs/
 │   ├── 04-Thermal Budget.md          # Loss breakdown, junction temps, cooling
 │   ├── 05-EMI Filter Design.md       # EN 55032 Class B, surge, inrush
 │   ├── 06-Firmware Architecture.md   # STM32G474 HRTIM, ADC, control loops
+│   ├── 06-Firmware-Design/           # Firmware implementation details (8 docs)
+│   │   ├── __init.md                 # Index and reading order
+│   │   ├── 01-Application State Machine.md
+│   │   ├── 02-Power-On Sequence and Ramp Control.md
+│   │   ├── 03-Fault State Machine and Recovery.md
+│   │   ├── 04-LLC Burst Mode.md
+│   │   ├── 05-CAN Master and Module Stacking.md
+│   │   ├── 06-ADC Pipeline and DMA Configuration.md
+│   │   └── 07-Neutral Point Balancing.md
 │   ├── 07-BOM and Cost Analysis.md   # Per-module BOM, cost @ 100/500 qty
 │   ├── 08-Power-On Sequence and Inrush Management.md
-│   ├── 09-Protection and Safety.md   # OVP/OCP/OTP, insulation, hipot, compliance
-│   ├── 10-Mechanical Integration.md  # Enclosure, heatsink, fans, bus bars, assembly
+│   ├── 09-Protection and Safety.md   # OVP/OCP/OTP, insulation, hipot,compliance
+│   ├── 10-Mechanical Integration.md  # Enclosure,heatsink,fans,bus bars,assembly
 │   │
 │   └── 07-PCB-Layout/                # Multi-board PCB layout documentation
-│       ├── __init.md                  # 4-board overview and design targets
+│       ├── __init.md                  # 5-board overview and design targets
 │       ├── 00-Board Partitioning.md   # Inter-board interfaces, connectors, grounding
 │       ├── AC-DC/                     # Vienna PFC board (7 docs)
 │       │   ├── __init.md
@@ -78,8 +88,23 @@ pdu-docs/
 │       │   ├── 03-Thermal Layout.md
 │       │   ├── 04-Output Filtering and Regulation.md
 │       │   └── 05-Safety and Isolation.md
-│       └── Power-Entry/
+│       └── Power-Entry/               # Contactor and relay board (1 doc)
 │           └── __init.md
+│
+│   └── 12-Project-Management/            # Consolidated project management
+│       ├── __init.md                     # Epic overview, Gantt, milestones, gate reviews
+│       ├── EP-01 Design Review and Procurement.md    (18 stories)
+│       ├── EP-02 Rev A Prototype Build.md            (14 stories)
+│       ├── EP-03 Firmware Bring-Up.md                (16 stories)
+│       ├── EP-04 System Integration.md               (15 stories)
+│       ├── EP-05 Rev B Prototype.md                  (12 stories)
+│       ├── EP-06 Firmware Maturation.md              (14 stories)
+│       ├── EP-07 Certification Prep.md               (13 stories)
+│       ├── EP-08 Pre-Production Validation.md        (11 stories)
+│       ├── EP-09 Production Release.md               (10 stories)
+│       ├── Budget Estimate.md            # $390k–$615k detailed budget
+│       ├── Risk Register.md              # 21 risks, 5×5 scoring matrix
+│       └── Commissioning Procedure.md    # 7-stage field deployment
 │
 ├── research/                          # Research notes and trade studies
 │   ├── 3-Phase PFC Topology Selection.md
@@ -110,16 +135,19 @@ pdu-docs/
 | 04 | **Thermal Budget** — System losses, junction temperatures, cooling | Draft |
 | 05 | **EMI Filter Design** — EN 55032 Class B, CM/DM filtering | Draft |
 | 06 | **Firmware Architecture** — STM32G474RE HRTIM, control loops, CAN | Draft |
+| 06 | **Firmware Design** — Implementation details: state machine, ramps, faults, burst mode, CAN master, ADC/DMA, NP balance (8 sub-documents) | Draft |
 | 07 | **BOM and Cost Analysis** — Component selection, cost at volume | Draft |
-| 07 | **PCB Layout** — Multi-board layout across 4 PCBs (28 sub-documents) | Draft |
+| 07 | **PCB Layout** — Multi-board layout across 5 PCBs (29 sub-documents) | Draft |
 | 08 | **Power-On Sequence** — Startup/shutdown, inrush, pre-charge | Draft |
 | 09 | **Protection and Safety** — OVP/OCP/OTP, insulation, hipot, compliance | Draft |
 | 10 | **Mechanical Integration** — Enclosure, heatsink, fans, bus bars | Draft |
+| 12 | **Project Management** — 9 epics (123 stories), Gantt timeline, milestones, gate reviews, budget estimate, risk register, commissioning procedure (13 documents) | Draft |
 
 ### PCB Layout (`docs/07-PCB-Layout/`)
 
-The PCB layout section contains **28 documents** organized by board:
+The PCB layout section contains **29 documents** organized by board:
 
+- **Power Entry Board** (1 doc) — 2-layer, NTC inrush limiting, bypass relays, DC output contactor, AC/DC zone separation
 - **AC-DC Board** (7 docs) — 6-layer, Vienna PFC power loops (≤10 nH), SiC gate drivers, 530 VAC creepage
 - **DC-DC Board** (7 docs) — 6-layer, LLC primary loop (≤8 nH, critical margin), 4 kV primary-secondary isolation
 - **Controller Board** (6 docs) — 4-layer digital, signal integrity, CAN/OCPP/ISO 15118 interfaces
@@ -158,4 +186,4 @@ The documents are also readable as standard Markdown in any viewer (GitHub, VS C
 
 ## License
 
-All rights reserved. This documentation is proprietary.
+All rights reserved JouleWorX LLP 2025. This documentation is proprietary.

@@ -1,0 +1,9 @@
+(kicad_sch
+	(version 20230121)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(uuid "b4414bc4-98a7-47cd-8db5-0bfd6845eef3")
+	(paper "A4")
+	(lib_symbols)
+	(symbol_instances)
+)

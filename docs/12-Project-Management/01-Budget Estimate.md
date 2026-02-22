@@ -1,13 +1,14 @@
 ---
-tags: [pdu, project-plan, budget, cost]
+tags: [PDU, project-management, budget, cost]
 created: 2026-02-22
+aliases: [Budget Estimate, 04-Budget Estimate]
 ---
 
-# 04 — Budget Estimate
+# Budget Estimate
 
 This document provides both a high-level budget summary and detailed line-item estimates for the 30 kW PDU development programme.
 
-> [!note] Component costs reference [[07-BOM and Cost Analysis]]. Resource requirements reference [[03-Resource Plan]]. Mechanical costs reference [[10-Mechanical Integration]].
+> [!note] Component costs reference [[07-BOM and Cost Analysis]]. Team structure is defined in [[12-Project-Management/__init|Project Management]]. Mechanical costs reference [[10-Mechanical Integration]].
 
 ## High-Level Budget Summary
 
@@ -237,3 +238,4 @@ This document provides both a high-level budget summary and detailed line-item e
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
 | 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |
+| 0.2 | 2026-02-22 | Manas Pradhan | Moved from 11-Project-Plan to 12-Project-Management |

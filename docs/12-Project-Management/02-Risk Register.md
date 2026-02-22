@@ -1,13 +1,14 @@
 ---
-tags: [pdu, project-plan, risk, management]
+tags: [PDU, project-management, risk, management]
 created: 2026-02-22
+aliases: [Risk Register, 05-Risk Register]
 ---
 
-# 05 — Risk Register
+# Risk Register
 
 This document identifies and tracks risks for the 30 kW PDU development programme, categorized by type with likelihood, impact, and mitigation strategies.
 
-> [!note] See [[01-Development Phases]] for phase references and [[09-Protection and Safety]] for safety-related design mitigations.
+> [!note] See [[09-Protection and Safety]] for safety-related design mitigations. Phase references align with the epics in [[12-Project-Management/__init|Project Management]].
 
 ## Risk Matrix
 
@@ -287,7 +288,7 @@ Risks are scored on a 5×5 matrix:
 | **Impact** | 2 (Minor) — budget overrun 10–20% in equipment category |
 | **Score** | **6 (Medium)** |
 | **Phase** | 3 |
-| **Mitigation** | Get firm quotes before Phase 3; consider rental for non-critical items; 15% contingency in budget per [[04-Budget Estimate]] |
+| **Mitigation** | Get firm quotes before Phase 3; consider rental for non-critical items; 15% contingency in budget per [[12-Project-Management/01-Budget Estimate|Budget Estimate]] |
 | **Owner** | Project Manager |
 
 ### F2: Certification Cost Overrun Due to Re-Testing
@@ -339,3 +340,4 @@ Risks are scored on a 5×5 matrix:
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
 | 0.1 | 2026-02-22 | Manas Pradhan | Initial draft — 21 risks identified |
+| 0.2 | 2026-02-22 | Manas Pradhan | Moved from 11-Project-Plan to 12-Project-Management |

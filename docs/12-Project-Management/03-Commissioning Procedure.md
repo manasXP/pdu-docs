@@ -1,9 +1,10 @@
 ---
-tags: [pdu, project-plan, commissioning, deployment]
+tags: [PDU, project-management, commissioning, deployment]
 created: 2026-02-22
+aliases: [Commissioning Procedure, 06-Commissioning Procedure]
 ---
 
-# 06 — Commissioning Procedure
+# Commissioning Procedure
 
 This document defines the 7-stage field commissioning procedure for deploying a 30 kW PDU module (or 5-module 150 kW stack) at a charging site.
 
@@ -311,3 +312,4 @@ Customer Representative: _______________ Date: _______________
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
 | 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |
+| 0.2 | 2026-02-22 | Manas Pradhan | Moved from 11-Project-Plan to 12-Project-Management |

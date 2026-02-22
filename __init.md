@@ -53,12 +53,13 @@ For medical/precision applications like your robotics work, prioritize SiC-based
 - [[04-Thermal Budget]] -- System loss breakdown, junction temperatures, cooling design (draft)
 - [[05-EMI Filter Design]] -- Input EMI filter for EN 55032 Class B, surge protection, inrush limiting (draft)
 - [[06-Firmware Architecture]] -- STM32G474RE firmware: HRTIM resource map, ADC allocation, Vienna PFC dq control, LLC PFM, CAN stacking protocol, protection, OCPP/ISO 15118 interface
+- [[06-Firmware-Design/__init|06-Firmware Design]] -- Implementation details: application state machine, power-on sequencing, fault recovery, LLC burst mode, CAN master stacking, ADC/DMA pipeline, neutral point balancing (7 sub-documents)
 - [[10-Mechanical Integration]] -- Enclosure design, 4-board mounting, heatsink attachment, bus bar routing, airflow path, fan system, connector panel layout, assembly sequence
 - [[07-BOM and Cost Analysis]] -- Per-module BOM, cost breakdown @100/@500 qty, procurement notes, alternates
 - [[07-PCB-Layout/__init|07-PCB Layout]] -- 6-layer stack-up, power loop optimization, gate driver layout, thermal management, EMI-aware routing, creepage/clearance
 - [[08-Power-On Sequence and Inrush Management]] -- Startup/shutdown sequence, inrush analysis, NTC pre-charge, output contactor, cold-start verification
 - [[09-Protection and Safety]] -- OVP/OCP/OTP/short-circuit/ground-fault protection design, insulation coordination, surge immunity, hipot requirements, safety compliance matrix (IEC 61851-23, IEC 62368-1, UL 2202)
-- [[11-Project-Plan/__init|11-Project Plan]] -- Development phases, test plan, resource plan, budget estimate, risk register, commissioning procedure
+- [[12-Project-Management/__init|12-Project Management]] -- 9 epics, 123 stories across all disciplines: design review, prototype build, firmware bring-up, system integration, Rev B, firmware maturation, certification, validation, production release. Includes [[Budget Estimate]], [[Risk Register]], [[Commissioning Procedure]], Gantt timeline, milestones, and gate review process
 
 ## Research
 
@@ -70,6 +71,6 @@ For medical/precision applications like your robotics work, prioritize SiC-based
 
 ## Revision History
 
-| Rev | Date | Author | Changes |
-|-----|------|--------|---------|
-| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |
+| Rev | Date       | Author        | Changes       |
+| --- | ---------- | ------------- | ------------- |
+| 0.1 | 2025-06-02 | Manas Pradhan | Initial draft |

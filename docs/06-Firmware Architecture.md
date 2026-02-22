@@ -558,6 +558,15 @@ ISO 15118-2 (AC/DC charging) defines `CurrentDemand` and `PowerDelivery` message
 - [[04-Thermal Budget]] — SiC junction temperatures and derating curves
 - [[Commercial Reference Designs Survey]] — ST STDES-30KWVRECT, Wolfspeed CRD30DD12N-K
 
+**Implementation detail sub-documents** (see [[06-Firmware-Design/__init|06-Firmware Design]]):
+- [[06-Firmware-Design/01-Application State Machine|01-Application State Machine]] — 10-state FSM, transition table, pseudocode
+- [[06-Firmware-Design/02-Power-On Sequence and Ramp Control|02-Power-On Sequence and Ramp Control]] — Init steps, PLL lock, PFC/LLC ramps
+- [[06-Firmware-Design/03-Fault State Machine and Recovery|03-Fault State Machine and Recovery]] — Fault classification, derate curves, logging
+- [[06-Firmware-Design/04-LLC Burst Mode|04-LLC Burst Mode]] — Light-load burst algorithm, HRTIM registers
+- [[06-Firmware-Design/05-CAN Master and Module Stacking|05-CAN Master and Module Stacking]] — Master FSM, enable sequencing, failover
+- [[06-Firmware-Design/06-ADC Pipeline and DMA Configuration|06-ADC Pipeline and DMA Configuration]] — DMA buffers, oversampling, filters
+- [[06-Firmware-Design/07-Neutral Point Balancing|07-Neutral Point Balancing]] — P-controller, zero-sequence injection
+
 **External references:**
 - ST AN4539 Rev 5 — [HRTIM Cookbook](https://www.st.com/resource/en/application_note/an4539-hrtim-cookbook-stmicroelectronics.pdf)
 - ST UM3011 — [STDES-30KWVRECT Getting Started](https://www.st.com/resource/en/user_manual/um3011-getting-started-with-the-stdes30kwvrect-30-kw-vienna-pfc-rectifier-reference-design-stmicroelectronics.pdf)
