@@ -59,6 +59,7 @@ For medical/precision applications like your robotics work, prioritize SiC-based
 - [[07-PCB-Layout/__init|07-PCB Layout]] -- 6-layer stack-up, power loop optimization, gate driver layout, thermal management, EMI-aware routing, creepage/clearance
 - [[08-Power-On Sequence and Inrush Management]] -- Startup/shutdown sequence, inrush analysis, NTC pre-charge, output contactor, cold-start verification
 - [[09-Protection and Safety]] -- OVP/OCP/OTP/short-circuit/ground-fault protection design, insulation coordination, surge immunity, hipot requirements, safety compliance matrix (IEC 61851-23, IEC 62368-1, UL 2202)
+- [[11-Test-Plan/__init|11-Test Plan]] -- Board-level test procedure (lab bring-up, per-board pass/fail criteria), end-to-end test plan (requirements traceability, type tests per standards, environmental qualification, HALT/burn-in, communication validation, charging profiles, production test spec, certification matrix)
 - [[12-Project-Management/__init|12-Project Management]] -- 9 epics, 123 stories across all disciplines: design review, prototype build, firmware bring-up, system integration, Rev B, firmware maturation, certification, validation, production release. Includes [[Budget Estimate]], [[Risk Register]], [[Commissioning Procedure]], Gantt timeline, milestones, and gate review process
 
 ## Repositories
