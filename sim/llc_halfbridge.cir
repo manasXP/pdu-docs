@@ -1,0 +1,121 @@
+* LLC Half-Bridge Resonant Converter — Time-Domain SPICE Simulation
+* PDU 30 kW, Per Phase: 10 kW
+* Parameters from 02-Magnetics Design.md
+*
+* Purpose: Verify voltage gain M(fs) by sweeping switching frequency
+*          and measuring output voltage in steady state.
+*
+* Topology: Half-bridge → Lr → Cr → Transformer (Lm) → ideal rectifier → Rload
+*
+* Equivalent circuit (FHA-compatible):
+*   Vsq (half-bridge) → Lr (43µH) → Cr (26nF) → Lm (258µH) || Rac
+*
+* We sweep fs from 100 kHz to 300 kHz and measure Vout/Vin gain.
+
+.title LLC Half-Bridge Gain Sweep
+
+* ── Parameters ──────────────────────────────────────────────
+.param Lr=43u
+.param Cr=26n
+.param Lm=258u
+.param n=2
+.param Vbus=750
+.param Rload_nom=116.7
+
+* ── Half-Bridge Square Wave Source ──────────────────────────
+* Models the half-bridge output as a square wave ±Vbus/2
+* Using a pulse source at the sweep frequency
+.param fsw=150k
+.param period={1/fsw}
+.param halfperiod={period/2}
+
+Vsq in 0 PULSE({-Vbus/2} {Vbus/2} 0 10n 10n {halfperiod} {period})
+
+* ── Resonant Tank ──────────────────────────────────────────
+* Lr in series
+L_r in lr_cr {Lr} IC=0
+* Cr in series
+C_r lr_cr lm_node {Cr} IC=0
+* Lm in parallel with load (referred to primary)
+L_m lm_node 0 {Lm} IC=0
+
+* ── Equivalent AC Load (referred to primary) ──────────────
+* Rac = (8n²/π²) × (Vo²/Po)
+* At design center: Rac = 116.7 Ω
+* This models the rectifier + load as a resistor in FHA
+R_ac lm_node 0 {Rload_nom}
+
+* ── Analysis ──────────────────────────────────────────────
+* Run transient for 200 µs (30 cycles at 150 kHz) to reach steady state
+* then measure for another 50 µs
+.tran 0.1u 250u 200u 0.05u UIC
+
+* ── Measurements ─────────────────────────────────────────
+* Measure RMS voltage across Rac (= output referred to primary)
+.meas tran V_rac_rms RMS V(lm_node) from=200u to=250u
+* Measure RMS of input fundamental
+.meas tran V_in_rms RMS V(in) from=200u to=250u
+* Measure resonant current
+.meas tran I_Lr_rms RMS I(L_r) from=200u to=250u
+
+.control
+  * ── Frequency Sweep ─────────────────────────────────────
+  * We'll run multiple transient simulations at different frequencies
+  * and collect the gain at each point
+
+  let num_points = 40
+  let fs_min = 100e3
+  let fs_max = 300e3
+  let fs_step = (fs_max - fs_min) / num_points
+
+  * Arrays to store results
+  let freq_arr = unitvec(num_points + 1)
+  let gain_arr = unitvec(num_points + 1)
+
+  let idx = 0
+  let fs_curr = fs_min
+
+  echo "=== LLC Half-Bridge Gain Sweep ==="
+  echo "fs (kHz)    V_rac_rms (V)    Gain M"
+  echo "--------    -------------    ------"
+
+  while idx <= num_points
+    let period_curr = 1 / fs_curr
+    let half_curr = period_curr / 2
+
+    alter Vsq PULSE(-375 375 0 10n 10n $&half_curr $&period_curr)
+
+    tran 0.05u 300u 250u 0.02u UIC
+
+    meas tran vout_rms RMS V(lm_node) from=250u to=300u
+    meas tran vin_rms RMS V(in) from=250u to=300u
+
+    * Gain = V_rac_rms / V_in_fundamental_rms
+    * For square wave: V1_rms = (2/pi) * Vpk / sqrt(2) = 0.45 * Vbus
+    * Actually: V_in_rms of square wave = Vbus/2, fundamental RMS = (2/pi)*(Vbus/2)/sqrt(2)
+    * But since both sides see the same square wave basis, M = V_rac / V_in gives the
+    * correct relative gain.
+
+    let gain_val = vout_rms / vin_rms
+    let freq_arr[idx] = fs_curr
+    let gain_arr[idx] = gain_val
+
+    let fs_khz = fs_curr / 1e3
+    echo "$&fs_khz    $&vout_rms    $&gain_val"
+
+    let idx = idx + 1
+    let fs_curr = fs_curr + fs_step
+    destroy all
+
+  end
+
+  echo ""
+  echo "=== Sweep Complete ==="
+
+  * Write results to file
+  wrdata /Users/manaspradhan/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/ClaudeNotes/__Workspaces/PDU/sim/llc_spice_gain.csv freq_arr gain_arr
+
+  quit
+.endc
+
+.end

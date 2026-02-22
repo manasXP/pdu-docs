@@ -1,0 +1,27 @@
+* LLC Half-Bridge — Single Frequency Transient Simulation
+* Equivalent FHA circuit: Vsq → Lr → Cr → (Lm || Rac)
+* Run at a specific frequency, measure gain.
+* Use the companion Python script llc_ngspice_sweep.py to sweep.
+
+.title LLC Half-Bridge Single-Point Simulation
+
+.param fsw=150k
+.param period={1/fsw}
+.param halfp={period/2}
+.param Vhalf=375
+
+Vsq in 0 PULSE(-375 375 0 1n 1n {halfp} {period})
+
+L_r in mid 43u IC=0
+C_r mid out 26n IC=0
+L_m out 0 258u IC=0
+R_ac out 0 116.7
+
+.tran 0.02u 200u 150u 0.02u UIC
+
+.meas tran v_out_rms RMS V(out) from=150u to=200u
+.meas tran v_in_rms RMS V(in) from=150u to=200u
+.meas tran i_lr_rms RMS I(L_r) from=150u to=200u
+.meas tran i_lr_peak MAX I(L_r) from=150u to=200u
+
+.end
