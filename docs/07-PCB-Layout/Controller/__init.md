@@ -54,7 +54,7 @@ This document describes the **Controller Board** for the 30 kW EV Charger PDU. T
 
 ## 3. Key Interfaces
 
-### HRTIM PWM Generation
+### 3.1 HRTIM PWM Generation
 
 The STM32G474RE HRTIM peripheral generates all gate-drive PWM signals:
 
@@ -67,7 +67,7 @@ The STM32G474RE HRTIM peripheral generates all gate-drive PWM signals:
 - Dead-time insertion handled in hardware
 - Outputs routed to P1 (PFC) and P2 (LLC) harness connectors
 
-### Analog Sensing
+### 3.2 Analog Sensing
 
 | Signal | Range | Conditioning | ADC channel |
 |---|---|---|---|
@@ -82,7 +82,7 @@ The STM32G474RE HRTIM peripheral generates all gate-drive PWM signals:
 - Front-end: OPA2376 dual op-amp for signal conditioning
 - Anti-aliasing: 2nd-order RC low-pass at each ADC input
 
-### Communication
+### 3.3 Communication
 
 | Interface | IC / Method | Protocol | Connector |
 |---|---|---|---|

@@ -21,7 +21,7 @@ This document specifies the creepage (surface distance) and clearance (air gap) 
 | **IEC 60664-1** | Insulation coordination | Pollution degree, overvoltage category |
 | **EN 61000-series** | EMC | Not directly creepage, but influences layout |
 
-### Design Environment Parameters
+### 2.1 Design Environment Parameters
 
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
@@ -74,7 +74,7 @@ The DC-DC board has four distinct voltage domains:
 
 ## 4. Clearance and Creepage Requirements
 
-### External (PCB Surface) Requirements
+### 4.1 External (PCB Surface) Requirements
 
 | Boundary | Working Voltage | Insulation Type | Clearance (mm) | Creepage (mm) | Notes |
 |----------|----------------|-----------------|----------------|---------------|-------|
@@ -88,7 +88,7 @@ The DC-DC board has four distinct voltage domains:
 | Switching node → adjacent trace | 920V (primary) | Functional | 4.0 | 7.0 | Same domain |
 | Any HV → mounting hole (PE) | 920V / 1000V | Basic | 8.0–8.5 | 14.0–15.0 | Screw = PE potential |
 
-### Internal (Between PCB Layers) Requirements — IPC-2221B
+### 4.2 Internal (Between PCB Layers) Requirements — IPC-2221B
 
 Internal clearances are significantly smaller than external because the insulating material (FR-4) has a much higher dielectric strength than air:
 
@@ -104,7 +104,7 @@ Internal clearances are significantly smaller than external because the insulati
 
 ## 5. Primary-Secondary Isolation Barrier — Detailed Design
 
-### Physical Implementation
+### 5.1 Physical Implementation
 
 The isolation barrier is implemented as a **routed slot** through the entire PCB:
 
@@ -121,7 +121,7 @@ The isolation barrier is implemented as a **routed slot** through the entire PCB
   Total keep-out zone: 4mm slot + 2×2mm clearance = 8mm minimum
 ```
 
-### Barrier Specifications
+### 5.2 Barrier Specifications
 
 | Parameter | Value | Standard Reference |
 |-----------|-------|--------------------|
@@ -135,7 +135,7 @@ The isolation barrier is implemented as a **routed slot** through the entire PCB
 > [!note] Conformal Coating Creepage Credit
 > Per IEC 60664-1 and IPC-2221B, conformal coating (Type AR per IPC-CC-830) can reduce creepage requirements by providing a sealed surface resistant to contamination. With coating applied, the effective creepage is measured along the **coated surface** rather than the bare PCB surface. However, for reinforced insulation, many certification bodies do not grant full coating credit. Design for the uncoated requirement (20 mm creepage) and use coating as additional margin.
 
-### Slots at Transformer Interface
+### 5.3 Slots at Transformer Interface
 
 The isolation barrier must pass through or around each transformer. Since the transformer physically bridges the primary and secondary domains, special attention is needed:
 
@@ -173,7 +173,7 @@ The isolation barrier must pass through or around each transformer. Since the tr
 > [!tip] Preferred: Option 2
 > Making the transformer cutouts part of the isolation barrier simplifies the board design and saves PCB area. The transformer's own insulation system (per its safety certification) handles the isolation between its primary and secondary pins. The PCB only needs to ensure adequate creepage around the transformer landing pads.
 
-### Creepage Around Transformer Pins
+### 5.4 Creepage Around Transformer Pins
 
 The transformer primary pins and secondary pins land on opposite sides of the isolation barrier. The creepage path between the closest primary pin and the closest secondary pin must satisfy the reinforced insulation requirement:
 
@@ -195,7 +195,7 @@ Design approach:
 
 Each of the 12 STGAP2SiC gate drivers has its own internal isolation barrier between input and output pins. The PCB must support this isolation:
 
-### Driver PCB Slot
+### 6.1 Driver PCB Slot
 
 | Parameter | Value |
 |-----------|-------|
@@ -221,7 +221,7 @@ Each of the 12 STGAP2SiC gate drivers has its own internal isolation barrier bet
                         │  any layer)  │
 ```
 
-### Creepage Verification per Driver
+### 6.2 Creepage Verification per Driver
 
 | Path | Distance | Requirement | Status |
 |------|----------|-------------|--------|
@@ -233,7 +233,7 @@ Each of the 12 STGAP2SiC gate drivers has its own internal isolation barrier bet
 
 Configure the KiCad DRC (Design Rule Check) with the following net classes to automatically enforce clearance and creepage rules:
 
-### Net Class Definitions
+### 7.1 Net Class Definitions
 
 | Net Class | Nets Included | Min Clearance to Others | Min Trace Width | Notes |
 |-----------|--------------|------------------------|-----------------|-------|
@@ -246,7 +246,7 @@ Configure the KiCad DRC (Design Rule Check) with the following net classes to au
 | `PE` | PE, CHASSIS, MOUNTING | See matrix below | 1.0 mm | Protective earth |
 | `DEFAULT` | All other nets | 0.15 mm | 0.15 mm | Standard signal |
 
-### Clearance Matrix (mm) — External Layers (L1, L6)
+### 7.2 Clearance Matrix (mm) — External Layers (L1, L6)
 
 | | DC_BUS_PRI | OUTPUT_SEC | PRI_CTRL | SEC_CTRL | GATE_PRI | GATE_SEC | PE |
 |---|-----------|-----------|----------|----------|----------|----------|-----|
@@ -261,7 +261,7 @@ Configure the KiCad DRC (Design Rule Check) with the following net classes to au
 > [!warning] 10 mm Entries Are Isolation Barrier
 > All entries showing **10.0 mm** in the matrix represent the primary-secondary isolation barrier. These clearances are enforced by the **physical PCB slot**, not by copper spacing alone. The DRC net class system prevents any routing tool from bridging the barrier, but the slot must be drawn manually in the board outline / keep-out layer.
 
-### Clearance Matrix (mm) — Internal Layers (L2–L5)
+### 7.3 Clearance Matrix (mm) — Internal Layers (L2–L5)
 
 | Boundary | Internal Clearance | Notes |
 |----------|--------------------|-------|
@@ -291,7 +291,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 
 ## 9. Special Creepage Zones
 
-### Zone 1: DC Bus Input (Bus Bar to Capacitors)
+### 9.1 Zone 1: DC Bus Input (Bus Bar to Capacitors)
 
 | Boundary | Clearance | Creepage |
 |----------|-----------|---------|
@@ -300,7 +300,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | DC bus + pad → DC bus − pad | 4 mm | 7 mm |
 | Bus capacitor pads → adjacent signal trace | 8 mm | 14 mm |
 
-### Zone 2: Primary Half-Bridge (Switching Nodes)
+### 9.2 Zone 2: Primary Half-Bridge (Switching Nodes)
 
 | Boundary | Clearance | Creepage |
 |----------|-----------|---------|
@@ -309,7 +309,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | Q1/Q2 pads → gate driver IC input pins | 8 mm | 14 mm |
 | Snubber pad → adjacent low-voltage component | 8 mm | 14 mm |
 
-### Zone 3: Isolation Barrier (Transformer Area)
+### 9.3 Zone 3: Isolation Barrier (Transformer Area)
 
 | Boundary | Clearance | Creepage |
 |----------|-----------|---------|
@@ -318,7 +318,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | Y-capacitor pad (primary side) → Y-cap pad (secondary side) | 10 mm | 20 mm |
 | Driver IC input pin → driver IC output pin (across slot) | Per STGAP2SiC spec (8 mm) | Per STGAP2SiC spec |
 
-### Zone 4: Secondary Rectifiers
+### 9.4 Zone 4: Secondary Rectifiers
 
 | Boundary | Clearance | Creepage |
 |----------|-----------|---------|
@@ -326,7 +326,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | Q3/Q4 pads → gate driver IC input pins | 8.5 mm | 15 mm |
 | Output + pad → Output − pad | 4.5 mm | 8 mm |
 
-### Zone 5: Output Connector (P3)
+### 9.5 Zone 5: Output Connector (P3)
 
 | Boundary | Clearance | Creepage |
 |----------|-----------|---------|
@@ -336,7 +336,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 
 ## 10. Conformal Coating Strategy
 
-### Coating Application Map
+### 10.1 Coating Application Map
 
 | Area | Coating Required? | Reason |
 |------|------------------|--------|
@@ -348,7 +348,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | Control/signal zone | No | Low voltage, not safety-critical |
 | Component pads requiring rework | **Selective mask** | Leave test points and adjustment pots uncoated |
 
-### Coating Specification
+### 10.2 Coating Specification
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -364,7 +364,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 
 ## 11. Hipot Test Requirements
 
-### Factory Test Specification
+### 11.1 Factory Test Specification
 
 | Test | Voltage | Duration | Pass Criteria | Reference |
 |------|---------|----------|---------------|-----------|
@@ -372,7 +372,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | Primary-to-PE | 2500 VAC (or 3535 VDC) | 60 seconds | Leakage <10 mA | IEC 62368-1 |
 | Secondary-to-PE | 2500 VAC (or 3535 VDC) | 60 seconds | Leakage <10 mA | IEC 62368-1 |
 
-### Design for Hipot Survival
+### 11.2 Design for Hipot Survival
 
 | Factor | Requirement |
 |--------|-------------|

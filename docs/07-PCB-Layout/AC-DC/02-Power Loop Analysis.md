@@ -18,13 +18,13 @@ In a Vienna PFC switching at 48–65 kHz with SiC MOSFETs, the commutation loop 
 
 ## 2. Vienna PFC Commutation Loops
 
-### Topology Review
+### 2.1 Topology Review
 
 The Vienna rectifier has three phases, each with two SiC MOSFETs (high-side and low-side relative to the neutral point). During each switching cycle, current commutates between a MOSFET and the corresponding boost diode through the DC bus capacitors.
 
 There are two primary commutation loops per phase:
 
-### Loop 1 — MOSFET Turn-Off (Main Commutation Loop)
+### 2.2 Loop 1 — MOSFET Turn-Off (Main Commutation Loop)
 
 When Q_hi turns off during a positive half-cycle, current transfers from Q_hi to D_hi through the snubber capacitors:
 
@@ -45,7 +45,7 @@ When Q_hi turns off during a positive half-cycle, current transfers from Q_hi to
 
 **This is the most critical loop.** It carries the full switching current at turn-off (up to 60 A peak) with dI/dt of 5–15 A/ns. Every nanohenry of inductance in this loop adds voltage overshoot.
 
-### Loop 2 — DC Bus Charge Loop
+### 2.3 Loop 2 — DC Bus Charge Loop
 
 After commutation, the boost inductor current charges the DC bus capacitors through the boost diode:
 
@@ -63,13 +63,13 @@ After commutation, the boost inductor current charges the DC bus capacitors thro
 
 This loop carries the average inductor current (up to 40 A) but at a lower dI/dt (limited by inductor). The inductance requirement is less stringent than Loop 1, but the current is continuous, so resistive losses in the traces dominate.
 
-### Loop 3 — Gate Drive Loop
+### 2.4 Loop 3 — Gate Drive Loop
 
 See [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] for the gate loop analysis. The gate loop is a separate, smaller loop with its own inductance budget (<5 nH).
 
 ## 3. Parasitic Inductance Budget
 
-### Component-Level Parasitics
+### 3.1 Component-Level Parasitics
 
 | Element | Symbol | Value (nH) | Source | Notes |
 |---------|--------|-----------|--------|-------|
@@ -79,7 +79,7 @@ See [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] for the gate loop analysis. Th
 | Bulk electrolytic C_bus | L_cap_bus | 10–15 | Capacitor datasheet | Not in the hot loop (decoupled by C_snub) |
 | PCB traces + vias | L_PCB | **≤10 (target)** | Layout-dependent | This is what we control |
 
-### Total Loop Inductance Budget (Loop 1)
+### 3.2 Total Loop Inductance Budget (Loop 1)
 
 | Contributor | Value (nH) | Notes |
 |-------------|-----------|-------|
@@ -89,7 +89,7 @@ See [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] for the gate loop analysis. Th
 | PCB interconnect (target) | **10** | Traces, vias, pad transitions |
 | **Total** | **~18.2** | |
 
-### Voltage Overshoot Calculation
+### 3.3 Voltage Overshoot Calculation
 
 At maximum switching current with the target loop inductance:
 
@@ -115,7 +115,7 @@ At maximum switching current with the target loop inductance:
 >
 > The topology selection in [[01-Topology Selection]] should specify the device voltage class. With a 920V DC bus capability, 1200V SiC MOSFETs are likely required regardless.
 
-### Revised Budget for 1200V Devices at 920V Bus
+### 3.4 Revised Budget for 1200V Devices at 920V Bus
 
 | Parameter | Value |
 |-----------|-------|
@@ -131,7 +131,7 @@ With 1200V devices, the 18 nH total budget provides adequate margin. The 10 nH P
 
 ## 4. Decoupling Capacitor Array
 
-### Tiered Decoupling Strategy
+### 4.1 Tiered Decoupling Strategy
 
 The decoupling is organized in three tiers, each serving a different frequency range:
 
@@ -146,7 +146,7 @@ The decoupling is organized in three tiers, each serving a different frequency r
     100Hz  1kHz  10kHz  100kHz 1MHz  10MHz
 ```
 
-### C_snub1 — First-Tier High-Frequency Decoupling
+### 4.2 C_snub1 — First-Tier High-Frequency Decoupling
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -186,7 +186,7 @@ The decoupling is organized in three tiers, each serving a different frequency r
 >
 > The trade-off is lower volumetric capacitance — hence only 100 nF per cap in 1206/1210. Use 4–8 in parallel to achieve both the required total capacitance and low ESL.
 
-### C_snub2 — Second-Tier Decoupling
+### 4.3 C_snub2 — Second-Tier Decoupling
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -198,7 +198,7 @@ The decoupling is organized in three tiers, each serving a different frequency r
 | Placement | **<10 mm from drain pad** |
 | Return path | Via to L2 GND or direct to source copper |
 
-### C_bus — Bulk DC Bus Capacitors
+### 4.4 C_bus — Bulk DC Bus Capacitors
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -221,7 +221,7 @@ The decoupling is organized in three tiers, each serving a different frequency r
 
 The DC bus charge loop extends from the boost inductor through the boost diode to the bulk capacitors and back. This loop carries continuous current (up to 40 A) and must be sized for low resistive loss.
 
-### Layout Rules for Loop 2
+### 5.1 Layout Rules for Loop 2
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -230,7 +230,7 @@ The DC bus charge loop extends from the boost inductor through the boost diode t
 | Path length | Minimize — keep C_bus within 50 mm of diodes | Reduce I²R loss |
 | L2 return path | Unbroken ground plane beneath | Low-inductance return |
 
-### DC Output to LLC Board Connector
+### 5.2 DC Output to LLC Board Connector
 
 The DC bus connects from the bulk capacitors (Zone C) to the output connector (Zone D) that feeds the [[07-PCB-Layout/DC-DC/__init|DC-DC]] converter board. This path must handle 40 A continuous:
 
@@ -243,7 +243,7 @@ The DC bus connects from the bulk capacitors (Zone C) to the output connector (Z
 
 ## 6. Layout Rules Summary
 
-### Power Loop (Loop 1) — Mandatory Rules
+### 6.1 Power Loop (Loop 1) — Mandatory Rules
 
 | # | Rule | Target |
 |---|------|--------|
@@ -258,7 +258,7 @@ The DC bus connects from the bulk capacitors (Zone C) to the output connector (Z
 | 9 | Via count for return path | ≥4 vias per cap group |
 | 10 | Total PCB loop inductance | ≤10 nH |
 
-### Same-Side Placement Rule
+### 6.2 Same-Side Placement Rule
 
 All components in the hot commutation loop (MOSFET, snubber caps, boost diode) **must be placed on the same board side** (L1/top). Placing components on opposite sides forces current through vias in the hot loop, adding 0.5–1 nH per via transition and increasing total loop inductance.
 
@@ -266,7 +266,7 @@ Exception: If the boost diode is placed on L6 (bottom), the via transition induc
 
 ## 7. Simulation and Verification
 
-### Pre-Layout Estimation
+### 7.1 Pre-Layout Estimation
 
 Use the following formula for a rough PCB loop inductance estimate:
 
@@ -281,7 +281,7 @@ $$L_{PCB} \approx 4\pi \times 10^{-7} \times \frac{0.0001 \times 0.020}{0.010} =
 
 This extremely low value assumes perfect overlap. Real layouts with pad transitions, via transitions, and non-uniform overlap will be 10–40× higher. Use this formula for relative comparison between layout options, not absolute values.
 
-### Post-Layout Verification
+### 7.2 Post-Layout Verification
 
 After completing the layout, extract loop inductance using:
 

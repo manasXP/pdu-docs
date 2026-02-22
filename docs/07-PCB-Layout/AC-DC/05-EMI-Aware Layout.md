@@ -20,7 +20,7 @@ The three primary EMI mechanisms in the Vienna PFC are:
 
 ## 2. Common-Mode Current Budget
 
-### CM Current Sources
+### 2.1 CM Current Sources
 
 The primary CM current sources on the AC-DC board are:
 
@@ -69,7 +69,7 @@ The PCB bottom layer (L6) has parasitic capacitance to the metal chassis/enclosu
 | Estimated capacitance | 5–20 pF (low, due to air gap) |
 | CM current contribution | <1 A peak |
 
-### Total CM Current Budget
+### 2.2 Total CM Current Budget
 
 | Source | CM Current (peak) | Percentage |
 |--------|-------------------|------------|
@@ -89,13 +89,13 @@ The PCB bottom layer (L6) has parasitic capacitance to the metal chassis/enclosu
 
 ## 3. Switching Node Area Minimization
 
-### Why Switching Node Area Matters
+### 3.1 Why Switching Node Area Matters
 
 The switching node is the connection between the MOSFET drain and the boost inductor. It transitions between 0V and V_bus (up to 920V) at every switching cycle. Any copper connected to the switching node acts as an electric field antenna radiating at the switching frequency and its harmonics.
 
 Additionally, switching node copper on L1 couples capacitively to L2 (ground plane) and to the heatsink, generating additional CM current.
 
-### Switching Node Area Target
+### 3.2 Switching Node Area Target
 
 | Parameter | Target | Notes |
 |-----------|--------|-------|
@@ -103,7 +103,7 @@ Additionally, switching node copper on L1 couples capacitively to L2 (ground pla
 | Layer restriction | **L1 only** | No switching node copper on L2–L6 |
 | Copper on L2 beneath switching node | Continuous ground pour | Shields switching node from inner layers |
 
-### Implementation Strategy
+### 3.3 Implementation Strategy
 
 The switching node copper consists of:
 - MOSFET drain pad (TO-247 tab pad): ~150 mm² (already exceeds 1 cm² target)
@@ -126,7 +126,7 @@ Since the TO-247 drain pad alone is ~150 mm², achieving <100 mm² total switchi
 > - **Zero switching node copper on L2–L6** (shielded by L2 ground plane)
 > - Drain pad + snubbers + inductor connection only — no extra copper
 
-### Switching Node Copper Rules
+### 3.4 Switching Node Copper Rules
 
 | # | Rule | Rationale |
 |---|------|-----------|
@@ -139,7 +139,7 @@ Since the TO-247 drain pad alone is ~150 mm², achieving <100 mm² total switchi
 
 ## 4. EMI Filter Zone Separation
 
-### Separation Requirement
+### 4.1 Separation Requirement
 
 The EMI filter in Zone A must be physically and electrically separated from the power stage in Zone B. Without adequate separation, the switching noise from the power stage couples back into the filter output, reducing the effective filter attenuation.
 
@@ -151,7 +151,7 @@ The EMI filter in Zone A must be physically and electrically separated from the 
 | Component placement | No components in the 20 mm separation zone |
 | Trace routing | No traces crossing the separation zone on any layer except L2 GND |
 
-### Stitching Via Fence Specification
+### 4.2 Stitching Via Fence Specification
 
 The double-row stitching via fence creates a low-impedance ground connection across the zone boundary, containing EMI within each zone:
 
@@ -188,7 +188,7 @@ The double-row stitching via fence creates a low-impedance ground connection acr
 >
 > This is well above the frequency range of concern for conducted emissions (150 kHz – 30 MHz) and most radiated emissions (30 MHz – 1 GHz). The via fence is effective across the entire relevant spectrum.
 
-### Additional Separation Measures
+### 4.3 Additional Separation Measures
 
 | Measure | Implementation | Benefit |
 |---------|---------------|---------|
@@ -198,7 +198,7 @@ The double-row stitching via fence creates a low-impedance ground connection acr
 
 ## 5. L2 Ground Plane Integrity
 
-### Critical Importance
+### 5.1 Critical Importance
 
 The L2 ground plane is the single most important EMI mitigation element on the board. As detailed in [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]], L2 must remain continuous and unbroken. This section specifies the EMI-related reasons:
 
@@ -208,7 +208,7 @@ The L2 ground plane is the single most important EMI mitigation element on the b
 
 3. **CM current return path:** The CM current injected by MOSFET Cdh into the heatsink returns through the Y-caps and L2 ground plane. Slots or splits in L2 increase the CM loop area.
 
-### L2 Rules (EMI-Focused)
+### 5.2 L2 Rules (EMI-Focused)
 
 | # | Rule | Consequence of Violation |
 |---|------|------------------------|
@@ -220,7 +220,7 @@ The L2 ground plane is the single most important EMI mitigation element on the b
 | 6 | GND vias at every signal via | Provides local return path for L3 signals |
 | 7 | Stitching vias along board edges | Contains fields within the board boundary |
 
-### Signal Via Return Path Rule
+### 5.3 Signal Via Return Path Rule
 
 Every signal via that transitions from L1 to L3 (or L6 to L3) must have a companion ground via within 2 mm. Without this companion via, the return current on L2 has no low-impedance path to transition to the correct layer, and it must find an alternative path — increasing the effective loop area.
 
@@ -236,7 +236,7 @@ Every signal via that transitions from L1 to L3 (or L6 to L3) must have a compan
 
 ## 6. Sensitive Signal Routing
 
-### Signal Categories and Routing Rules
+### 6.1 Signal Categories and Routing Rules
 
 | Signal Category | Examples | Layer | Routing Rules |
 |----------------|----------|-------|---------------|
@@ -248,7 +248,7 @@ Every signal via that transitions from L1 to L3 (or L6 to L3) must have a compan
 | Fault/interlock | OVP, OCP, OTP signals | L3 | Guard traces, filtered at source |
 | Auxiliary power | 12V, 5V, 3.3V distribution | L4 | Decoupled locally, via to L2 return |
 
-### Current Sense Routing
+### 6.2 Current Sense Routing
 
 The Vienna PFC requires accurate current sensing for each phase (for PFC control) and for the DC bus (for current limiting). Current sense signals are the most noise-sensitive signals on the board.
 
@@ -276,7 +276,7 @@ The Vienna PFC requires accurate current sensing for each phase (for PFC control
     L2: ═══════════════════════════════════════  (GND plane)
 ```
 
-### Analog Ground Considerations
+### 6.3 Analog Ground Considerations
 
 The Vienna PFC board does not use a split ground plane (L2 is continuous). However, the current sense and control circuits benefit from a localized "quiet" zone on L1:
 
@@ -287,7 +287,7 @@ The Vienna PFC board does not use a split ground plane (L2 is continuous). Howev
 
 ## 7. EMI Filter Component Placement
 
-### Zone A Layout Strategy
+### 7.1 Zone A Layout Strategy
 
 The EMI filter components in Zone A must be arranged to maximize filter attenuation and minimize parasitic coupling:
 
@@ -306,7 +306,7 @@ The EMI filter components in Zone A must be arranged to maximize filter attenuat
                                                    Via fence
 ```
 
-### CM Choke Placement
+### 7.2 CM Choke Placement
 
 | Rule | Requirement |
 |------|-------------|
@@ -316,7 +316,7 @@ The EMI filter components in Zone A must be arranged to maximize filter attenuat
 | Clearance to PCB edge | ≥5 mm (for creepage to chassis) |
 | Clearance to other magnetics | ≥10 mm (prevent mutual coupling) |
 
-### X-Capacitor Placement
+### 7.3 X-Capacitor Placement
 
 | Rule | Requirement |
 |------|-------------|
@@ -325,7 +325,7 @@ The EMI filter components in Zone A must be arranged to maximize filter attenuat
 | Connection | Line-to-line (phase-to-phase) |
 | Trace length | Short, direct connection between phase conductors |
 
-### Y-Capacitor Placement
+### 7.4 Y-Capacitor Placement
 
 | Rule | Requirement |
 |------|-------------|
@@ -357,7 +357,7 @@ In addition to the zone-boundary via fence, place stitching vias along all four 
 
 ## 9. EMI Verification
 
-### Pre-Layout EMI Estimate
+### 9.1 Pre-Layout EMI Estimate
 
 Before layout, estimate conducted emissions using:
 
@@ -366,7 +366,7 @@ Before layout, estimate conducted emissions using:
 3. LISN impedance (50 Ω per standard)
 4. Predicted voltage at LISN = I_CM × Z_filter_output × Z_LISN
 
-### Post-Layout EMI Verification
+### 9.2 Post-Layout EMI Verification
 
 After layout:
 1. Measure switching node copper area on each phase (target <3 cm²)
@@ -376,7 +376,7 @@ After layout:
 5. Measure separation distance between Zone A and Zone B (≥20 mm)
 6. Check current sense routing for proper guarding and differential symmetry
 
-### Near-Field Scanning (Prototype)
+### 9.3 Near-Field Scanning (Prototype)
 
 On the first prototype, perform near-field scanning with an H-field probe to identify:
 - Unexpected current loop areas

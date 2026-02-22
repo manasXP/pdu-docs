@@ -29,7 +29,7 @@ This document defines the 4-layer PCB stack-up for the Controller Board of the 3
 
 The following impedance values are required for specific signal classes. They must be communicated to the PCB fabricator with a tolerance of +/-10%.
 
-### Single-Ended Traces (50 ohm)
+### 2.1 Single-Ended Traces (50 ohm)
 
 Used for general-purpose digital I/O, SPI clock/data, UART, and HRTIM outputs.
 
@@ -52,7 +52,7 @@ where:
   Z0 ≈ 50.2 ohm
 ```
 
-### Differential Pairs (100 ohm)
+### 2.2 Differential Pairs (100 ohm)
 
 Used for the CAN bus differential pair (CANH / CANL) and any Ethernet differential pairs.
 
@@ -69,7 +69,7 @@ Used for the CAN bus differential pair (CANH / CANL) and any Ethernet differenti
 
 ## 3. Layer Assignment Rules
 
-### L1 — Top Signal/Component Layer
+### 3.1 L1 — Top Signal/Component Layer
 
 This is the **primary routing layer** and the component-side layer.
 
@@ -85,7 +85,7 @@ This is the **primary routing layer** and the component-side layer.
 > [!tip] Analog routing priority
 > All analog sense traces (current sense, voltage sense) **must** be routed on L1 directly above the continuous L2 GND plane. Never route analog signals on L4 where the reference is the L3 power plane — the power plane carries switching noise from decoupling transients.
 
-### L2 — Ground Plane
+### 3.2 L2 — Ground Plane
 
 **This layer must be an unbroken, continuous copper pour connected to GND.**
 
@@ -100,7 +100,7 @@ The continuous GND plane serves three critical functions:
 2. **Shielding** between L1 signals and L3 power
 3. **Thermal spreading** for the STM32 exposed pad (if applicable)
 
-### L3 — Power Plane (3.3 V)
+### 3.3 L3 — Power Plane (3.3 V)
 
 The 3.3 V power plane on L3 is partitioned into regions:
 
@@ -131,7 +131,7 @@ The 3.3 V power plane on L3 is partitioned into regions:
 > [!warning] Plane partitioning caution
 > Keep L3 splits narrow (0.5 mm gap) and run them **perpendicular** to the board's longest dimension. Never let a signal trace on L4 cross a split in L3 without a stitching via to L2 GND nearby — this avoids return-current discontinuities.
 
-### L4 — Bottom Signal/Component Layer
+### 3.4 L4 — Bottom Signal/Component Layer
 
 Secondary routing layer. Used for:
 
@@ -149,7 +149,7 @@ Avoid routing the following on L4:
 
 ## 4. Via Strategy
 
-### Via Types
+### 4.1 Via Types
 
 | Via type | Drill | Pad | Annular ring | Usage |
 |---|---|---|---|---|
@@ -157,7 +157,7 @@ Avoid routing the following on L4:
 | Power via | 0.4 mm | 0.8 mm | 0.20 mm | VDD connections, bulk current |
 | Stitching via | 0.3 mm | 0.6 mm | 0.15 mm | GND stitching, edge vias, guard rings |
 
-### Via Placement Rules
+### 4.2 Via Placement Rules
 
 1. **Decoupling vias**: each bypass capacitor connects to its VDD and GND planes through a dedicated via pair, placed within 1 mm of the capacitor pad
 2. **Signal transition vias**: when a signal moves from L1 to L4, place a GND stitching via within 1 mm of the signal via to provide a return-current path

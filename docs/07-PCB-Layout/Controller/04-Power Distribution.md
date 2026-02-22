@@ -21,7 +21,7 @@ This document describes the power distribution network (PDN) for the Controller 
 
 The P5 connector is a Molex Micro-Fit 3.0 (or equivalent), placed at the **southeast corner** of the board.
 
-### P5 Pinout
+### 2.1 P5 Pinout
 
 | Pin | Signal | Wire gauge | Notes |
 |---|---|---|---|
@@ -41,7 +41,7 @@ The P5 connector is a Molex Micro-Fit 3.0 (or equivalent), placed at the **south
 
 Each power rail entering the board through P5 passes through an input filter stage before reaching the distribution network:
 
-### 3.3 V Digital Input Filter
+### 3.1 3.3 V Digital Input Filter
 
 ```
 P5 pin 1,2 ──┬── FB1 ──┬── 3.3V_DIGITAL plane (L3)
@@ -57,7 +57,7 @@ P5 pin 1,2 ──┬── FB1 ──┬── 3.3V_DIGITAL plane (L3)
 | C_bulk1 | 100 µF / 6.3 V electrolytic or polymer | Radial 5 mm | Low-frequency energy storage |
 | C_bulk2 | 4.7 µF / 10 V MLCC | 0805 | Mid-frequency decoupling |
 
-### 5 V Input Filter
+### 3.2 5 V Input Filter
 
 ```
 P5 pin 3 ──── FB2 ──┬── 5V island on L3
@@ -72,7 +72,7 @@ P5 pin 3 ──── FB2 ──┬── 5V island on L3
 | FB2 (ferrite bead) | BLM18PG331SN1 (330 ohm @ 100 MHz) | 0603 | HF noise rejection |
 | C_5V_bulk | 4.7 µF / 10 V MLCC | 0805 | Bulk decoupling for TCAN1044 |
 
-### 12 V Fan Pass-Through
+### 3.3 12 V Fan Pass-Through
 
 The 12 V rail is a pass-through — it enters via P5 and exits via a separate fan connector (J1) on the east edge. Filtering is minimal since this rail drives fans (inductive loads), not sensitive electronics:
 
@@ -96,7 +96,7 @@ P5 pin 4,5 ──── Polyfuse (2A) ──┬── J1 Fan connector
 
 The analog circuits (op-amps, ADC reference) require a cleaner 3.3 V supply than what the Aux PSU provides after cable and connector drops. A low-noise LDO generates 3.3 V analog (AVDD) from the 3.3 V digital rail.
 
-### LDO Selection: TPS7A20
+### 4.1 LDO Selection: TPS7A20
 
 | Parameter | Value |
 |---|---|
@@ -112,7 +112,7 @@ The analog circuits (op-amps, ADC reference) require a cleaner 3.3 V supply than
 > [!warning] LDO headroom
 > The TPS7A20 requires a minimum dropout of 100 mV. If the 3.3 V digital rail drops below 3.4 V under load (possible with cable drop from the Aux PSU), the LDO exits regulation. Verify the Aux PSU output under worst-case load to ensure >= 3.45 V at P5. Alternatively, consider feeding the LDO from the 5 V rail (which has more headroom) and using a 3.3 V output LDO rated for 5 V input.
 
-### Alternative: LDO from 5 V Rail
+### 4.2 Alternative: LDO from 5 V Rail
 
 If headroom on the 3.3 V rail is insufficient:
 
@@ -122,7 +122,7 @@ If headroom on the 3.3 V rail is insufficient:
 
 This provides 1.7 V of headroom, ensuring clean regulation even with supply variations.
 
-### LDO Circuit and Layout
+### 4.3 LDO Circuit and Layout
 
 ```
 3.3V_DIGITAL ──── FB3 ──┬──── TPS7A20 ──┬──── 3.3V_ANALOG (AVDD)
@@ -148,7 +148,7 @@ LDO placement rules:
 
 The STM32G474RE (LQFP-64) has multiple VDD and VSS pins. Each VDD pin requires local decoupling.
 
-### MCU Power Pins
+### 5.1 MCU Power Pins
 
 | Pin name | Pin number (LQFP-64) | Rail | Decoupling |
 |---|---|---|---|
@@ -160,7 +160,7 @@ The STM32G474RE (LQFP-64) has multiple VDD and VSS pins. Each VDD pin requires l
 | VREF+ | 14 | 3.3 V analog | 100 nF |
 | VBAT | 1 | 3.3 V (or battery) | 100 nF |
 
-### Decoupling Capacitor Placement
+### 5.2 Decoupling Capacitor Placement
 
 Each 100 nF capacitor must be placed according to these rules:
 
@@ -175,7 +175,7 @@ Each 100 nF capacitor must be placed according to these rules:
 > [!tip] Via-in-pad for decoupling
 > For optimal performance, use via-in-pad design for decoupling capacitors: place vias directly on the capacitor pads, connecting one pad to L2 GND and the other to L3 VDD. This eliminates trace inductance between the cap and the planes. Requires the fab to fill and cap the vias (VIPPO process), which adds cost. For a cost-sensitive design, standard pad-to-via traces of < 1 mm are acceptable.
 
-### Bulk Decoupling Per Rail Section
+### 5.3 Bulk Decoupling Per Rail Section
 
 In addition to per-pin 100 nF caps, place bulk capacitors at strategic points:
 
@@ -190,7 +190,7 @@ In addition to per-pin 100 nF caps, place bulk capacitors at strategic points:
 
 The L3 power plane is divided into regions as described in [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]]:
 
-### Plane Region Table
+### 6.1 Plane Region Table
 
 | Region | Rail | Area (approx) | Connected ICs |
 |---|---|---|---|
@@ -199,7 +199,7 @@ The L3 power plane is divided into regions as described in [[07-PCB-Layout/Contr
 | 5 V island | 5.0 V | 10% of L3 | TCAN1044 |
 | 12 V trace | 12 V | Trace on L4 | Fan connector J1 |
 
-### Plane Partition Implementation
+### 6.2 Plane Partition Implementation
 
 - Partition gaps on L3: 0.5 mm (20 mil) clearance between islands
 - Ferrite bead bridges: each island connects to its source through a ferrite bead

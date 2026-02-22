@@ -12,7 +12,7 @@ This document defines the 6-layer PCB stack-up for the DC-DC LLC resonant conver
 
 ## 2. 6-Layer Stack-Up Definition
 
-### Cross-Section
+### 2.1 Cross-Section
 
 ```
          ┌─────────────────────────────────────┐
@@ -42,7 +42,7 @@ This document defines the 6-layer PCB stack-up for the DC-DC LLC resonant conver
   Total board thickness: ~1.6 mm (±10%)
 ```
 
-### Layer Assignment Table
+### 2.2 Layer Assignment Table
 
 | Layer | Name | Weight | Primary Function (DC-DC Board) |
 |-------|------|--------|-------------------------------|
@@ -56,7 +56,7 @@ This document defines the 6-layer PCB stack-up for the DC-DC LLC resonant conver
 > [!warning] L2 Ground Plane Integrity
 > The L2 GND plane is the **single most critical layer** for EMI performance. It must remain continuous across the entire board with the sole exception of the **primary-secondary isolation slot**. No signal traces, no vias (except stitching vias), and no splits are permitted on L2. Any GND plane breach under a high-dV/dt node will create CM noise injection.
 
-### Impedance Targets
+### 2.3 Impedance Targets
 
 | Trace Type | Layers | Target Z₀ | Width (1 oz) | Width (2 oz) |
 |------------|--------|-----------|-------------|-------------|
@@ -72,7 +72,7 @@ This document defines the 6-layer PCB stack-up for the DC-DC LLC resonant conver
 
 The 250 mm × 180 mm board area is divided into functional zones arranged for optimal power flow and thermal management. The **primary-to-secondary isolation barrier** runs horizontally across the board, creating two electrically isolated halves.
 
-### Zone Dimensions and Allocation
+### 3.1 Zone Dimensions and Allocation
 
 | Zone | Y-Position | Height | Width | Area | Function |
 |------|-----------|--------|-------|------|----------|
@@ -86,7 +86,7 @@ The 250 mm × 180 mm board area is divided into functional zones arranged for op
 > [!note] Zone Overlap
 > The transformer zone overlaps with both primary and secondary zones because the transformer straddles the isolation barrier. The transformer primary pins land in the primary zone, and the secondary pins land in the secondary zone, with the isolation barrier passing through or around the transformer footprint.
 
-### Detailed Zone Layout (Top View)
+### 3.2 Detailed Zone Layout (Top View)
 
 ```
  0mm ┌──────────────────────── 250mm ────────────────────────────┐
@@ -130,7 +130,7 @@ The 250 mm × 180 mm board area is divided into functional zones arranged for op
 180mm└────────────────────────────────────────────────────────────┘
 ```
 
-### Per-Phase Allocation
+### 3.3 Per-Phase Allocation
 
 Each of the 3 phases occupies approximately **80 mm × 60 mm** in the primary bridge zone and **80 mm × 45 mm** in the secondary rectifier zone. The phases are spaced equally across the 250 mm board width:
 
@@ -147,7 +147,7 @@ Each of the 3 phases occupies approximately **80 mm × 60 mm** in the primary br
 
 The transformer mounting strategy is the single biggest board-level mechanical decision. Two approaches are under consideration:
 
-### Option A: Through-Board Cutout
+### 4.1 Option A: Through-Board Cutout
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -158,7 +158,7 @@ The transformer mounting strategy is the single biggest board-level mechanical d
 | Advantage | Lower profile, better thermal coupling to chassis heatsink |
 | Disadvantage | Removes board area, complicates routing, weakens board mechanically |
 
-### Option B: On-Board Surface Mount (Planar Transformer)
+### 4.2 Option B: On-Board Surface Mount (Planar Transformer)
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -176,7 +176,7 @@ The transformer mounting strategy is the single biggest board-level mechanical d
 
 All current-carrying conductors are sized per **IPC-2152** (2009) for the specified current, copper weight, and allowable temperature rise. The target temperature rise is **30°C** above ambient for internal layers and **20°C** for external layers (more conservative for external due to proximity to other components).
 
-### External Layers (L1, L6) — 2 oz Cu
+### 5.1 External Layers (L1, L6) — 2 oz Cu
 
 | Net | Current (A) | Temp Rise (°C) | Min Width (mm) | Recommended Pour (mm) | Notes |
 |-----|-------------|-----------------|-----------------|----------------------|-------|
@@ -187,14 +187,14 @@ All current-carrying conductors are sized per **IPC-2152** (2009) for the specif
 | Secondary out − | 33 (per phase) | 20 | 7.0 | 10–15 | Matched to positive |
 | Combined output | 100 (total) | 20 | — | Bus bar + pour | Cannot be trace; bus bar mandatory |
 
-### Internal Layers (L5) — 2 oz Cu
+### 5.2 Internal Layers (L5) — 2 oz Cu
 
 | Net | Current (A) | Temp Rise (°C) | Min Width (mm) | Notes |
 |-----|-------------|-----------------|-----------------|-------|
 | DC Bus distribution | 28 | 30 | 8.0 | Full-width pour preferred |
 | Output distribution | 33 | 30 | 10.0 | Full-width pour preferred |
 
-### Signal Layers (L3, L4) — 1 oz Cu
+### 5.3 Signal Layers (L3, L4) — 1 oz Cu
 
 | Net | Current (mA) | Min Width (mm) | Notes |
 |-----|-------------|-----------------|-------|
@@ -206,7 +206,7 @@ All current-carrying conductors are sized per **IPC-2152** (2009) for the specif
 > [!warning] 100A Output Path
 > The combined 100 A output current **cannot** be carried by PCB copper alone at reasonable temperature rise. A **copper bus bar** soldered or bolted to the PCB is mandatory for the output path from the combined output capacitor bank to the P3 connector. Size the bus bar cross-section per IPC-2152: minimum 30 mm² copper cross-section for 100 A at 20°C rise.
 
-### Bus Bar Sizing Calculation
+### 5.4 Bus Bar Sizing Calculation
 
 For the output bus bar (100 A combined):
 
@@ -226,7 +226,7 @@ Resistive loss check:
 
 ## 6. Via Specifications
 
-### Power Vias (L1 ↔ L5, L1 ↔ L6)
+### 6.1 Power Vias (L1 ↔ L5, L1 ↔ L6)
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -237,7 +237,7 @@ Resistive loss check:
 | Vias needed per phase secondary (33 A) | 22 minimum → use 28 |
 | Array pattern | 4×6 or 5×5 grid in power pour areas |
 
-### Thermal Vias (Under TO-247 Pads)
+### 6.2 Thermal Vias (Under TO-247 Pads)
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -247,7 +247,7 @@ Resistive loss check:
 | Fill | Plugged and capped (prevent solder wicking) |
 | Count per TO-247 | 12–16 vias in drain pad area |
 
-### Stitching Vias (L1 GND ↔ L2 GND)
+### 6.3 Stitching Vias (L1 GND ↔ L2 GND)
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -257,7 +257,7 @@ Resistive loss check:
 
 ## 7. Layer Assignment by Zone
 
-### DC Bus Input Zone (0–40 mm)
+### 7.1 DC Bus Input Zone (0–40 mm)
 
 | Layer | Content |
 |-------|---------|
@@ -268,7 +268,7 @@ Resistive loss check:
 | L5 | DC− return plane |
 | L6 | Additional DC+ distribution, capacitor return pads |
 
-### LLC Primary Bridge Zone (40–120 mm)
+### 7.2 LLC Primary Bridge Zone (40–120 mm)
 
 | Layer | Content |
 |-------|---------|
@@ -279,7 +279,7 @@ Resistive loss check:
 | L5 | DC bus positive plane (wide pour, low impedance to decoupling caps) |
 | L6 | DC bus return, MOSFET thermal pad interface to heatsink |
 
-### Transformer Zone (115–175 mm)
+### 7.3 Transformer Zone (115–175 mm)
 
 | Layer | Content |
 |-------|---------|
@@ -293,7 +293,7 @@ Resistive loss check:
 > [!warning] Isolation Barrier — All Layers
 > **No copper on any layer** may cross the primary-secondary isolation barrier except through the transformer itself. This includes L2 GND, L3/L4 signal, and L5 power. The barrier must be maintained on all 6 layers as a continuous PCB slot or keep-out zone. See [[07-PCB-Layout/DC-DC/06-Creepage and Clearance|Creepage and Clearance]] for detailed barrier requirements.
 
-### Secondary Rectifier Zone (140–190 mm)
+### 7.4 Secondary Rectifier Zone (140–190 mm)
 
 | Layer | Content |
 |-------|---------|
@@ -304,7 +304,7 @@ Resistive loss check:
 | L5 | Output positive plane |
 | L6 | Output return, rectifier thermal pads |
 
-### Output Zone (165–180 mm)
+### 7.5 Output Zone (165–180 mm)
 
 | Layer | Content |
 |-------|---------|

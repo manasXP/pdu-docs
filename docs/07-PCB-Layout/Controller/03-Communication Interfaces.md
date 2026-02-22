@@ -26,7 +26,7 @@ North edge (120 mm)
 > [!tip] Connector grouping rationale
 > Placing all communication connectors on a single edge achieves three goals: (1) cable harnesses exit the enclosure in one direction, (2) communication signals are physically separated from the power-stage harness on the south edge, and (3) EMC filtering components can be concentrated in one board region.
 
-### Connector Summary
+### 1.1 Connector Summary
 
 | Connector | Interface | Type | Pins | Placement |
 |---|---|---|---|---|
@@ -36,7 +36,7 @@ North edge (120 mm)
 
 ## 2. CAN Bus Interface
 
-### CAN Transceiver: TCAN1044
+### 2.1 CAN Transceiver: TCAN1044
 
 The TCAN1044 is a 3.3 V logic, 5 V bus CAN transceiver from Texas Instruments. It supports CAN 2.0B at up to 5 Mbps (used here at 1 Mbps).
 
@@ -49,13 +49,13 @@ The TCAN1044 is a 3.3 V logic, 5 V bus CAN transceiver from Texas Instruments. I
 | Standby current | 5 µA |
 | ESD rating | +/- 8 kV HBM on bus pins |
 
-### TCAN1044 Placement
+### 2.2 TCAN1044 Placement
 
 - Place the TCAN1044 within **10 mm of the P4 connector** to minimize the length of the unshielded differential pair between the transceiver and the connector
 - Orient the IC so that bus-side pins (CANH, CANL) face the connector and logic-side pins (TXD, RXD) face the MCU
 - Place a ground pad or via array under the IC thermal pad for heat dissipation
 
-### CAN Schematic and Key Components
+### 2.3 CAN Schematic and Key Components
 
 ```
                         TCAN1044
@@ -73,7 +73,7 @@ STM32 CAN_RX ───────┤ RXD  VIO ├──── 3.3V (100nF bypas
                                   Termination
 ```
 
-### CAN Differential Pair Routing
+### 2.4 CAN Differential Pair Routing
 
 The CANH/CANL differential pair between the TCAN1044 and P4 connector must be routed as a controlled-impedance pair:
 
@@ -90,7 +90,7 @@ The CANH/CANL differential pair between the TCAN1044 and P4 connector must be ro
 > [!warning] Differential pair continuity
 > The CANH/CANL pair must not cross any plane split on L2 or change layers. Route entirely on L1 with a continuous L2 GND reference underneath. Any discontinuity in the reference plane creates a common-mode noise source.
 
-### CAN Termination Resistor
+### 2.5 CAN Termination Resistor
 
 A 120 ohm termination resistor is placed at the P4 connector between CANH and CANL:
 
@@ -106,7 +106,7 @@ In a 5-module stacking configuration, only the two end nodes need the 120 ohm te
 | End-of-bus module (in stack) | 120 ohm installed |
 | Middle module (in stack) | 120 ohm removed / jumper open |
 
-### Common-Mode Choke
+### 2.6 Common-Mode Choke
 
 A common-mode choke (CMC) is placed between the TCAN1044 and the P4 connector to suppress common-mode noise on the CAN bus:
 
@@ -122,7 +122,7 @@ Placement: between TCAN1044 bus pins and the 120 ohm termination / P4 connector.
 
 ## 3. OCPP 1.6 Interface
 
-### Architecture Options
+### 3.1 Architecture Options
 
 OCPP 1.6 communicates via JSON over WebSocket over TCP/IP. Two implementation options exist:
 
@@ -134,7 +134,7 @@ OCPP 1.6 communicates via JSON over WebSocket over TCP/IP. Two implementation op
 > [!tip] Recommended approach
 > For a production design, use the **W5500** SPI-to-Ethernet IC. It integrates the TCP/IP stack in hardware, minimizing MCU software complexity. It connects to the MCU via SPI (shared bus or dedicated) and to the network via a standard RJ45 connector with integrated magnetics.
 
-### W5500 Ethernet Controller Layout
+### 3.2 W5500 Ethernet Controller Layout
 
 | Parameter | Specification |
 |---|---|
@@ -155,7 +155,7 @@ Layout rules for W5500:
 | RX+/RX- differential pair | 100 ohm, route on L1, keep within 10 mm to RJ45 |
 | Clearance from analog section | Minimum 10 mm |
 
-### RJ45 Connector (P6) with Magnetics
+### 3.3 RJ45 Connector (P6) with Magnetics
 
 Use an RJ45 jack with integrated magnetics and LED indicators:
 
@@ -174,7 +174,7 @@ MCU SPI ──────┤ SPI  TX+ ├──── Integrated ────�
 
 ## 4. ISO 15118 PLC Modem Interface
 
-### QCA7000 Overview
+### 4.1 QCA7000 Overview
 
 The Qualcomm QCA7000 is a HomePlug Green PHY (HPGP) PLC modem used for ISO 15118 vehicle-to-charger communication over the control pilot / proximity pilot lines.
 
@@ -186,7 +186,7 @@ The Qualcomm QCA7000 is a HomePlug Green PHY (HPGP) PLC modem used for ISO 15118
 | PLC coupling | Via analog front-end (AFE) and coupling transformer |
 | Firmware | Loaded from external SPI flash or MCU at boot |
 
-### QCA7000 Placement and Routing
+### 4.2 QCA7000 Placement and Routing
 
 Place the QCA7000 in the **northeast section** of the board, near the P7 coax connector:
 
@@ -198,7 +198,7 @@ Place the QCA7000 in the **northeast section** of the board, near the P7 coax co
 | RESET line | Route from MCU GPIO, 10 kohm pull-up, 100 nF cap to GND |
 | Decoupling | 100 nF per VDD pin, 10 µF bulk, placed within 2 mm |
 
-### PLC Analog Front-End and Coupling Circuit
+### 4.3 PLC Analog Front-End and Coupling Circuit
 
 The QCA7000 connects to the charging cable's control pilot line through an analog front-end (AFE) circuit:
 
@@ -218,7 +218,7 @@ pins        circuit     1:1             (to CP line)
 > [!warning] PLC analog routing
 > The PLC transmit and receive paths carry signals in the 2–30 MHz band. These traces are NOT baseband analog like the ADC sense channels. Route them as 50 ohm controlled impedance on L1 and keep them at least 5 mm from any other signal. The coupling transformer must be within 10 mm of the P7 connector.
 
-### SPI Flash for QCA7000 Firmware
+### 4.4 SPI Flash for QCA7000 Firmware
 
 If the QCA7000 boots from external SPI flash (rather than MCU-loaded firmware):
 
@@ -239,7 +239,7 @@ If the QCA7000 boots from external SPI flash (rather than MCU-loaded firmware):
 
 ## 6. Connector Pin Assignments
 
-### P4 — CAN Bus (Molex Micro-Fit 3.0, 4-pin)
+### 6.1 P4 — CAN Bus (Molex Micro-Fit 3.0, 4-pin)
 
 | Pin | Signal | Notes |
 |---|---|---|
@@ -248,7 +248,7 @@ If the QCA7000 boots from external SPI flash (rather than MCU-loaded firmware):
 | 3 | GND | Signal ground |
 | 4 | Shield | Cable shield, connect to chassis GND via RC |
 
-### P6 — OCPP Ethernet (RJ45)
+### 6.2 P6 — OCPP Ethernet (RJ45)
 
 Standard Ethernet pinout (T568B), integrated magnetics in jack.
 
@@ -260,7 +260,7 @@ Standard Ethernet pinout (T568B), integrated magnetics in jack.
 | 6 | RX- |
 | 4,5,7,8 | Unused (or PoE if needed) |
 
-### P7 — ISO 15118 PLC (SMA or BNC)
+### 6.3 P7 — ISO 15118 PLC (SMA or BNC)
 
 | Pin | Signal | Notes |
 |---|---|---|

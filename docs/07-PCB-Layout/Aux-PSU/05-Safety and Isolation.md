@@ -6,13 +6,13 @@ status: draft
 
 # 05 — Safety and Isolation
 
-## 1 Purpose
+## 1. Purpose
 
 This document specifies the safety and isolation design for the Aux PSU board. The board bridges the most dangerous voltage boundary in the entire PDU: the 920 VDC bus (hazardous energy source) to all low-voltage secondary outputs that are accessible through connectors and harnesses. This makes the Aux PSU the **most safety-critical PCB** in the system — a single insulation failure here can expose operators or downstream boards to lethal voltage.
 
 All isolation requirements are derived from **IEC 62368-1** (Audio/video, information and technology equipment — Safety requirements), which is the harmonized standard for IT/telecom power supplies and is accepted by UL (UL 62368-1) and CE (EN 62368-1).
 
-## 2 Applicable Safety Standards
+## 2. Applicable Safety Standards
 
 | Standard | Scope | Key Requirements for Aux PSU |
 |----------|-------|------------------------------|
@@ -22,9 +22,9 @@ All isolation requirements are derived from **IEC 62368-1** (Audio/video, inform
 | UL 2202 | EV charging equipment | Additional requirements for EV DCFC safety |
 | IEC 60112 | CTI testing | Material group classification for creepage calculation |
 
-## 3 Voltage Classification
+## 3. Voltage Classification
 
-### Primary Side
+### 3.1 Primary Side
 
 | Parameter | Value |
 |-----------|-------|
@@ -35,7 +35,7 @@ All isolation requirements are derived from **IEC 62368-1** (Audio/video, inform
 | Overvoltage category | OVC II (equipment level) |
 | Energy class | PS2 (hazardous energy: V > 60 VDC and available energy > 20 J from bus caps) |
 
-### Secondary Side (All Outputs)
+### 3.2 Secondary Side (All Outputs)
 
 | Parameter | Value |
 |-----------|-------|
@@ -43,7 +43,7 @@ All isolation requirements are derived from **IEC 62368-1** (Audio/video, inform
 | Classification | SELV (Safety Extra-Low Voltage) — PS1 |
 | Accessible | Yes — through connectors P4 and P5 to other boards |
 
-### Insulation Requirement
+### 3.3 Insulation Requirement
 
 | Boundary | From | To | Insulation Type | Rationale |
 |----------|------|----|----|-----------|
@@ -51,9 +51,9 @@ All isolation requirements are derived from **IEC 62368-1** (Audio/video, inform
 | Gate drive A ↔ Gate drive B | PS1 | PS1 | Functional | Different isolated returns, max 50 V differential |
 | Gate drive ↔ Logic | PS1 | PS1 | Functional | Different returns, max 18 V differential |
 
-## 4 Creepage and Clearance Requirements
+## 4. Creepage and Clearance Requirements
 
-### Primary to Secondary (Reinforced Insulation)
+### 4.1 Primary to Secondary (Reinforced Insulation)
 
 Creepage and clearance are calculated per IEC 62368-1, Table 28 and Table G.9:
 
@@ -81,7 +81,7 @@ Creepage and clearance are calculated per IEC 62368-1, Table 28 and Table G.9:
 | Reinforced factor | 2.0x | IEC 62368-1 clause 5.4.2 |
 | **Required clearance** | **8.0 mm** | Minimum through-air distance |
 
-### Functional Isolation (Between Secondary Domains)
+### 4.2 Functional Isolation (Between Secondary Domains)
 
 | Boundary | Working Voltage | Creepage | Clearance |
 |----------|----------------|----------|-----------|
@@ -97,11 +97,11 @@ Creepage and clearance are calculated per IEC 62368-1, Table 28 and Table G.9:
 >
 > When measuring creepage across the PCB slot, the path goes: primary copper edge → down the slot wall → across the slot bottom (if any) → up the opposite wall → to secondary copper edge. The 4 mm slot width contributes approximately 4 + 1.6 + 1.6 = 7.2 mm of path (slot width + two wall descents of ~0.8 mm each for 1.6 mm board).
 
-## 5 PCB Slot Specification
+## 5. PCB Slot Specification
 
 The primary isolation barrier is a **routed PCB slot** that spans the full board height (80 mm):
 
-### Slot Geometry
+### 5.1 Slot Geometry
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
@@ -112,7 +112,7 @@ The primary isolation barrier is a **routed PCB slot** that spans the full board
 | Copper setback from slot edge | 1.0 mm minimum on all layers | No copper within 1 mm of slot wall |
 | Solder mask setback from slot | 0.5 mm minimum | Prevent mask bridging |
 
-### Slot Location on Board
+### 5.2 Slot Location on Board
 
 ```
         ←——————————— 100 mm ———————————————→
@@ -127,7 +127,7 @@ The primary isolation barrier is a **routed PCB slot** that spans the full board
                33 mm    37 mm from left edge
 ```
 
-### Components Crossing the Slot
+### 5.3 Components Crossing the Slot
 
 Only two component types are permitted to physically bridge the PCB slot:
 
@@ -140,9 +140,9 @@ Only two component types are permitted to physically bridge the PCB slot:
 > [!tip] Slot Bridging Verification
 > After layout, generate a DRC report with a custom rule that flags any copper, solder mask, or silkscreen crossing the defined slot zone (33–37 mm from left edge, all layers). Only the transformer pads, Y-capacitor pads, and optocoupler pads should appear as intentional violations.
 
-## 6 Conformal Coating
+## 6. Conformal Coating
 
-### Coating Specification
+### 6.1 Coating Specification
 
 | Parameter | Value |
 |-----------|-------|
@@ -152,7 +152,7 @@ Only two component types are permitted to physically bridge the PCB slot:
 | Coverage | All copper traces, solder joints, and component leads within 5 mm of the isolation barrier |
 | Exclusion zones | Connector pins, test points, mounting holes, transformer core |
 
-### Coating Benefits for Isolation
+### 6.2 Coating Benefits for Isolation
 
 Conformal coating provides several safety benefits:
 
@@ -164,7 +164,7 @@ Conformal coating provides several safety benefits:
 > [!warning] Conformal Coating is Not a Substitute for Creepage
 > The conformal coating provides a secondary safety benefit but must NOT be relied upon as the primary insulation means. The 14 mm creepage and 8 mm clearance must be met on the **bare PCB** without coating. The coating is an additional layer of protection.
 
-### Application Process
+### 6.3 Application Process
 
 1. Clean the board thoroughly (IPA wash + DI water rinse) before coating
 2. Mask connector pins, test points, and transformer core
@@ -172,9 +172,9 @@ Conformal coating provides several safety benefits:
 4. Cure per manufacturer specifications
 5. Inspect under UV light (acrylic coatings fluoresce under UV for inspection)
 
-## 7 Hipot (Dielectric Withstand) Testing
+## 7. Hipot (Dielectric Withstand) Testing
 
-### Test Specification
+### 7.1 Test Specification
 
 | Parameter | Value | Reference |
 |-----------|-------|-----------|
@@ -185,7 +185,7 @@ Conformal coating provides several safety benefits:
 | Test frequency | 50/60 Hz | Line frequency AC |
 | Pass criteria | No breakdown, no flashover, leakage <5 mA | |
 
-### Test Matrix
+### 7.2 Test Matrix
 
 | Test # | From (shorted together) | To (shorted together) | Voltage | Duration |
 |--------|------------------------|----------------------|---------|----------|
@@ -198,7 +198,7 @@ Conformal coating provides several safety benefits:
 > [!warning] Hipot Test Sequence
 > Always perform hipot tests **before** conformal coating, so any defects are caught. Then coat, cure, and re-test at the same voltage as a post-coating verification. A hipot failure after coating indicates a coating defect or contamination under the coating.
 
-### Test Point Design
+### 7.3 Test Point Design
 
 Provide dedicated test pads for hipot testing:
 
@@ -212,13 +212,13 @@ Provide dedicated test pads for hipot testing:
 
 Test pads: 2 mm diameter, ENIG finish, not covered by solder mask. Place at board edges for probe access.
 
-## 8 Y1 Safety Capacitor
+## 8. Y1 Safety Capacitor
 
-### Purpose
+### 8.1 Purpose
 
 A Y1-class capacitor is placed across the isolation barrier (from PRI_GND to SEC_GND) to provide a return path for common-mode noise current. Without this capacitor, CM noise current has no low-impedance path back to the primary side, resulting in high conducted EMI.
 
-### Specification
+### 8.2 Specification
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
@@ -229,7 +229,7 @@ A Y1-class capacitor is placed across the isolation barrier (from PRI_GND to SEC
 | Placement | Bridges the PCB slot, one pad on primary side, one on secondary side |
 | Creepage (component body) | ≥14 mm (verified on datasheet) | Must meet reinforced insulation distance |
 
-### Placement Rules
+### 8.3 Placement Rules
 
 1. Y1 capacitor placed within 10 mm of the flyback transformer (shares the CM noise loop)
 2. Primary pad connects to PRI_GND copper pour
@@ -251,9 +251,9 @@ A Y1-class capacitor is placed across the isolation barrier (from PRI_GND to SEC
                     ←── 4mm ──→
 ```
 
-## 9 Leakage Current Budget
+## 9. Leakage Current Budget
 
-### Requirement
+### 9.1 Requirement
 
 Per IEC 62368-1 clause 5.7.2, the total touch current (leakage current) must not exceed:
 
@@ -262,7 +262,7 @@ Per IEC 62368-1 clause 5.7.2, the total touch current (leakage current) must not
 | Normal operation | 3.5 mA (for permanently connected equipment) |
 | Single fault | 3.5 mA |
 
-### Leakage Current Sources
+### 9.2 Leakage Current Sources
 
 | Source | Estimated Current | Calculation |
 |--------|------------------|-------------|
@@ -274,7 +274,7 @@ Per IEC 62368-1 clause 5.7.2, the total touch current (leakage current) must not
 > [!tip] Touch Current vs. CM Noise Current
 > The IEC 62368-1 leakage current limit applies at **mains frequency** (50/60 Hz) and is measured with a specified body impedance network. The high-frequency CM current through the transformer interwinding capacitance (~7.5 mA at 65 kHz) is an EMI concern, not a safety concern per the leakage current test. The Y1 capacitor and the EMI filter together manage the high-frequency CM current.
 
-### Y1 Capacitor Value Selection
+### 9.3 Y1 Capacitor Value Selection
 
 The Y1 capacitor value is limited by the leakage current budget:
 
@@ -282,9 +282,9 @@ $$C_{Y1\_max} = \frac{I_{leak\_max}}{2\pi \times f \times V_{bus}} = \frac{3.5 \
 
 The selected 2.2 nF provides a 4.6x margin to the leakage limit. Increasing to 4.7 nF would improve CM filtering but reduce margin to 2.1x.
 
-## 10 Isolation Between Gate Drive Domains
+## 10. Isolation Between Gate Drive Domains
 
-### Functional Isolation (Domain A ↔ Domain B)
+### 10.1 Functional Isolation (Domain A ↔ Domain B)
 
 The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each other because they have independent return paths that may operate at different potentials (the MOSFET source of each power board is at a different switching potential).
 
@@ -297,7 +297,7 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 | PCB implementation | 1 mm gap between Domain A and Domain B ground pours on L2; no shared copper |
 | Hipot test | 500 VAC for 60 s between domains |
 
-### Layout Rules for Domain Separation
+### 10.2 Layout Rules for Domain Separation
 
 1. Each gate drive domain (A, B) has its own ground pour on L2, L1, and L4 — never merged
 2. Output inductors and capacitors for Domain A and Domain B maintain 1.6 mm edge-to-edge spacing
@@ -305,7 +305,7 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 4. Connector P4 has dedicated return pins for each domain (pin 3 = RTN_AC, pin 7 = RTN_DC)
 5. No component straddles the boundary between domains A and B
 
-## 11 Safety Marking and Silkscreen
+## 11. Safety Marking and Silkscreen
 
 ### Required Markings
 
@@ -318,7 +318,7 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 | Hipot test points | Near TP1–TP5 | "HIPOT TEST" labels |
 | Creepage boundaries | Along 14 mm paths | Hatched keepout zone markings |
 
-## 12 Design Verification Checklist
+## 12. Design Verification Checklist
 
 - [ ] Creepage ≥14 mm measured across every primary-to-secondary path (PCB surface, component bodies)
 - [ ] Clearance ≥8 mm measured through air across every primary-to-secondary gap
@@ -334,7 +334,7 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 - [ ] Safety silkscreen markings present on both sides of PCB
 - [ ] DRC configured with net classes enforcing creepage/clearance per domain
 
-## 13 Cross-References
+## 13. Cross-References
 
 - [[__init]] — Board overview, isolation domain map
 - [[07-PCB-Layout/Aux-PSU/01-Stack-Up and Layer Assignment]] — Split ground plane, slot location

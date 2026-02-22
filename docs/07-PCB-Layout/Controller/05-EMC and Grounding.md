@@ -10,14 +10,14 @@ This document defines the electromagnetic compatibility (EMC) and grounding stra
 
 ## 1. Grounding Philosophy
 
-### Single GND Plane — No Splits
+### 1.1 Single GND Plane — No Splits
 
 The Controller Board uses a **single, continuous ground plane on L2** with no intentional splits or cuts. This is the recommended approach for a mixed-signal board where the analog and digital sections share a single ADC (the STM32's internal ADCs).
 
 > [!warning] Why no ground splits
 > A split ground plane forces return currents to find alternative paths around the split, which increases loop area and creates common-mode noise. The STM32G474 has analog and digital ground pins (VSSA, VSS) that are internally connected within the IC die. Splitting the external ground plane while the IC connects them internally creates a ground loop through the IC package. A single plane with **careful component partitioning** is superior.
 
-### Partitioning by Placement, Not by Plane Cuts
+### 1.2 Partitioning by Placement, Not by Plane Cuts
 
 Instead of splitting the ground plane, analog and digital sections are separated by **component placement zoning**:
 
@@ -30,7 +30,7 @@ Instead of splitting the ground plane, analog and digital sections are separated
 
 The continuous L2 plane allows return currents to flow directly under their source traces. Since analog components are grouped on the west side and digital components on the east side, their return currents naturally stay in separate regions of the plane without a physical cut forcing them elsewhere.
 
-### Star-Ground Point
+### 1.3 Star-Ground Point
 
 The analog ground star point is the **single location** where the analog ground region (under the op-amps and LDO) and digital ground region (under the MCU) are defined to have equal potential. In practice, with a continuous plane, the star point is simply the location where the analog supply return (AGND from the LDO) connects to L2.
 
@@ -58,7 +58,7 @@ A perimeter ring of GND stitching vias connects L1 GND copper (guard traces, edg
 2. **Return-current containment**: prevents currents from flowing along the board edge
 3. **Mechanical grounding**: provides multiple low-impedance connections for any enclosure contact
 
-### Stitching Via Specification
+### 2.1 Stitching Via Specification
 
 | Parameter | Value |
 |---|---|
@@ -69,7 +69,7 @@ A perimeter ring of GND stitching vias connects L1 GND copper (guard traces, edg
 | Total via count | ~220 vias (perimeter of 120+100+120+100 = 440 mm, at 2 mm pitch) |
 | Connected layers | L1 GND copper to L2 GND plane |
 
-### Edge Copper Pour
+### 2.2 Edge Copper Pour
 
 On L1, a 2 mm wide GND copper pour runs along the board perimeter, connected to the stitching vias:
 
@@ -91,7 +91,7 @@ Board edge
 
 Every external connector on the board is a potential EMC ingress/egress point. Each connector has a dedicated filtering and protection scheme.
 
-### P4 — CAN Bus Connector
+### 3.1 P4 — CAN Bus Connector
 
 | Protection | Component | Placement |
 |---|---|---|
@@ -107,7 +107,7 @@ P4 pin ──┬── TVS ──┬── CMC ──── TCAN1044
          GND      GND
 ```
 
-### P6 — OCPP Ethernet (RJ45)
+### 3.2 P6 — OCPP Ethernet (RJ45)
 
 | Protection | Component | Placement |
 |---|---|---|
@@ -122,7 +122,7 @@ The RJ45 connector shield is connected to **chassis ground** (not signal ground)
 | R_shield | 1 Mohm | DC bleed for static charge |
 | C_shield | 4.7 nF / 2 kV | AC coupling for HF noise to chassis |
 
-### P7 — ISO 15118 PLC (Coax)
+### 3.3 P7 — ISO 15118 PLC (Coax)
 
 | Protection | Component | Placement |
 |---|---|---|
@@ -132,7 +132,7 @@ The RJ45 connector shield is connected to **chassis ground** (not signal ground)
 
 The coupling transformer provides inherent galvanic isolation. The GDT (gas discharge tube) protects against high-energy surges coupled through the charging cable.
 
-### P3 — Analog Sense Inputs
+### 3.4 P3 — Analog Sense Inputs
 
 | Protection | Component | Placement |
 |---|---|---|
@@ -143,7 +143,7 @@ The coupling transformer provides inherent galvanic isolation. The GDT (gas disc
 > [!warning] Analog connector ESD
 > The TVS diodes on P3 must be low-capacitance types (< 5 pF per channel) to avoid degrading the analog signal bandwidth. The TPD4E05U06 has 1.5 pF per channel, which is acceptable for the DC–50 kHz bandwidth of the current sense signals.
 
-### P1/P2 — PWM Harness Connectors
+### 3.5 P1/P2 — PWM Harness Connectors
 
 | Protection | Component | Placement |
 |---|---|---|
@@ -151,7 +151,7 @@ The coupling transformer provides inherent galvanic isolation. The GDT (gas disc
 | TVS diode array | TPD6E05U06 (6-ch, 5 V clamp) | At connector pins |
 | Bypass capacitor | 100 pF to GND | At each connector pin |
 
-### P5 — Power Entry Connector
+### 3.6 P5 — Power Entry Connector
 
 | Protection | Component | Placement |
 |---|---|---|
@@ -161,7 +161,7 @@ The coupling transformer provides inherent galvanic isolation. The GDT (gas disc
 
 ## 4. ESD Protection Strategy
 
-### Design Target
+### 4.1 Design Target
 
 The controller board must survive ESD events per **IEC 61000-4-2**:
 
@@ -169,7 +169,7 @@ The controller board must survive ESD events per **IEC 61000-4-2**:
 |---|---|---|
 | Level 4 (target) | +/- 8 kV | +/- 15 kV |
 
-### Protection Architecture
+### 4.2 Protection Architecture
 
 ESD protection is implemented in three tiers:
 
@@ -179,7 +179,7 @@ ESD protection is implemented in three tiers:
 | 2. Trace level | Series components in signal path | Resistors (10k–33 ohm) | Limit current, slow edge rate |
 | 3. IC level | Internal to ICs | IC ESD structures | Last line of defense (not relied upon) |
 
-### TVS Diode Selection Criteria
+### 4.3 TVS Diode Selection Criteria
 
 | Parameter | Requirement |
 |---|---|
@@ -189,7 +189,7 @@ ESD protection is implemented in three tiers:
 | Peak pulse current | > 5 A (8/20 µs waveform) |
 | Package | SOT-23 or smaller for per-pin, array for multi-pin |
 
-### ESD Current Path Design
+### 4.4 ESD Current Path Design
 
 ESD currents must have a low-impedance path from the connector pin to ground **without flowing through sensitive IC pins**:
 
@@ -224,7 +224,7 @@ All shielded cables entering the board (CAN, Ethernet, PLC, analog sense) must h
 
 ## 6. Board-Level EMC Design Rules
 
-### Bypass Capacitor Strategy
+### 6.1 Bypass Capacitor Strategy
 
 Every connector pin that enters or exits the board has a bypass capacitor to GND:
 
@@ -237,7 +237,7 @@ Every connector pin that enters or exits the board has a bypass capacitor to GND
 | P6 | Ethernet | Via magnetics | — (magnetics provide isolation) |
 | P7 | PLC coax | Via transformer | — (transformer provides isolation) |
 
-### Ferrite Bead Placement
+### 6.2 Ferrite Bead Placement
 
 Ferrite beads are used at three locations:
 
@@ -247,7 +247,7 @@ Ferrite beads are used at three locations:
 | 5 V power entry (FB2) | BLM18PG331 | 330 ohm @ 100 MHz | Reject Aux PSU HF noise |
 | Analog 3.3 V isolation (FB3) | BLM18PG221 | 220 ohm @ 100 MHz | Isolate analog from digital noise |
 
-### Trace Routing for EMC
+### 6.3 Trace Routing for EMC
 
 | Rule | Specification |
 |---|---|

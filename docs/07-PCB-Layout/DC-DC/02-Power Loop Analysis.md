@@ -15,7 +15,7 @@ This document analyzes the two critical power commutation loops in the LLC reson
 
 ## 2. Loop 1: LLC Primary Half-Bridge
 
-### Circuit Description
+### 2.1 Circuit Description
 
 Each phase of the LLC converter uses a half-bridge (two series SiC MOSFETs) driven from the 920V DC bus. The commutation loop is:
 
@@ -38,7 +38,7 @@ The critical loop is: **C_bus(+) → Q1 drain → Q1 source/Q2 drain (SW node) �
 
 This loop carries the full switching current during hard-switched transitions (e.g., startup, overload, or loss of ZVS conditions).
 
-### Inductance Budget
+### 2.2 Inductance Budget
 
 | Component | Inductance (nH) | Source | Controllable? |
 |-----------|-----------------|--------|---------------|
@@ -55,7 +55,7 @@ This loop carries the full switching current during hard-switched transitions (e
 > [!note] Package Inductance Dominates
 > The TO-247 package contributes **~24 nH** out of the ~34 nH total — roughly **70%** of the loop inductance. This is inherent to the through-hole package and cannot be reduced by layout. The only ways to reduce package inductance are: (1) use TO-247-4L (Kelvin source) which saves ~2–3 nH by eliminating shared source inductance from the gate loop, or (2) use a surface-mount package like TO-263-7L or a module. For this design, TO-247-4L is assumed.
 
-### Overshoot Calculation — Without Snubber
+### 2.3 Overshoot Calculation — Without Snubber
 
 The voltage overshoot during turn-off is:
 
@@ -83,7 +83,7 @@ Margin  = 1200 - 1192 = 8 V (0.67%)
 >
 > **The RC snubber is non-negotiable.**
 
-### RC Snubber Design
+### 2.4 RC Snubber Design
 
 An RC snubber across each MOSFET damps the parasitic ringing and reduces peak voltage.
 
@@ -143,7 +143,7 @@ Total for 6 MOSFETs: 6 × 0.127 = 0.76 W (negligible)
 
 The 10 Ω resistor must handle 0.13 W — a standard 0805 rated at 0.125 W is marginal. **Use 1206 (0.25 W) for margin**, or a 0805 rated for pulse duty.
 
-### Primary Loop Layout Rules
+### 2.5 Primary Loop Layout Rules
 
 To achieve ≤8 nH PCB inductance contribution:
 
@@ -158,7 +158,7 @@ To achieve ≤8 nH PCB inductance contribution:
 | **P-7** | Snubber R-C within 3 mm of each MOSFET D-S pads | Snubber effectiveness degrades rapidly with distance |
 | **P-8** | Keep gate driver components outside the power loop area | Prevent coupling of dI/dt into gate circuit |
 
-### Primary Loop Inductance Estimation Method
+### 2.6 Primary Loop Inductance Estimation Method
 
 Use the parallel-plate approximation for overlapping L1/L5 copper pours:
 
@@ -183,7 +183,7 @@ This is comfortably below the 8 nH target.
 
 ## 3. Loop 2: Secondary Rectifier
 
-### Circuit Description
+### 3.1 Circuit Description
 
 Each phase uses a synchronous rectifier (two SiC MOSFETs) on the transformer secondary:
 
@@ -203,7 +203,7 @@ Each phase uses a synchronous rectifier (two SiC MOSFETs) on the transformer sec
 
 The critical loop is: **TX secondary → Q3 → C_out(+) → C_out(−) → Q4 → TX secondary**
 
-### Inductance Budget
+### 3.2 Inductance Budget
 
 | Component | Inductance (nH) | Source |
 |-----------|-----------------|--------|
@@ -217,7 +217,7 @@ The critical loop is: **TX secondary → Q3 → C_out(+) → C_out(−) → Q4 �
 | C_out ESL | 1–2 | Ceramic MLCC parallel bank |
 | **Total loop inductance** | **~17–23 (nominal 22)** | — |
 
-### Overshoot Calculation — Secondary
+### 3.3 Overshoot Calculation — Secondary
 
 ```
 V_overshoot = L_loop × (dI/dt)
@@ -239,7 +239,7 @@ Margin  = 650 - 610 = 40 V (6.2%)
 > [!warning] Secondary Margin Is Also Tight
 > A 40V (6.2%) margin on the secondary rectifiers is workable but not generous. Consider adding RC snubbers on the secondary as well, especially if the LLC loses soft-switching during transients. A 4.7 Ω + 470 pF snubber per secondary MOSFET would reduce the peak to approximately 570V (80V margin, 12.3%).
 
-### Optional Secondary Snubber
+### 3.4 Optional Secondary Snubber
 
 | Parameter | Value |
 |-----------|-------|
@@ -249,7 +249,7 @@ Margin  = 650 - 610 = 40 V (6.2%)
 | Package | 0603 sufficient |
 | Recommendation | Include in schematic, populate based on prototype testing |
 
-### Secondary Loop Layout Rules
+### 3.5 Secondary Loop Layout Rules
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -264,7 +264,7 @@ Margin  = 650 - 610 = 40 V (6.2%)
 
 With 3 interleaved phases sharing the output current equally, parasitic mismatches cause current imbalance:
 
-### Inductance Matching Target
+### 4.1 Inductance Matching Target
 
 ```
 For ≤2% current imbalance:
@@ -274,14 +274,14 @@ This means the PCB inductance variation between phases must be < 0.68 nH.
 At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between phases.
 ```
 
-### Layout Approach for Symmetry
+### 4.2 Layout Approach for Symmetry
 
 1. **Design Phase A completely** — place all components, route all power and signal traces
 2. **Copy Phase A layout to Phase B and Phase C** using KiCad "Replicate Layout" or manual mirroring
 3. **Verify inductance matching** using a 2D field solver (e.g., Ansys Q3D, FastHenry) or measure on prototype with impedance analyzer
 4. **Bus bar connections** to each phase must be equal length (use a star topology from the main bus bar)
 
-### Bus Bar Star Topology
+### 4.3 Bus Bar Star Topology
 
 ```
          P2 (920V DC Bus Input)
@@ -303,7 +303,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 
 ## 5. Decoupling Capacitor Strategy
 
-### Primary Bus Decoupling (per phase)
+### 5.1 Primary Bus Decoupling (per phase)
 
 | Tier | Component | Qty | ESL (each) | ESL (parallel) | Purpose |
 |------|-----------|-----|-----------|-----------------|---------|
@@ -312,7 +312,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 | Tier 2 | 10 µF / 1kV film | 2 | 5 nH | 2.5 nH | Within 30 mm, sustained switching energy |
 | Bulk | Electrolytic (shared) | 4–6 | 15 nH | 3 nH | On bus bar, bus voltage stability |
 
-### Secondary Output Decoupling (per phase)
+### 5.2 Secondary Output Decoupling (per phase)
 
 | Tier | Component | Qty | ESL (each) | ESL (parallel) | Purpose |
 |------|-----------|-----|-----------|-----------------|---------|
@@ -326,7 +326,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 
 ## 6. Loop Inductance Verification
 
-### Pre-Fabrication (Simulation)
+### 6.1 Pre-Fabrication (Simulation)
 
 | Tool | Method | Accuracy |
 |------|--------|----------|
@@ -334,7 +334,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 | FastHenry (open source) | Define conductor segments → L matrix | ±15% |
 | KiCad + FreePDK SPICE | Estimate from trace geometry rules of thumb | ±30% |
 
-### Post-Fabrication (Measurement)
+### 6.2 Post-Fabrication (Measurement)
 
 | Method | Equipment | Frequency |
 |--------|-----------|-----------|

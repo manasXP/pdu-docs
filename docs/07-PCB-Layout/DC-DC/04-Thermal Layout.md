@@ -12,7 +12,7 @@ This document specifies the thermal management layout for the DC-DC LLC resonant
 
 ## 2. Power Loss Budget
 
-### Per-Phase Loss Breakdown (at 10 kW per phase)
+### 2.1 Per-Phase Loss Breakdown (at 10 kW per phase)
 
 | Component | Loss Type | Power (W) | Quantity | Subtotal (W) |
 |-----------|-----------|-----------|----------|---------------|
@@ -29,7 +29,7 @@ This document specifies the thermal management layout for the DC-DC LLC resonant
 | PCB copper (I²R) | Resistive | 3–8 | — | 3–8 |
 | **Phase subtotal** | | | | **100–175** |
 
-### Total Board Loss
+### 2.2 Total Board Loss
 
 | Condition | Per Phase | 3 Phases | Notes |
 |-----------|-----------|----------|-------|
@@ -43,7 +43,7 @@ This document specifies the thermal management layout for the DC-DC LLC resonant
 
 ## 3. MOSFET Thermal Design — Primary (1200V SiC, TO-247)
 
-### Thermal Interface
+### 3.1 Thermal Interface
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -54,7 +54,7 @@ This document specifies the thermal management layout for the DC-DC LLC resonant
 | Insulation | Electrically insulating TIM (GP3000S is insulating) |
 | Mounting torque | 0.5 N·m (per Bergquist specification) |
 
-### Thermal Resistance Stack
+### 3.2 Thermal Resistance Stack
 
 ```
 T_junction
@@ -75,7 +75,7 @@ T_heatsink_surface
 T_ambient
 ```
 
-### Temperature Calculation — Primary MOSFET
+### 3.3 Temperature Calculation — Primary MOSFET
 
 ```
 Worst case: P_MOSFET = 25 W per device, T_amb = 55°C
@@ -94,7 +94,7 @@ At thermal derating threshold (55°C ambient):
   T_j = 55 + 25 × 1.39 = 89.8°C → still well below limit
 ```
 
-### PCB Thermal Interface for TO-247
+### 3.4 PCB Thermal Interface for TO-247
 
 The TO-247 devices are through-hole mounted. The PCB area under and around the device contributes to heat spreading:
 
@@ -117,7 +117,7 @@ The TO-247 devices are through-hole mounted. The PCB area under and around the d
 
 ## 4. MOSFET Thermal Design — Secondary (650V SiC, TO-247)
 
-### Thermal Parameters
+### 4.1 Thermal Parameters
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -128,7 +128,7 @@ The TO-247 devices are through-hole mounted. The PCB area under and around the d
 | Dominant loss | Conduction (synchronous rectification, near-ZCS) |
 | Power dissipation | 10–20 W per device |
 
-### Temperature Calculation — Secondary MOSFET
+### 4.2 Temperature Calculation — Secondary MOSFET
 
 ```
 P_MOSFET = 20 W (worst case), T_amb = 55°C
@@ -147,7 +147,7 @@ T_j_max = 175°C → margin = 94°C (comfortable)
 
 The transformers are the **largest individual heat sources** on the DC-DC board, each dissipating 30–50 W of combined core and winding losses.
 
-### Mounting Options and Thermal Paths
+### 5.1 Mounting Options and Thermal Paths
 
 #### Option A: Through-Board Cutout Mounting
 
@@ -192,7 +192,7 @@ The transformers are the **largest individual heat sources** on the DC-DC board,
 >
 > The on-board mounting option **requires active cooling** of the transformer itself (direct airflow over the core) or a **thermal interface bracket** that bypasses the PCB. Through-board cutout mounting is strongly preferred for thermal reasons.
 
-### Transformer Cutout Thermal Considerations
+### 5.2 Transformer Cutout Thermal Considerations
 
 The PCB cutout removes copper and FR-4 material, affecting nearby component cooling:
 
@@ -205,7 +205,7 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 
 ## 6. Gate Driver Thermal
 
-### Power Dissipation and Cooling
+### 6.1 Power Dissipation and Cooling
 
 | Parameter | Value |
 |-----------|-------|
@@ -215,7 +215,7 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 | Rth_ja (still air) | ~70°C/W (SO-16W) |
 | Rth_ja (with Cu pour + vias) | ~40°C/W |
 
-### Driver Thermal Layout
+### 6.2 Driver Thermal Layout
 
 | Feature | Specification |
 |---------|--------------|
@@ -226,14 +226,14 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 
 ## 7. Passive Component Thermal
 
-### Resonant Components (Lr, Cr)
+### 7.1 Resonant Components (Lr, Cr)
 
 | Component | Loss (W) | Thermal Consideration |
 |-----------|----------|----------------------|
 | Lr (resonant inductor) | 10–15 per phase | Mount vertically with airflow access; may need heatsink clip |
 | Cr (resonant capacitor bank) | 2–5 per phase | Film/ceramic caps; distribute across area for thermal spreading |
 
-### Electrolytic Capacitors
+### 7.2 Electrolytic Capacitors
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -247,7 +247,7 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 
 ## 8. Airflow Path Design
 
-### Forced-Air Cooling Architecture
+### 8.1 Forced-Air Cooling Architecture
 
 The PDU enclosure uses forced-air cooling with fans drawing air across the boards. The airflow direction across the DC-DC board is designed to cool the **lowest-power components first** (entering cool air) and **highest-power components last** (where the air is warmest but the components have the highest temperature ratings):
 
@@ -283,7 +283,7 @@ The PDU enclosure uses forced-air cooling with fans drawing air across the board
 > [!tip] Airflow Optimization
 > The transformer zone creates the most significant airflow obstruction (large core bodies). Ensure the PCB cutouts are sized to allow airflow through/around the transformer. If using through-board cutouts, the transformer core sits below the board surface, and airflow over the top side is unobstructed. Consider airflow baffles to direct air across MOSFET heatsink fins.
 
-### Airflow Requirements
+### 8.2 Airflow Requirements
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
@@ -292,7 +292,7 @@ The PDU enclosure uses forced-air cooling with fans drawing air across the board
 | Pressure drop budget | 5–10 Pa across board | Typical for 40 mm axial fans |
 | Fan specification | 2× 80 mm, 12V, 25 CFM each | Redundant; one fan sustains derating |
 
-### Thermal Derating
+### 8.3 Thermal Derating
 
 Per the PDU specification, thermal derating begins at **55°C ambient**:
 
@@ -317,7 +317,7 @@ Consolidated from [[07-PCB-Layout/DC-DC/01-Stack-Up and Layer Assignment|Stack-U
 | Resonant tank (Lr/Cr) | 28 | L1 (ext) | 2 oz | 5.5 | 20 |
 | SW node (keep small) | 28 | L1 (ext) | 2 oz | 5.5 min, ≤1.5cm² area | 20 |
 
-### I²R Loss in PCB Copper
+### 9.1 I²R Loss in PCB Copper
 
 ```
 Example: DC bus trace, one phase, L1 (2 oz external)
@@ -351,7 +351,7 @@ Before fabrication, perform a thermal simulation to validate the layout:
 | KiCad + external thermal solver | Export geometry → thermal solver | Medium |
 | Hand calculation (this doc) | Rth stack-up per component | Low — conservative |
 
-### Key Simulation Inputs
+### 10.1 Key Simulation Inputs
 
 | Input | Value | Source |
 |-------|-------|--------|

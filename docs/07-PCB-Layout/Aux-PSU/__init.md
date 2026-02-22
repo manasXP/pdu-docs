@@ -7,13 +7,13 @@ aliases: [Aux PSU Board, Auxiliary Power Supply]
 
 # Aux PSU Board — Isolated Auxiliary Power Supply
 
-## 1 Overview
+## 1. Overview
 
 This subfolder documents the PCB layout design for the **Auxiliary Power Supply (Aux PSU)** board of the 30 kW Power Delivery Unit. The Aux PSU provides all low-voltage power rails required by the system — isolated gate drive supplies for the two power boards, logic power for the controller, and fan drive voltage — all derived from the high-voltage DC bus (920 VDC) or an auxiliary AC winding.
 
 The Aux PSU must start up autonomously from the DC bus or AC input before the main converter begins switching, providing a stable standby rail to the controller so it can initialize, perform safety checks, and command the main power stage.
 
-## 2 Board Summary
+## 2. Board Summary
 
 | Parameter | Value |
 |-----------|-------|
@@ -31,7 +31,7 @@ The Aux PSU must start up autonomously from the DC bus or AC input before the ma
 | Total output power | 15–25 W across all rails |
 | On-board dissipation | 5–10 W (topology-dependent) |
 
-## 3 Output Rail Summary
+## 3. Output Rail Summary
 
 | Rail | Voltage | Current | Ripple (max) | Load | Isolation | Connector |
 |------|---------|---------|-------------|------|-----------|-----------|
@@ -50,7 +50,7 @@ $$P_{out} = (18 \times 0.5 + 5 \times 0.2) \times 2 + 5 \times 1.0 + 3.3 \times 
 
 At 80% converter efficiency: $P_{in} \approx 28.5$ W, dissipation $\approx 5.7$ W on-board.
 
-## 4 Isolation Domains
+## 4. Isolation Domains
 
 The Aux PSU contains **four distinct isolation domains** separated by reinforced or functional insulation barriers:
 
@@ -87,37 +87,37 @@ The Aux PSU contains **four distinct isolation domains** separated by reinforced
 > [!warning] Reinforced Insulation Requirement
 > The 920 VDC bus is classified as a hazardous voltage source. All insulation between the primary side and any secondary output must meet **reinforced insulation** per IEC 62368-1. This drives the 4 mm PCB slot, 14 mm creepage, 8 mm clearance, and hipot test requirements detailed in [[05-Safety and Isolation]].
 
-## 5 Functional Block Diagram
+## 5. Functional Block Diagram
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
-│  AUX-PSU-01  (100 mm × 80 mm)                                    │
+│  AUX-PSU-01  (100 mm × 80 mm)                                     │
 │                                                                   │
 │  PRIMARY SIDE              │ BARRIER │  SECONDARY SIDE            │
 │                            │  (slot) │                            │
-│  ┌─────────┐  ┌─────────┐ │         │  ┌──────────┐ → +18V/−5V  │
-│  │ Input   │→ │ Flyback │ │  XFMR   │  │ Rect +   │   (AC-DC)   │
-│  │ Filter  │  │ Primary │─│─────────│─ │ Filter A │ → P4:1-4    │
-│  │ + Caps  │  │ + Clamp │ │         │  ├──────────┤             │
-│  └─────────┘  └─────────┘ │         │  │ Rect +   │ → +18V/−5V  │
-│       ↑                   │         │  │ Filter B │   (DC-DC)   │
-│  DC Bus In                │         │  ├──────────┤ → P4:5-8    │
-│  (920 VDC)                │         │  │ Rect +   │             │
-│                            │         │  │ Filter C │ → +12V/+5V  │
-│  ┌─────────┐              │         │  └────┬─────┘ → P5:1-4    │
-│  │ PWM     │              │    Y1   │       │                    │
-│  │ Control │──────────────│─ ─ ─ ─ │───────┘ Feedback           │
-│  │ IC      │  Optocoupler │  cap    │                            │
-│  └─────────┘              │         │  ┌──────┐                  │
-│                            │         │  │ LDO  │ → +3.3V         │
+│  ┌─────────┐  ┌─────────┐  │         │  ┌──────────┐ → +18V/−5V   │
+│  │ Input   │→ │ Flyback │  │  XFMR   │  │ Rect +   │   (AC-DC)    │
+│  │ Filter  │  │ Primary │─ │─────────│─ │ Filter A │ → P4:1-4     │
+│  │ + Caps  │  │ + Clamp │  │         │  ├──────────┤              │
+│  └─────────┘  └─────────┘  │         │  │ Rect +   │ → +18V/−5V   │
+│       ↑                    │         │  │ Filter B │   (DC-DC)    │
+│  DC Bus In                 │         │  ├──────────┤ → P4:5-8     │
+│  (920 VDC)                 │         │  │ Rect +   │              │
+│                            │         │  │ Filter C │ → +12V/+5V   │
+│  ┌─────────┐               │         │  └────┬─────┘ → P5:1-4     │
+│  │ PWM     │               │    Y1   │       │                    │
+│  │ Control │───────────────│─ ─ ─ ─ -│───────┘ Feedback           │
+│  │ IC      │  Optocoupler  │  cap    │                            │
+│  └─────────┘               │         │  ┌──────┐                  │
+│                            │         │  │ LDO  │ → +3.3V          │
 │                            │         │  └──────┘                  │
 │                            │         │  ┌──────┐                  │
-│                            │         │  │STBY  │ → 3.3V standby  │
+│                            │         │  │STBY  │ → 3.3V standby   │
 │                            │         │  └──────┘                  │
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-## 6 Key Design Parameters
+## 6. Key Design Parameters
 
 | Parameter | Target | Reference |
 |-----------|--------|-----------|
@@ -133,7 +133,7 @@ The Aux PSU contains **four distinct isolation domains** separated by reinforced
 | Output ripple (+18 V rail) | <100 mV pp | [[04-Output Filtering and Regulation]] |
 | Output ripple (+3.3 V rail) | <30 mV pp | [[04-Output Filtering and Regulation]] |
 
-## 7 Document Index
+## 7. Document Index
 
 This subfolder contains the following detailed layout design notes:
 
@@ -147,7 +147,7 @@ This subfolder contains the following detailed layout design notes:
 
 5. **[[05-Safety and Isolation]]** — Reinforced insulation design per IEC 62368-1, creepage and clearance analysis, PCB slot specification, conformal coating, hipot testing, Y-capacitor selection, and leakage current budget.
 
-## 8 Design Constraints Summary
+## 8. Design Constraints Summary
 
 > [!warning] Critical Layout Constraints
 > - The **4 mm PCB slot** across the full board width is the primary isolation barrier. No copper, solder mask bridges, or silkscreen may cross this slot except the flyback transformer footprint and Y-class safety capacitor.
@@ -155,7 +155,7 @@ This subfolder contains the following detailed layout design notes:
 > - All gate drive output rails (+18 V/−5 V) must maintain **functional isolation** from each other — separate windings, separate rectifiers, separate ground returns.
 > - The standby rail must be operational within **50 ms** of DC bus voltage appearing, before any main converter switching begins.
 
-## 9 Related Documents
+## 9. Related Documents
 
 - [[__init]] — PDU top-level specifications
 - [[00-Board Partitioning]] — Multi-board architecture, P4/P5 connector definitions

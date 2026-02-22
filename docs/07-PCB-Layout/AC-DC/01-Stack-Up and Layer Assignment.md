@@ -12,7 +12,7 @@ This document defines the 6-layer PCB stack-up for the Vienna Rectifier PFC boar
 
 ## 2. Stack-Up Definition
 
-### Layer Table
+### 2.1 Layer Table
 
 | Layer | Name | Cu Weight | Thickness (µm) | Function | Notes |
 |-------|------|-----------|-----------------|----------|-------|
@@ -33,7 +33,7 @@ This document defines the 6-layer PCB stack-up for the Vienna Rectifier PFC boar
 > [!tip] Why 2 oz on L1/L2/L5/L6?
 > At 60 A AC input current, 1 oz copper requires impractically wide traces (>50 mm). The 2 oz outer layers halve the required trace width and significantly reduce I²R losses. The 2 oz L2 ground plane provides a low-impedance return path that is critical for both power loop performance and EMI control.
 
-### Prepreg Selection — L1 to L2 Gap
+### 2.2 Prepreg Selection — L1 to L2 Gap
 
 The L1-to-L2 prepreg thickness is the most critical dimension in the stack-up. A thinner dielectric between L1 (power) and L2 (ground) reduces power loop inductance because:
 
@@ -53,7 +53,7 @@ where $d$ is the dielectric thickness and $w$ is the overlap width between the f
 > [!warning] Fabrication Constraint
 > Confirm the target prepreg thickness with your PCB fabricator before finalizing the design. Not all fabricators can reliably produce <100 µm prepreg with 2 oz copper on both sides. Request a stack-up review from the fab house and document the agreed-upon values.
 
-### Impedance Considerations
+### 2.3 Impedance Considerations
 
 While this is primarily a power board, controlled impedance is needed for:
 
@@ -83,7 +83,7 @@ The board is divided into four functional zones arranged along the primary axis 
    connector      + gate drivers  + film caps  connector
 ```
 
-### Zone A — EMI Filter (~50 mm)
+### 3.1 Zone A — EMI Filter (~50 mm)
 
 **Layer assignments:**
 - **L1:** X-capacitor pads, CM choke pads, inrush relay pads
@@ -101,7 +101,7 @@ The board is divided into four functional zones arranged along the primary axis 
 > [!warning] EMI Filter Isolation
 > The EMI filter zone must be physically and electrically isolated from the power stage zone. Conducted emissions from the switching node will couple back into the filter and degrade attenuation if the zones share return paths or have insufficient separation. See [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] for the stitching via fence specification.
 
-### Zone B — Vienna Rectifier Power Stage (~100 mm)
+### 3.2 Zone B — Vienna Rectifier Power Stage (~100 mm)
 
 This is the most layout-critical zone on the board. It contains:
 
@@ -152,7 +152,7 @@ This is the most layout-critical zone on the board. It contains:
     └──────────────────────────────────┘
 ```
 
-### Zone C — DC Bus Capacitors (~50 mm)
+### 3.3 Zone C — DC Bus Capacitors (~50 mm)
 
 **Layer assignments:**
 - **L1:** Positive bus bar pour (2 oz)
@@ -165,7 +165,7 @@ This is the most layout-critical zone on the board. It contains:
 - Additional film capacitors for high-frequency decoupling
 - Bleeder/balancing resistors across each series cap
 
-### Zone D — Connectors and Auxiliary (~50 mm)
+### 3.4 Zone D — Connectors and Auxiliary (~50 mm)
 
 - DC output power connector (to [[07-PCB-Layout/DC-DC/__init|DC-DC]] board or bus bar)
 - AC input connector (from EMI filter if external, or from Zone A)
@@ -177,7 +177,7 @@ This is the most layout-critical zone on the board. It contains:
 
 Current-carrying traces must be sized per IPC-2152 for the required current and allowable temperature rise. The following table assumes 2 oz (70 µm) external copper and a 30°C temperature rise above ambient.
 
-### External Layers (L1, L6) — 2 oz Copper
+### 4.1 External Layers (L1, L6) — 2 oz Copper
 
 | Current (A) | Trace Width (mm) | Recommended Implementation | Application |
 |-------------|-------------------|---------------------------|-------------|
@@ -187,7 +187,7 @@ Current-carrying traces must be sized per IPC-2152 for the required current and 
 | 10 | 3 | Trace | Auxiliary power |
 | 5 | 1.2 | Trace | Gate driver supply bus |
 
-### Internal Layers (L5) — 2 oz Copper
+### 4.2 Internal Layers (L5) — 2 oz Copper
 
 Internal layers have worse thermal dissipation. Apply a derating factor of approximately 0.5× compared to external layers.
 
@@ -200,7 +200,7 @@ Internal layers have worse thermal dissipation. Apply a derating factor of appro
 > [!tip] Use Copper Pours, Not Traces
 > At 40–60 A, discrete traces are impractical. Use copper pour zones (polygon fills) that span the full available width in each zone. The "trace width" values above represent the **minimum** width — always use the maximum available width to reduce resistive losses and improve thermal performance.
 
-### Internal Layers (L3, L4) — 1 oz Copper
+### 4.3 Internal Layers (L3, L4) — 1 oz Copper
 
 These layers carry only signal and low-current auxiliary power. Maximum recommended current on L3/L4 is 2 A for power and <100 mA for signals.
 
@@ -218,7 +218,7 @@ The L2 ground plane is the most critical element of the stack-up. It serves thre
 2. **EMI shield** — L2 shields the inner signal layers (L3, L4) from the high dV/dt switching noise on L1.
 3. **Signal reference** — All analog current sense signals and gate drive signals reference L2 for their return path.
 
-### Mandatory Rules for L2
+### 5.1 Mandatory Rules for L2
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -233,7 +233,7 @@ The L2 ground plane is the most critical element of the stack-up. It serves thre
 
 ## 6. Via Strategy
 
-### Power Vias (L1 ↔ L5/L6)
+### 6.1 Power Vias (L1 ↔ L5/L6)
 
 | Parameter | Value |
 |-----------|-------|
@@ -245,7 +245,7 @@ The L2 ground plane is the most critical element of the stack-up. It serves thre
 
 Power transitions between L1 and L5/L6 must use via arrays. Place vias in a grid pattern within the copper pour zone.
 
-### Signal Vias (L1/L6 ↔ L3)
+### 6.2 Signal Vias (L1/L6 ↔ L3)
 
 | Parameter | Value |
 |-----------|-------|
@@ -254,11 +254,11 @@ Power transitions between L1 and L5/L6 must use via arrays. Place vias in a grid
 | Finished hole | 0.2 mm |
 | Usage | Gate drive signals, analog sense, digital control |
 
-### Thermal Vias
+### 6.3 Thermal Vias
 
 See [[07-PCB-Layout/AC-DC/04-Thermal Layout]] for thermal via arrays under MOSFET pads and gate driver packages.
 
-### Stitching Vias
+### 6.4 Stitching Vias
 
 | Parameter | Value |
 |-----------|-------|

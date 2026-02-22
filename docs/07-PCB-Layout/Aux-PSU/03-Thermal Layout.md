@@ -6,15 +6,15 @@ status: draft
 
 # 03 — Thermal Layout
 
-## 1 Purpose
+## 1. Purpose
 
 This document specifies the thermal design aspects of the Aux PSU board. Unlike the main power boards (AC-DC and DC-DC) which dissipate hundreds of watts and require dedicated heatsinks with forced-air cooling, the Aux PSU dissipates only **5–10 W total**. This modest dissipation level allows the board to rely on **natural convection and PCB conduction** to the enclosure chassis, supplemented by incidental airflow from the main system fan.
 
 Despite the low total dissipation, individual hot spots — particularly the primary MOSFET and secondary rectifier diodes — require careful thermal layout to stay within safe operating limits at the 55°C ambient maximum.
 
-## 2 Thermal Budget Overview
+## 2. Thermal Budget Overview
 
-### Power Dissipation Breakdown
+### 2.1 Power Dissipation Breakdown
 
 | Component | Loss Mechanism | Estimated Loss (W) | Worst Case (W) | Notes |
 |-----------|---------------|-------------------|-----------------|-------|
@@ -34,7 +34,7 @@ Despite the low total dissipation, individual hot spots — particularly the pri
 > [!warning] LDO Dissipation Dominates
 > The +3.3 V LDO (fed from +5 V) and the +5 V LDO (if fed from +12 V) together account for 1.35–2.0 W — approximately 25% of total board dissipation. If the +5 V rail is derived from the +12 V winding through an LDO, the dropout loss is $(12 - 5) \times 1.0 = 7.0$ W, which is unacceptable. The +5 V rail **must** have its own dedicated winding or use a small buck regulator from the +12 V rail. See [[04-Output Filtering and Regulation]] for alternatives.
 
-### Temperature Targets
+### 2.2 Temperature Targets
 
 | Component | Package | Max Junction/Case Temp | Target Operating Temp | Max Dissipation |
 |-----------|---------|----------------------|---------------------|-----------------|
@@ -46,9 +46,9 @@ Despite the low total dissipation, individual hot spots — particularly the pri
 | PWM controller U1 | SOIC-8 | 150°C | ≤100°C | 0.3 W |
 | Electrolytic output caps | Radial | 105°C (case) | ≤85°C | ESR loss only |
 
-## 3 Cooling Strategy — Natural Convection + Conduction
+## 3. Cooling Strategy — Natural Convection + Conduction
 
-### No Dedicated Forced Air
+### 3.1 No Dedicated Forced Air
 
 The Aux PSU board is positioned in the enclosure near the main system fan but does **not** have dedicated forced-air cooling. The thermal design relies on:
 
@@ -58,7 +58,7 @@ The Aux PSU board is positioned in the enclosure near the main system fan but do
 4. **Incidental airflow** — The main system fan (exhausting from the power boards) creates some air movement around the Aux PSU
 5. **Radiation** — Black solder mask and copper surfaces radiate heat to the enclosure walls
 
-### Thermal Resistance Estimates (Natural Convection, 55°C Ambient)
+### 3.2 Thermal Resistance Estimates (Natural Convection, 55°C Ambient)
 
 | Cooling Path | Estimated Rth (°C/W) | Notes |
 |-------------|---------------------|-------|
@@ -68,7 +68,7 @@ The Aux PSU board is positioned in the enclosure near the main system fan but do
 | PCB to chassis (Rth_pc) — via standoffs | 10–20 per standoff | M3 standoff, 5 mm length |
 | Junction to ambient (Rth_ja) — total for TO-263 with thermal vias | 30–50 | With 10 cm² copper pour + 9 thermal vias |
 
-### Temperature Rise Calculations
+### 3.3 Temperature Rise Calculations
 
 #### Primary MOSFET (Q1) — 2.5 W Worst Case
 
@@ -101,9 +101,9 @@ $$T_j = 55 + 1.0 \times 50 = 105°C \quad \text{(meets target)}$$
 > [!warning] LDO Thermal Pads Are Mandatory
 > Both the +5 V and +3.3 V LDOs **must** have dedicated copper pour thermal pads on L1, connected through thermal vias to L4 bottom-side pours. Without these pours, the SOT-223 packages will overheat at 55°C ambient. Minimum copper pour: 4 cm² per LDO.
 
-## 4 Thermal Via Arrays
+## 4. Thermal Via Arrays
 
-### Under Primary MOSFET (Q1) — TO-263
+### 4.1 Under Primary MOSFET (Q1) — TO-263
 
 | Parameter | Value |
 |-----------|-------|
@@ -135,7 +135,7 @@ $$T_j = 55 + 1.0 \times 50 = 105°C \quad \text{(meets target)}$$
     ○ = thermal via (0.3mm drill, 1.27mm pitch)
 ```
 
-### Under Secondary Rectifier Diodes
+### 4.2 Under Secondary Rectifier Diodes
 
 For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 
@@ -147,7 +147,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | L1 copper pour | 2–4 cm² per diode |
 | L4 copper pour | Matching area on bottom |
 
-### Under LDO Regulators (SOT-223)
+### 4.3 Under LDO Regulators (SOT-223)
 
 | Parameter | Value |
 |-----------|-------|
@@ -157,9 +157,9 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | L1 copper pour | 4 cm² minimum |
 | L4 copper pour | 4 cm² minimum, matching |
 
-## 5 Copper Pour Heat Spreading
+## 5. Copper Pour Heat Spreading
 
-### Primary Side Thermal Pours
+### 5.1 Primary Side Thermal Pours
 
 | Pour | Net | Area | Layer(s) | Connected Components |
 |------|-----|------|----------|---------------------|
@@ -167,7 +167,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | Input cap return | PRI_GND | 5 cm² | L1 | C_in negative terminal |
 | Clamp resistor | CLAMP | 2 cm² | L1 | R_clamp (heat spreading for 1 W) |
 
-### Secondary Side Thermal Pours
+### 5.2 Secondary Side Thermal Pours
 
 | Pour | Net | Area | Layer(s) | Connected Components |
 |------|-----|------|----------|---------------------|
@@ -180,9 +180,9 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 > [!tip] Check LDO Tab Connection
 > Some LDOs connect the tab (exposed pad) to the output pin, others to the ground pin. Verify the specific LDO datasheet before assigning the thermal pour net. Connecting the tab to the wrong net will short the output.
 
-## 6 Operating Temperature Analysis at 55°C Ambient
+## 6. Operating Temperature Analysis at 55°C Ambient
 
-### Thermal Summary Table
+### 6.1 Thermal Summary Table
 
 | Component | Dissipation (W) | Rth_ja (°C/W) | Tj at 55°C (°C) | Target (°C) | Margin (°C) | Status |
 |-----------|-----------------|---------------|-----------------|-------------|-------------|--------|
@@ -199,9 +199,9 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 > [!warning] Chassis Thermal Path is Mandatory for Q1
 > Without direct chassis conduction through a mounting standoff, the primary MOSFET Q1 exceeds its target temperature by 35°C at worst-case ambient. The layout **must** include a copper thermal path from Q1 to a board mounting standoff. This is a firm design constraint, not optional.
 
-## 7 Component Derating Guidelines
+## 7. Component Derating Guidelines
 
-### Derating at 55°C Ambient
+### 7.1 Derating at 55°C Ambient
 
 | Component Type | Parameter | Derated Value at 55°C | Derating Rule |
 |---------------|-----------|----------------------|---------------|
@@ -213,7 +213,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | Transformer core | Saturation flux | 90% of 25°C value | Ferrite Bsat decreases ~0.3%/°C |
 | Resistors (1%) | Tolerance | Within spec if Tj < 125°C | Standard metal film |
 
-### Derating Table for Key Components
+### 7.2 Derating Table for Key Components
 
 | Component | Rated Value | Derated Value (55°C) | Safety Margin |
 |-----------|------------|---------------------|---------------|
@@ -222,7 +222,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | Q1 (1200 V SiC, Rdson = 1.0 ohm at 25°C) | 1.0 ohm | 1.5 ohm at 150°C Tj | Recalculate conduction loss |
 | LDO (1 A, SOT-223) | 1 A at 25°C | Check SOA at Tj = 105°C | May need to limit to 0.8 A |
 
-## 8 Thermal Design Verification
+## 8. Thermal Design Verification
 
 ### Pre-Layout Checks
 
@@ -239,7 +239,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 - [ ] Board mounting standoff holes have thermal copper connection to nearest hot component
 - [ ] No high-dissipation components placed adjacent to electrolytic capacitors
 
-## 9 Cross-References
+## 9. Cross-References
 
 - [[__init]] — Board overview, power budget
 - [[07-PCB-Layout/Aux-PSU/01-Stack-Up and Layer Assignment]] — Copper weights, layer assignments

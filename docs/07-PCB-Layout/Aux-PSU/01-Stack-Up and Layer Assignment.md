@@ -6,15 +6,15 @@ status: draft
 
 # 01 — Stack-Up and Layer Assignment
 
-## 1 Purpose
+## 1. Purpose
 
 This document defines the 4-layer PCB stack-up for the Aux PSU board. Unlike the power boards (AC-DC and DC-DC) where the stack-up is optimized for minimal power loop inductance, the Aux PSU stack-up is primarily driven by **isolation barrier management** — the board must physically separate 920 VDC primary-side circuitry from all secondary-side outputs with reinforced insulation per IEC 62368-1.
 
 The 4-layer stack-up provides adequate routing density for the low-complexity Aux PSU circuit while maintaining a continuous ground reference on L2 within each isolation domain.
 
-## 2 Stack-Up Definition
+## 2. Stack-Up Definition
 
-### Layer Table
+### 2.1 Layer Table
 
 | Layer | Name | Cu Weight | Thickness (um) | Function | Notes |
 |-------|------|-----------|-----------------|----------|-------|
@@ -31,7 +31,7 @@ The 4-layer stack-up provides adequate routing density for the low-complexity Au
 > [!tip] Why 4 Layers (Not 6)?
 > The Aux PSU carries a maximum of 2 A per rail — far less than the 40–60 A on the power boards. Four layers provide sufficient copper area for 25 W total power delivery. The cost, complexity, and lead time of a 4-layer board are substantially lower than 6-layer, making it appropriate for this low-power auxiliary board. The 100 x 80 mm footprint also limits routing congestion.
 
-### Selective 2 oz Copper
+### 2.2 Selective 2 oz Copper
 
 The board uses 1 oz copper as the baseline, with **2 oz copper pours selectively applied** on L1 and L4 for power-carrying paths:
 
@@ -46,7 +46,7 @@ The board uses 1 oz copper as the baseline, with **2 oz copper pours selectively
 > [!warning] Selective Copper Weight
 > Not all fabricators support selective copper weight on the same layer. If selective 2 oz is unavailable, use full 2 oz on L1 and L4, or use 1 oz throughout with wider pours. Confirm with the fabricator during stack-up review.
 
-## 3 Board Zone Map
+## 3. Board Zone Map
 
 The board is divided into two primary zones by the isolation barrier, with the secondary side further subdivided by function:
 
@@ -77,9 +77,9 @@ The board is divided into two primary zones by the isolation barrier, with the s
 - Only the flyback transformer footprint and Y1 safety capacitor bridge the slot
 - No copper, solder mask, or silkscreen may cross the slot except at designated bridge points
 
-## 4 Layer Assignments by Zone
+## 4. Layer Assignments by Zone
 
-### Primary Side (35 mm width)
+### 4.1 Primary Side (35 mm width)
 
 | Layer | Function | Key Nets |
 |-------|----------|----------|
@@ -91,7 +91,7 @@ The board is divided into two primary zones by the isolation barrier, with the s
 > [!warning] Primary Side Net Classification
 > All nets on the primary side carry hazardous voltage potential (referenced to the 920 VDC bus). The primary ground (PRI_GND) is **not** the same as secondary/logic GND. In the schematic and layout, these must be clearly differentiated with distinct net names and net classes.
 
-### Secondary Side — Gate Drive Domain A (AC-DC)
+### 4.2 Secondary Side — Gate Drive Domain A (AC-DC)
 
 | Layer | Function | Key Nets |
 |-------|----------|----------|
@@ -100,7 +100,7 @@ The board is divided into two primary zones by the isolation barrier, with the s
 | L3 | −5 V regulator routing, filter components | VNEG_AC, RTN_AC |
 | L4 | Connector P4 pins 1–4 routing, additional output filtering | VDRV_AC+, VNEG_AC, RTN_AC |
 
-### Secondary Side — Gate Drive Domain B (DC-DC)
+### 4.3 Secondary Side — Gate Drive Domain B (DC-DC)
 
 | Layer | Function | Key Nets |
 |-------|----------|----------|
@@ -109,7 +109,7 @@ The board is divided into two primary zones by the isolation barrier, with the s
 | L3 | −5 V regulator routing, filter components | VNEG_DC, RTN_DC |
 | L4 | Connector P4 pins 5–8 routing, additional output filtering | VDRV_DC+, VNEG_DC, RTN_DC |
 
-### Secondary Side — Logic + Fan Domain C
+### 4.4 Secondary Side — Logic + Fan Domain C
 
 | Layer | Function | Key Nets |
 |-------|----------|----------|
@@ -118,7 +118,7 @@ The board is divided into two primary zones by the isolation barrier, with the s
 | L3 | Standby regulator, feedback divider routing | STBY, V5V, SEC_GND |
 | L4 | Connector P5 routing, fan output, additional filtering | V12V, V5V, V3V3, SEC_GND |
 
-## 5 L2 Ground Plane — Split Configuration
+## 5. L2 Ground Plane — Split Configuration
 
 Unlike the power boards where L2 is a single continuous ground plane, the Aux PSU L2 is **intentionally split** into four isolated ground zones:
 
@@ -136,7 +136,7 @@ L2 Ground Plane (view from top):
      ~35 mm   slot  ~20 mm   ~20 mm   ~21 mm
 ```
 
-### Ground Plane Rules
+### 5.1 Ground Plane Rules
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -156,9 +156,9 @@ L2 Ground Plane (view from top):
 >
 > This enforces isolation distances automatically during layout.
 
-## 6 Via Strategy
+## 6. Via Strategy
 
-### Power Vias (L1 ↔ L4)
+### 6.1 Power Vias (L1 ↔ L4)
 
 | Parameter | Value |
 |-----------|-------|
@@ -169,7 +169,7 @@ L2 Ground Plane (view from top):
 | Array for 2 A fan rail | 3 vias minimum (use 4+) |
 | Array for 0.5 A gate drive | 2 vias minimum |
 
-### Signal Vias (L1/L4 ↔ L3)
+### 6.2 Signal Vias (L1/L4 ↔ L3)
 
 | Parameter | Value |
 |-----------|-------|
@@ -178,7 +178,7 @@ L2 Ground Plane (view from top):
 | Finished hole | 0.2 mm |
 | Usage | PWM controller, feedback, optocoupler |
 
-### Thermal Vias
+### 6.3 Thermal Vias
 
 | Parameter | Value |
 |-----------|-------|
@@ -190,7 +190,7 @@ L2 Ground Plane (view from top):
 
 See [[03-Thermal Layout]] for thermal via placement under dissipative components.
 
-### Stitching Vias
+### 6.4 Stitching Vias
 
 | Parameter | Value |
 |-----------|-------|
@@ -202,7 +202,7 @@ See [[03-Thermal Layout]] for thermal via placement under dissipative components
 > [!warning] No Stitching Vias Across Isolation Barrier
 > Stitching vias must only connect copper within the **same isolation domain**. A via that connects primary-side L1 copper through L2 PRI_GND to L4 primary copper is correct. A via that connects any primary copper to any secondary copper is a catastrophic isolation failure. Verify via assignments against net classes after placement.
 
-## 7 Impedance Considerations
+## 7. Impedance Considerations
 
 The Aux PSU has minimal controlled-impedance requirements. All signals are low-frequency (PWM controller at 65–130 kHz, feedback loop bandwidth <10 kHz):
 
@@ -212,7 +212,7 @@ The Aux PSU has minimal controlled-impedance requirements. All signals are low-f
 | Optocoupler feedback | Not controlled | L3 | Low bandwidth, <5 kHz loop |
 | Bias winding sense | Not controlled | L3 | Low current, shield with ground pour |
 
-## 8 Design for Manufacturing (DFM) Notes
+## 8. Design for Manufacturing (DFM) Notes
 
 | Parameter | Value | Standard |
 |-----------|-------|----------|
@@ -230,7 +230,7 @@ The Aux PSU has minimal controlled-impedance requirements. All signals are low-f
 > [!tip] PCB Slot Fabrication
 > The 4 mm isolation slot must be **routed** (milled) by the fabricator, not V-scored. Specify the slot on the board outline layer (Edge.Cuts in KiCad) or as a routed cutout on the mechanical layer. The slot walls should be smooth and free of copper burrs to prevent tracking. Confirm with the fabricator that the slot meets the specified width tolerance (+/- 0.1 mm).
 
-## 9 Cross-References
+## 9. Cross-References
 
 - [[__init]] — Board overview, rail summary, isolation domain map
 - [[02-Isolated Converter Layout]] — Transformer placement across isolation barrier

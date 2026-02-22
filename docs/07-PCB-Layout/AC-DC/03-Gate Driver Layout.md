@@ -33,7 +33,7 @@ The STGAP2SiC was selected for its high dV/dt immunity (>100 V/ns), 4A peak gate
 
 ## 3. Placement Strategy
 
-### Driver-to-MOSFET Relationship
+### 3.1 Driver-to-MOSFET Relationship
 
 Each STGAP2SiC drives one SiC MOSFET. The 6 driver ICs are placed in close proximity to their respective MOSFETs:
 
@@ -49,7 +49,7 @@ Each STGAP2SiC drives one SiC MOSFET. The 6 driver ICs are placed in close proxi
     └──────┘             └──────┘             └──────┘
 ```
 
-### Placement Rules
+### 3.2 Placement Rules
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -65,7 +65,7 @@ Each STGAP2SiC drives one SiC MOSFET. The 6 driver ICs are placed in close proxi
 
 ## 4. Gate Loop Analysis
 
-### Gate Loop Path
+### 4.1 Gate Loop Path
 
 The gate drive loop includes all conductors carrying the gate charge/discharge current:
 
@@ -89,7 +89,7 @@ The gate drive loop includes all conductors carrying the gate charge/discharge c
          └── Rg_off (parallel path via Schottky steering diode)
 ```
 
-### Gate Loop Inductance Budget
+### 4.2 Gate Loop Inductance Budget
 
 | Element | Symbol | Value (nH) | Notes |
 |---------|--------|-----------|-------|
@@ -112,7 +112,7 @@ The gate drive loop includes all conductors carrying the gate charge/discharge c
 
 ## 5. Gate Resistor Design
 
-### Turn-On Path — Rg_on
+### 5.1 Turn-On Path — Rg_on
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
@@ -121,7 +121,7 @@ The gate drive loop includes all conductors carrying the gate charge/discharge c
 | Package | 0402 (preferred for low inductance) or 0603 | Thin-film for tight tolerance |
 | Quantity | 1 per MOSFET | Series in gate-on path |
 
-### Turn-Off Path — Rg_off with Schottky Steering
+### 5.2 Turn-Off Path — Rg_off with Schottky Steering
 
 For fast turn-off (to prevent dV/dt-induced parasitic turn-on), a lower resistance path is used during turn-off, steered by a Schottky diode:
 
@@ -142,7 +142,7 @@ For fast turn-off (to prevent dV/dt-induced parasitic turn-on), a lower resistan
 > [!warning] Schottky Diode Placement
 > The Schottky steering diode must be placed **immediately adjacent** to the Rg_on resistor — within 2 mm pad-to-pad. The diode and Rg_off form a parallel path that must not add length to the gate loop. Poor placement of the steering network can actually increase gate loop inductance, negating its benefit.
 
-### Turn-Off dV/dt Immunity Check
+### 5.3 Turn-Off dV/dt Immunity Check
 
 At maximum dV/dt (35 kV/µs) across the MOSFET, the Miller capacitor Cgd injects current into the gate:
 
@@ -167,7 +167,7 @@ This is well below the SiC MOSFET threshold voltage (~2.5–4V), so **no parasit
 
 ## 6. Kelvin Source Connection
 
-### Why Kelvin Source Matters
+### 6.1 Why Kelvin Source Matters
 
 The TO-247-4 package has a dedicated 4th pin — the Kelvin source. This pin connects directly to the MOSFET die source bond wire with minimal inductance, bypassing the power source pin's package inductance (5–8 nH).
 
@@ -182,7 +182,7 @@ With Kelvin source:
 - Gate drive voltage is accurately applied to Vgs
 - Fast, clean switching with predictable dV/dt
 
-### Kelvin Source Routing Rules
+### 6.2 Kelvin Source Routing Rules
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -210,7 +210,7 @@ With Kelvin source:
 
 ## 7. Driver Decoupling
 
-### VDRV Supply (Positive Gate Drive, +15V to +20V)
+### 7.1 VDRV Supply (Positive Gate Drive, +15V to +20V)
 
 | Component | Value | Dielectric | Package | Placement |
 |-----------|-------|-----------|---------|-----------|
@@ -225,20 +225,20 @@ $$\Delta V_{DRV} = \frac{Q_g}{C_{local}} = \frac{200 \text{ nC}}{10 \text{ µF}}
 
 A 20 mV droop is negligible. The 10 µF is adequate.
 
-### VNEG Supply (Negative Gate Drive, −3V to −5V)
+### 7.2 VNEG Supply (Negative Gate Drive, −3V to −5V)
 
 | Component | Value | Dielectric | Package | Placement |
 |-----------|-------|-----------|---------|-----------|
 | C_VNEG_1 | 100 nF | C0G / NP0 | 0402 or 0603 | <3 mm from VNEG pin |
 | C_VNEG_2 | 4.7 µF | X5R | 0603 or 0805 | <5 mm from VNEG pin |
 
-### VCC Supply (Primary Side Logic, 3.3V or 5V)
+### 7.3 VCC Supply (Primary Side Logic, 3.3V or 5V)
 
 | Component | Value | Dielectric | Package | Placement |
 |-----------|-------|-----------|---------|-----------|
 | C_VCC | 100 nF | X7R | 0402 | <3 mm from VCC pin |
 
-### Decoupling Return Path
+### 7.4 Decoupling Return Path
 
 **All secondary-side decoupling capacitors (VDRV, VNEG) must return to the Kelvin source net**, not to the power source or a generic ground pour. This ensures the decoupling current loop is contained within the gate drive circuit and does not inject noise into other circuits.
 
@@ -251,7 +251,7 @@ A 20 mV droop is negligible. The 10 µF is adequate.
 
 The switching node transitions at 35 kV/µs or more. Capacitive coupling from the switching node to the gate driver can cause malfunction. The following layout measures mitigate this risk:
 
-### 1. No Copper Across the Isolation Gap
+### 8.1 No Copper Across the Isolation Gap
 
 The STGAP2SiC SO-8W package has primary-side pins (1–4) and secondary-side pins (5–8) separated by a molded isolation gap. On the PCB:
 
@@ -262,7 +262,7 @@ The STGAP2SiC SO-8W package has primary-side pins (1–4) and secondary-side pin
 | No vias | Beneath the package body in the isolation gap zone |
 | Clearance zone | ≥1 mm beyond the package body outline on all layers |
 
-### 2. PCB Slot Under Driver
+### 8.2 PCB Slot Under Driver
 
 A routed slot in the PCB beneath the STGAP2SiC isolation gap dramatically increases the creepage and clearance across the isolation barrier:
 
@@ -276,7 +276,7 @@ A routed slot in the PCB beneath the STGAP2SiC isolation gap dramatically increa
 > [!warning] Structural Integrity
 > PCB slots reduce mechanical strength. Do not place mounting holes, connectors, or heavy components near a slotted area. Verify with the PCB fabricator that the slot can be routed with acceptable tolerances (typically ±0.1 mm).
 
-### 3. Minimum Distance from Switching Node
+### 8.3 Minimum Distance from Switching Node
 
 | Distance from switching node copper | Action |
 |-------------------------------------|--------|
@@ -285,7 +285,7 @@ A routed slot in the PCB beneath the STGAP2SiC isolation gap dramatically increa
 | ≥5 mm | Acceptable — standard placement |
 | ≥10 mm | Preferred — maximum dV/dt rejection |
 
-### 4. Common-Mode Current from Driver Parasitic Capacitance
+### 8.4 Common-Mode Current from Driver Parasitic Capacitance
 
 Each STGAP2SiC has a parasitic capacitance across the isolation barrier (Cdh ≈ 5 pF typical). When the switching node transitions at high dV/dt, this capacitance injects CM current:
 
@@ -301,7 +301,7 @@ This 1 A of CM current must return through the EMI filter Y-capacitors and chass
 
 The STGAP2SiC supports SPI configuration on the primary (low-voltage) side. For a 6-driver daisy chain:
 
-### SPI Routing Rules
+### 9.1 SPI Routing Rules
 
 | Rule | Requirement |
 |------|-------------|
@@ -313,7 +313,7 @@ The STGAP2SiC supports SPI configuration on the primary (low-voltage) side. For 
 | Bypass caps | 100 nF on VCC at each driver (already specified above) |
 | Pull-up/pull-down | Per STGAP2SiC datasheet recommendations |
 
-### Daisy Chain Topology
+### 9.2 Daisy Chain Topology
 
 ```
     MCU SPI ──→ U1 ──→ U2 ──→ U3 ──→ U4 ──→ U5 ──→ U6
@@ -327,7 +327,7 @@ Route the SPI bus on L3, keeping it physically separated from all secondary-side
 
 The STGAP2SiC includes desaturation detection (DESAT) for short-circuit protection. The DESAT pin connects to the MOSFET drain through a high-voltage diode and sense resistor.
 
-### DESAT Layout Rules
+### 10.1 DESAT Layout Rules
 
 | Rule | Requirement |
 |------|-------------|

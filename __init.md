@@ -58,6 +58,7 @@ For medical/precision applications like your robotics work, prioritize SiC-based
 - [[07-PCB-Layout/__init|07-PCB Layout]] -- 6-layer stack-up, power loop optimization, gate driver layout, thermal management, EMI-aware routing, creepage/clearance
 - [[08-Power-On Sequence and Inrush Management]] -- Startup/shutdown sequence, inrush analysis, NTC pre-charge, output contactor, cold-start verification
 - [[09-Protection and Safety]] -- OVP/OCP/OTP/short-circuit/ground-fault protection design, insulation coordination, surge immunity, hipot requirements, safety compliance matrix (IEC 61851-23, IEC 62368-1, UL 2202)
+- [[11-Project-Plan/__init|11-Project Plan]] -- Development phases, test plan, resource plan, budget estimate, risk register, commissioning procedure
 
 ## Research
 

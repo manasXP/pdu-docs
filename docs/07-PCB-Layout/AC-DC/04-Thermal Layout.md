@@ -14,7 +14,7 @@ At 30 kW with >96% efficiency, the board dissipates up to **1200 W** of heat (at
 
 ## 2. Thermal Budget Overview
 
-### Power Dissipation Breakdown (Per Phase, 10 kW)
+### 2.1 Power Dissipation Breakdown (Per Phase, 10 kW)
 
 | Component | Loss Mechanism | Estimated Loss (W) | Notes |
 |-----------|---------------|-------------------|-------|
@@ -28,7 +28,7 @@ At 30 kW with >96% efficiency, the board dissipates up to **1200 W** of heat (at
 | **Total per phase** | | **135–220 W** | |
 | **Total 3-phase** | | **400–660 W** | Consistent with 98–96% efficiency |
 
-### Temperature Targets
+### 2.2 Temperature Targets
 
 | Component | Max Junction/Case Temp | Target Operating Temp | Notes |
 |-----------|----------------------|---------------------|-------|
@@ -40,7 +40,7 @@ At 30 kW with >96% efficiency, the board dissipates up to **1200 W** of heat (at
 
 ## 3. TO-247 Heatsink Mounting
 
-### Mechanical Specification
+### 3.1 Mechanical Specification
 
 The 6 SiC MOSFETs (and 6 boost diodes, if discrete TO-247) are mounted in TO-247 / HiP247 packages with a shared heatsink. The heatsink is a separate mechanical assembly that attaches through the PCB.
 
@@ -56,7 +56,7 @@ The 6 SiC MOSFETs (and 6 boost diodes, if discrete TO-247) are mounted in TO-247
 > [!warning] TO-247 Tab is Electrically Hot
 > The TO-247 metal tab is connected to the drain of the SiC MOSFET. The drain operates at the switching node voltage (0 to 920 VDC). The thermal interface material must provide **electrical isolation** between the tab and the heatsink. The heatsink is typically connected to PE (protective earth) or floating — in either case, the TIM must withstand the full bus voltage plus transients.
 
-### Thermal Interface Material — Bergquist GP3000S
+### 3.2 Thermal Interface Material — Bergquist GP3000S
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
@@ -68,7 +68,7 @@ The 6 SiC MOSFETs (and 6 boost diodes, if discrete TO-247) are mounted in TO-247
 | Operating temperature | −40°C to +200°C | |
 | Hardness | Shore 00-55 (compressed) | Soft enough to conform |
 
-### Thermal Stack (Junction to Ambient)
+### 3.3 Thermal Stack (Junction to Ambient)
 
 For one SiC MOSFET at maximum dissipation:
 
@@ -88,7 +88,7 @@ This is within the 175°C absolute max but above the 125°C operating target. **
 > [!tip] Heatsink Selection Drives Layout
 > The heatsink dimensions and mounting hole pattern directly affect the PCB layout. Select the heatsink early in the design process and incorporate its footprint into the PCB layout from the beginning. The heatsink mounting holes must align with the PCB mounting holes and maintain creepage from drain copper to PE. See [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]].
 
-### PCB Mounting Pad Design
+### 3.4 PCB Mounting Pad Design
 
 The TO-247 package has three elements that contact the PCB:
 
@@ -112,7 +112,7 @@ The TO-247 package has three elements that contact the PCB:
 
 Thermal vias conduct heat from the top copper layer (L1) through the PCB stack-up to inner and bottom layers, increasing the effective thermal conduction area.
 
-### Under MOSFET Pads
+### 4.1 Under MOSFET Pads
 
 For the TO-247 drain pad on L1, a thermal via array conducts heat to L5/L6:
 
@@ -150,7 +150,7 @@ For the TO-247 drain pad on L1, a thermal via array conducts heat to L5/L6:
 >
 > Thermal relief is only acceptable on signal-level pads where soldering by hand may be required during prototyping.
 
-### Via Fill Options
+### 4.2 Via Fill Options
 
 | Option | Pros | Cons | Recommendation |
 |--------|------|------|----------------|
@@ -161,7 +161,7 @@ For the TO-247 drain pad on L1, a thermal via array conducts heat to L5/L6:
 
 ## 5. Gate Driver Thermal Management
 
-### STGAP2SiC Thermal Design
+### 5.1 STGAP2SiC Thermal Design
 
 The STGAP2SiC in SO-8W package dissipates ~0.33 W per driver. With a typical SO-8W Rth_ja of 120–150°C/W, the temperature rise at 0.33 W would be 40–50°C — acceptable but leaves little margin at 55°C ambient.
 
@@ -184,7 +184,7 @@ At 55°C ambient: Tj = 55 + 23 = **78°C** — well within the 150°C maximum.
 > [!tip] Copper Pour Must Be on Kelvin Source Net
 > The copper pour beneath the STGAP2SiC (secondary side) is connected to the driver's exposed pad, which is typically the secondary-side ground (Kelvin source net for that phase). Ensure this pour does not connect to a different ground net or to the primary-side ground. Check the STGAP2SiC datasheet for the exposed pad connection.
 
-### Driver Thermal Pour Layout
+### 5.2 Driver Thermal Pour Layout
 
 ```
     L1 (top):
@@ -212,7 +212,7 @@ At 55°C ambient: Tj = 55 + 23 = **78°C** — well within the 150°C maximum.
 
 ## 6. IPC-2152 Bus Trace / Pour Sizing
 
-### AC Input Traces (60 A per phase)
+### 6.1 AC Input Traces (60 A per phase)
 
 The AC input current flows from the input connector (Zone A/D) through the EMI filter (Zone A) to the boost inductors and then to the MOSFETs (Zone B). Each phase carries up to 60 A RMS.
 
@@ -229,7 +229,7 @@ The AC input current flows from the input connector (Zone A/D) through the EMI f
 > [!tip] Parallel Layers for Current Sharing
 > Using L1 and L6 in parallel for the AC input phases effectively doubles the copper cross-section. With 30 mm pours on both L1 and L6 connected by via arrays, the effective cross-section is equivalent to a 30 mm, 4 oz copper trace. This reduces temperature rise and I²R losses. Ensure the via arrays are distributed along the pour length, not just at the ends.
 
-### DC Bus Traces (40 A)
+### 6.2 DC Bus Traces (40 A)
 
 The DC bus current flows from the MOSFETs through the snubber array to the bulk capacitors and then to the output connector.
 
@@ -243,7 +243,7 @@ The DC bus current flows from the MOSFETs through the snubber array to the bulk 
 | Positive bus | L1 (top) pour, extending from snubbers through Zone C to connector |
 | Negative bus | L5/L6 pour, extending from MOSFET sources through Zone C |
 
-### Internal Layer (L5) DC Bus Distribution
+### 6.3 Internal Layer (L5) DC Bus Distribution
 
 | Parameter | Value |
 |-----------|-------|
@@ -253,7 +253,7 @@ The DC bus current flows from the MOSFETs through the snubber array to the bulk 
 | Required pour width | **≥40 mm** |
 | Implementation | Full-width pour on L5 across Zones B–D |
 
-### Resistive Loss Estimation
+### 6.4 Resistive Loss Estimation
 
 For a 100 mm copper pour carrying 40 A on L1 (2 oz, 20 mm wide):
 
@@ -269,7 +269,7 @@ This is significant and motivates using the widest possible pours and parallel l
 
 ## 7. Airflow Path Design
 
-### Airflow Direction
+### 7.1 Airflow Direction
 
 The board is oriented with airflow from left (AC input) to right (DC output):
 
@@ -296,7 +296,7 @@ This sequence is deliberate:
 > - Adding a thermal baffle between MOSFETs and caps
 > - Increasing heatsink fin area to reduce air temperature rise
 
-### Component Height Profile
+### 7.2 Component Height Profile
 
 Ensure components are arranged with increasing height along the airflow direction to avoid flow shadows:
 
@@ -325,7 +325,7 @@ Ensure components are arranged with increasing height along the airflow directio
 
 ## 9. Thermal Design Verification
 
-### Pre-Layout Thermal Simulation
+### 9.1 Pre-Layout Thermal Simulation
 
 Before committing to the final layout, perform a thermal simulation using:
 - Input: component power dissipation values, airflow velocity (from fan spec), ambient temperature
@@ -333,7 +333,7 @@ Before committing to the final layout, perform a thermal simulation using:
 - Output: Temperature distribution on the board and heatsink
 - Criteria: All junctions below target operating temperatures at maximum power and maximum ambient (55°C)
 
-### Post-Layout Verification
+### 9.2 Post-Layout Verification
 
 After layout completion:
 1. Extract copper pour areas and thicknesses from the EDA tool

@@ -68,20 +68,20 @@ The board is organized into four functional zones arranged along the airflow axi
 
 ## 5. Key Components
 
-### Power Semiconductors
+### 5.1 Power Semiconductors
 
 | Ref | Part | Package | Qty | Notes |
 |-----|------|---------|-----|-------|
 | Q1–Q6 | SiC MOSFET 650V/75A | HiP247 / TO-247-4 | 6 | Kelvin source pin; see [[SiC Device Thermal Parameters]] |
 | D1–D6 | SiC Schottky 650V/20A | TO-247-2 | 6 | Boost diodes (if discrete) |
 
-### Gate Drivers
+### 5.2 Gate Drivers
 
 | Ref | Part | Package | Qty | Notes |
 |-----|------|---------|-----|-------|
 | U1–U6 | STGAP2SiC | SO-8W (wide body) | 6 | Isolated, 4A sink/source; see [[07-PCB-Layout/AC-DC/03-Gate Driver Layout|03-Gate Driver Layout]] |
 
-### Passive Power Components
+### 5.3 Passive Power Components
 
 | Ref | Part | Qty | Notes |
 |-----|------|-----|-------|

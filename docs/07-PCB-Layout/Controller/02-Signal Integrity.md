@@ -12,7 +12,7 @@ This document covers signal integrity considerations for the Controller Board. T
 
 The controller board receives six analog signals from the power stages via the P3 connector. These signals represent current and voltage measurements that directly affect control loop accuracy. A 1% error in sensing translates to a 1% error in output regulation.
 
-### Signal List
+### 1.1 Signal List
 
 | Signal | Source | Full scale | Bandwidth | ADC |
 |---|---|---|---|---|
@@ -23,7 +23,7 @@ The controller board receives six analog signals from the power stages via the P
 | Output voltage | Resistor divider + buffer | 0–3.3 V | DC–10 kHz | ADC2_IN2 |
 | Output current | Shunt + amp | 0–3.3 V | DC–50 kHz | ADC2_IN3 |
 
-### Analog Signal Conditioning Circuit
+### 1.2 Analog Signal Conditioning Circuit
 
 Each analog input passes through a front-end conditioning stage on the controller board before reaching the MCU ADC pin:
 
@@ -48,7 +48,7 @@ connector    ┌──────────┐            ┌─────�
 > [!warning] Filter placement is critical
 > If the anti-aliasing RC filter is placed far from the ADC pin, the trace between the filter and the pin acts as an antenna that picks up noise **after** filtering. The filter loses its effectiveness. Keep the R and C as close to the MCU pin as physically possible.
 
-### Analog Routing Rules
+### 1.3 Analog Routing Rules
 
 | Rule | Specification |
 |---|---|
@@ -60,7 +60,7 @@ connector    ┌──────────┐            ┌─────�
 | Via prohibition | No vias in analog signal path; route entirely on L1 |
 | Plane reference | L2 GND only — never cross a split in L2 (L2 has no splits) |
 
-### Guard Traces
+### 1.4 Guard Traces
 
 Guard traces are GND-connected traces that run parallel to high-impedance analog signals on both sides. They serve two purposes:
 
@@ -85,7 +85,7 @@ Implementation:
          Guard via    Guard via    Guard via
 ```
 
-### Analog Guard Ring Around Op-Amp Circuits
+### 1.5 Analog Guard Ring Around Op-Amp Circuits
 
 Each OPA2376 op-amp has a GND guard ring surrounding its footprint:
 
@@ -101,7 +101,7 @@ Each OPA2376 op-amp has a GND guard ring surrounding its footprint:
 
 The STM32G474 HRTIM peripheral generates 12 PWM channels (6 for the Vienna PFC, 6 for the LLC DC-DC). These signals control SiC MOSFET gate drivers on the power boards via harness cables.
 
-### PWM Channel Assignment
+### 2.1 PWM Channel Assignment
 
 | HRTIM Timer | Output | Function | Connector |
 |---|---|---|---|
@@ -112,7 +112,7 @@ The STM32G474 HRTIM peripheral generates 12 PWM channels (6 for the Vienna PFC, 
 | Timer E | TE1 / TE2 | LLC phase B (high/low) | P2 pin 3,4 |
 | Timer F | TF1 / TF2 | LLC phase C (high/low) | P2 pin 5,6 |
 
-### Matched-Length Routing for Complementary Pairs
+### 2.2 Matched-Length Routing for Complementary Pairs
 
 Each HRTIM timer produces a complementary pair (e.g., TA1 and TA2). The dead-time between high-side and low-side switching is programmed with 184 ps resolution. To preserve this accuracy at the board level:
 
@@ -124,7 +124,7 @@ Each HRTIM timer produces a complementary pair (e.g., TA1 and TA2). The dead-tim
 | Routing layer | L1 only |
 | Minimum spacing between pairs | 3x trace width (0.81 mm for 0.27 mm traces) |
 
-### Series Termination Resistors
+### 2.3 Series Termination Resistors
 
 Each HRTIM output has a **33 ohm series termination resistor** placed at the MCU pin (source termination):
 
@@ -143,7 +143,7 @@ Purpose:
 > [!tip] Resistor placement
 > Place the 33 ohm series resistors in a row adjacent to the MCU, oriented so that the trace runs straight from the MCU pad through the resistor and onward to the connector. Do not route the trace away from the MCU and then back to the resistor — this creates a stub.
 
-### PWM Signal Routing Summary
+### 2.4 PWM Signal Routing Summary
 
 | Characteristic | Value |
 |---|---|
@@ -159,7 +159,7 @@ Purpose:
 
 The current sense circuit is the most noise-sensitive analog subsystem. Layout for each current sense channel:
 
-### Component Placement Order
+### 3.1 Component Placement Order
 
 Place components in a **linear flow** from connector to ADC pin:
 
@@ -176,7 +176,7 @@ P3 pin ──▶ Input R (10kΩ) ──▶ Input C (100pF) ──▶ OPA2376 ─
 | Feedback path (if gain stage) | Route under the IC body or on L1 adjacent to IC |
 | Power supply bypass | 100 nF cap within 2 mm of OPA2376 V+ pin |
 
-### Noise Budget
+### 3.2 Noise Budget
 
 The ADC LSB at 12 bits and 3.3 V reference is:
 

@@ -26,7 +26,7 @@ These voltages, combined with pollution degree 2 (PD2) and material group IIIb (
 | IPC-2221B | Generic standard on printed board design | PCB internal clearances (between layers) |
 | UL 2202 | EV charging equipment (US) | Supplementary for UL listing |
 
-### Environmental Parameters
+### 2.1 Environmental Parameters
 
 | Parameter | Value | Justification |
 |-----------|-------|---------------|
@@ -41,7 +41,7 @@ These voltages, combined with pollution degree 2 (PD2) and material group IIIb (
 
 ## 3. Voltage Pairs and Insulation Requirements
 
-### Identification of Voltage Pairs
+### 3.1 Identification of Voltage Pairs
 
 Every pair of conductors on the board that can have a voltage difference must be classified:
 
@@ -58,7 +58,7 @@ Every pair of conductors on the board that can have a voltage difference must be
 
 ## 4. Creepage and Clearance Requirements
 
-### AC Input to PE (Reinforced Insulation)
+### 4.1 AC Input to PE (Reinforced Insulation)
 
 | Parameter | Value | Derivation |
 |-----------|-------|-----------|
@@ -76,7 +76,7 @@ Every pair of conductors on the board that can have a voltage difference must be
 >
 > On a PCB, creepage is typically the controlling dimension because the surface path is longer than the air path only when PCB slots or raised features are used. Without slots, creepage = clearance on a flat PCB surface.
 
-### DC Bus to PE (Reinforced Insulation)
+### 4.2 DC Bus to PE (Reinforced Insulation)
 
 | Parameter | Value | Derivation |
 |-----------|-------|-----------|
@@ -88,7 +88,7 @@ Every pair of conductors on the board that can have a voltage difference must be
 | **Clearance (IEC 62368-1, Table 21)** | **8 mm** | Reinforced, PD2, 920 Vpk |
 | **Creepage (IEC 62368-1, Table 22)** | **14 mm** | Reinforced, PD2, IIIb, 920 VDC |
 
-### Gate Drive Isolation (Reinforced)
+### 4.3 Gate Drive Isolation (Reinforced)
 
 The STGAP2SiC gate drivers provide reinforced isolation between the primary (control) side and the secondary (high-voltage) side.
 
@@ -100,7 +100,7 @@ The STGAP2SiC gate drivers provide reinforced isolation between the primary (con
 | **PCB slot under driver** | **1.5–2 mm wide** | Increases effective creepage |
 | **Total creepage target** | **≥8 mm** | Including slot contribution |
 
-### Functional Insulation (Gate Drive Circuit)
+### 4.4 Functional Insulation (Gate Drive Circuit)
 
 Within the gate drive circuit on the secondary (floating) side, the voltages are low:
 
@@ -112,7 +112,7 @@ Within the gate drive circuit on the secondary (floating) side, the voltages are
 
 These are well within standard PCB trace/space capabilities (0.15 mm minimum).
 
-### Phase-to-Phase (Basic Insulation)
+### 4.5 Phase-to-Phase (Basic Insulation)
 
 | Parameter | Value |
 |-----------|-------|
@@ -121,7 +121,7 @@ These are well within standard PCB trace/space capabilities (0.15 mm minimum).
 | Clearance | 5 mm (basic, PD2) |
 | Creepage | 8 mm (basic, PD2, IIIb) |
 
-### Summary Table — All Voltage Pairs
+### 4.6 Summary Table — All Voltage Pairs
 
 | Pair | Clearance (mm) | Creepage (mm) | Insulation | Notes |
 |------|----------------|---------------|------------|-------|
@@ -138,7 +138,7 @@ These are well within standard PCB trace/space capabilities (0.15 mm minimum).
 
 Where the required creepage distance cannot be achieved by copper spacing alone (due to board area constraints), PCB slots are used to increase the effective creepage path:
 
-### How Slots Increase Creepage
+### 5.1 How Slots Increase Creepage
 
 A slot forces the creepage path to go around the slot edges, increasing the surface distance:
 
@@ -158,7 +158,7 @@ A slot forces the creepage path to go around the slot edges, increasing the surf
 
 The slot adds approximately 2× the board thickness to the creepage path (current must traverse down one side of the slot and up the other).
 
-### Slot Specifications
+### 5.2 Slot Specifications
 
 | Parameter | Value |
 |-----------|-------|
@@ -169,7 +169,7 @@ The slot adds approximately 2× the board thickness to the creepage path (curren
 | Minimum slot length | 5 mm (structural integrity) |
 | Maximum slot length | Per fabricator capability (typically unlimited for routing) |
 
-### Where Slots Are Required
+### 5.3 Where Slots Are Required
 
 | Location | Purpose | Slot Width |
 |----------|---------|-----------|
@@ -189,13 +189,13 @@ The slot adds approximately 2× the board thickness to the creepage path (curren
 
 ## 6. Heatsink Mounting — Creepage to PE
 
-### Problem Statement
+### 6.1 Problem Statement
 
 The TO-247 MOSFET mounting hole passes through the PCB near the drain copper pad. The drain is at switching node voltage (0 to 920 VDC). The heatsink mounting screw connects to the heatsink, which may be connected to PE (protective earth) or chassis ground.
 
 The creepage path from drain copper to the PE-connected mounting hole must meet the DC bus→PE requirement: **14 mm**.
 
-### Solution
+### 6.2 Solution
 
 | Measure | Specification |
 |---------|--------------|
@@ -234,7 +234,7 @@ The creepage path from drain copper to the PE-connected mounting hole must meet 
 
 ## 7. Internal Layer Clearances (IPC-2221B)
 
-### L1-to-L2 Clearance (Through Prepreg)
+### 7.1 L1-to-L2 Clearance (Through Prepreg)
 
 Conductors on adjacent layers are separated by the prepreg or core dielectric. IPC-2221B specifies minimum internal clearances based on voltage and the dielectric type:
 
@@ -260,7 +260,7 @@ This means that copper features on L1 and L2 that belong to different nets must 
 >
 > Maintain the minimum 0.5 mm internal clearance (plan view) between different voltage domains on adjacent layers. For the most critical pairs (DC bus on L1 vs. GND on L2), the overlap is intentional and beneficial (reduces loop inductance) — the dielectric isolation is adequate for this voltage class.
 
-### L3-to-L4 Clearance
+### 7.2 L3-to-L4 Clearance
 
 | Parameter | Value |
 |-----------|-------|
@@ -274,7 +274,7 @@ No special internal clearance considerations for L3-L4.
 
 Configure the EDA tool's Design Rule Check (DRC) with net classes to enforce creepage and clearance automatically:
 
-### Net Class Definitions
+### 8.1 Net Class Definitions
 
 | Net Class | Nets Included | Min Clearance to PE Class | Min Clearance to HV-DC Class | Min Clearance to AC Class | Min Clearance within Class |
 |-----------|---------------|--------------------------|-----------------------------|--------------------------|-----------------------------|
@@ -286,7 +286,7 @@ Configure the EDA tool's Design Rule Check (DRC) with net classes to enforce cre
 | **LV-CTRL** | SPI_CLK, SPI_MOSI, SPI_MISO, VCC_5V, VCC_3V3 | 1.0 mm | 10 mm | 10 mm | 0.15 mm |
 | **GND** | GND (L2 plane) | 0.3 mm | N/A (adjacent planes) | N/A | — |
 
-### DRC Rule Matrix (Clearance, mm)
+### 8.2 DRC Rule Matrix (Clearance, mm)
 
 |  | HV-DC | AC-PHASE | PE-EARTH | SW-NODE | GATE-HV | LV-CTRL | GND |
 |--|-------|----------|----------|---------|---------|---------|-----|
@@ -327,7 +327,7 @@ Conformal coating can reduce effective creepage on assembled boards if the coati
 
 ## 10. Assembly and Inspection Considerations
 
-### Critical Inspection Points
+### 10.1 Critical Inspection Points
 
 After board assembly, the following must be inspected for creepage compliance:
 
@@ -341,7 +341,7 @@ After board assembly, the following must be inspected for creepage compliance:
 | Heatsink mounting holes | Insulating bushings in place | Bushing seated, no metal-to-metal contact |
 | Board edges near HV copper | No copper exposure | Copper pulled back ≥0.5 mm from board edge |
 
-### Hipot (Dielectric Withstand) Testing
+### 10.2 Hipot (Dielectric Withstand) Testing
 
 Per IEC 62368-1, the following hipot tests are required on the finished board/assembly:
 

@@ -121,15 +121,15 @@ The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/A
 
 ## 7. Cross-References
 
-### Topology and Component Selection
+### 7.1 Topology and Component Selection
 - [[01-Topology Selection]] — LLC resonant converter topology rationale and trade-offs
 - [[02-Magnetics Design]] — Transformer and resonant inductor (Lr) design parameters
 - [[SiC Device Thermal Parameters]] — MOSFET Rth_jc, power loss budgets
 
-### Companion Board Layout
+### 7.2 Companion Board Layout
 - [[07-PCB-Layout/AC-DC/__init|AC-DC Board Layout]] — Shares same 6-layer stack-up, similar gate driver approach
 
-### System-Level
+### 7.3 System-Level
 - [[10-Mechanical Integration]] — Enclosure, heatsink mounting, bus bar routing between boards
 - [[09-Protection and Safety]] — OVP, OCP, OTP requirements that influence layout
 

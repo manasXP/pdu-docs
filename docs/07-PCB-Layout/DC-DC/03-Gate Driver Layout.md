@@ -25,7 +25,7 @@ This document specifies the PCB layout requirements for the gate drivers on the 
 | UVLO | Integrated, both input and output sides |
 | Active Miller clamp | Integrated |
 
-### Driver Count and Assignment
+### 2.1 Driver Count and Assignment
 
 | Location | Qty | MOSFETs Driven | Bus Voltage | dV/dt Stress |
 |----------|-----|-----------------|-------------|-------------|
@@ -40,7 +40,7 @@ This document specifies the PCB layout requirements for the gate drivers on the 
 
 ## 3. Gate Loop Design
 
-### Gate Loop Budget
+### 3.1 Gate Loop Budget
 
 The gate loop inductance must be minimized to prevent:
 - Gate voltage ringing that could cause spurious turn-on
@@ -54,7 +54,7 @@ The gate loop inductance must be minimized to prevent:
 | Gate resistor (Rg_off) | 1–2 Ω |
 | Steering diode | Schottky (SBR1U30, BAT54S or equivalent) |
 
-### Gate Loop Circuit
+### 3.2 Gate Loop Circuit
 
 ```
   STGAP2SiC
@@ -72,7 +72,7 @@ The gate loop inductance must be minimized to prevent:
               └── 10nF ceramic (at IC pin) ─┘
 ```
 
-### Split Gate Resistor with Schottky Steering
+### 3.3 Split Gate Resistor with Schottky Steering
 
 The Schottky diode steers the turn-off current through the lower Rg_off (1–2 Ω) for fast turn-off, while turn-on uses the higher Rg_on (3–5 Ω) to limit dI/dt and reduce ringing:
 
@@ -89,7 +89,7 @@ The Schottky diode steers the turn-off current through the lower Rg_off (1–2 �
 > [!tip] Gate Resistor Selection
 > For 1200V primary MOSFETs: use **Rg_on = 4.7 Ω, Rg_off = 1.5 Ω** as starting values. For 650V secondary MOSFETs: use **Rg_on = 3.3 Ω, Rg_off = 1.0 Ω** (lower C_gd, less ringing risk). Verify by simulation with the specific MOSFET SPICE model and prototype measurement.
 
-### Gate Loop Layout Rules
+### 3.4 Gate Loop Layout Rules
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -102,7 +102,7 @@ The Schottky diode steers the turn-off current through the lower Rg_off (1–2 �
 | **G-7** | Decoupling caps (100 nF + 10 nF) within **2 mm** of driver VCC/GND pins | Local energy storage for gate charge pulses |
 | **G-8** | 10 µF electrolytic within **10 mm** of driver, low-ESR type | Bulk charge reservoir |
 
-### Gate Loop Inductance Estimation
+### 3.5 Gate Loop Inductance Estimation
 
 ```
 For a 10 mm gate trace with 0.2 mm width on L3, return on adjacent trace:
@@ -127,7 +127,7 @@ Total gate loop: ~2-3 nH → well within 5 nH budget
 
 ## 4. Driver Placement — Primary Side
 
-### Physical Layout
+### 4.1 Physical Layout
 
 Each primary half-bridge has two MOSFETs and two gate drivers:
 
@@ -153,7 +153,7 @@ Each primary half-bridge has two MOSFETs and two gate drivers:
   └──────────────────────────────────────────────┘
 ```
 
-### Driver-to-MOSFET Distance Constraints
+### 4.2 Driver-to-MOSFET Distance Constraints
 
 | Connection | Max Distance | Preferred |
 |------------|-------------|-----------|
@@ -162,7 +162,7 @@ Each primary half-bridge has two MOSFETs and two gate drivers:
 | DRV VCC → decoupling cap | 2 mm | 1 mm (direct pad) |
 | DRV GND → decoupling cap | 2 mm | 1 mm (direct pad) |
 
-### Primary Driver Isolation Considerations
+### 4.3 Primary Driver Isolation Considerations
 
 The STGAP2SiC has internal galvanic isolation between its input (logic) side and output (gate drive) side. On the PCB:
 
@@ -180,7 +180,7 @@ The STGAP2SiC has internal galvanic isolation between its input (logic) side and
 
 The secondary gate drivers are placed identically to the primary but operate at lower voltage stress (up to 500V reflected vs. 920V bus). The layout rules are the same, but with slightly relaxed urgency:
 
-### Secondary vs. Primary Driver Comparison
+### 5.1 Secondary vs. Primary Driver Comparison
 
 | Parameter | Primary Drivers | Secondary Drivers |
 |-----------|----------------|-------------------|
@@ -194,7 +194,7 @@ The secondary gate drivers are placed identically to the primary but operate at 
 
 ## 6. Primary-Secondary Isolation Barrier
 
-### The Barrier Concept
+### 6.1 The Barrier Concept
 
 The DC-DC board has a unique layout challenge not present on the AC-DC board: the **primary-secondary isolation barrier**. This barrier provides:
 
@@ -202,7 +202,7 @@ The DC-DC board has a unique layout challenge not present on the AC-DC board: th
 - **Reinforced insulation** classification
 - Physical separation between 920V primary domain and up to 1000V secondary domain
 
-### Barrier Implementation on PCB
+### 6.2 Barrier Implementation on PCB
 
 | Feature | Specification |
 |---------|--------------|
@@ -231,7 +231,7 @@ The DC-DC board has a unique layout challenge not present on the AC-DC board: th
 > - Optocouplers or digital isolators (for fault signals)
 > - The transformer itself (for power transfer)
 
-### L2 GND Plane at the Barrier
+### 6.3 L2 GND Plane at the Barrier
 
 The L2 GND plane is split into two separate ground domains at the isolation barrier:
 
@@ -253,7 +253,7 @@ These two GND domains must **never be directly connected** on the PCB. They are 
 
 ## 7. Driver Decoupling
 
-### Per-Driver Decoupling (Output Side)
+### 7.1 Per-Driver Decoupling (Output Side)
 
 | Component | Value | Package | Placement | Purpose |
 |-----------|-------|---------|-----------|---------|
@@ -262,14 +262,14 @@ These two GND domains must **never be directly connected** on the PCB. They are 
 | C3 | 10 µF | 1206 electrolytic or MLCC | Within 10 mm | Bulk charge reservoir |
 | C4 | 1 µF | 0805 | Within 5 mm | Mid-frequency energy |
 
-### Per-Driver Decoupling (Input Side)
+### 7.2 Per-Driver Decoupling (Input Side)
 
 | Component | Value | Package | Placement | Purpose |
 |-----------|-------|---------|-----------|---------|
 | C5 | 100 nF | 0402 | At VDD/GND pins | Logic-side bypass |
 | C6 | 10 nF | 0402 | At VDD/GND pins | UHF bypass |
 
-### Decoupling Layout Priority
+### 7.3 Decoupling Layout Priority
 
 ```
 Priority 1: C1 (100nF) and C2 (10nF) — directly at output VCC/GND pins
@@ -283,7 +283,7 @@ Priority 4: C5, C6 — at input-side pins (less critical, lower current)
 
 ## 8. Driver Thermal Management
 
-### Power Dissipation per Driver
+### 8.1 Power Dissipation per Driver
 
 ```
 P_driver = Q_g × V_drv × f_sw + I_q × V_drv
@@ -301,7 +301,7 @@ P_driver = 120e-9 × 18 × 150e3 + 5e-3 × 18
 Total for 12 drivers: 12 × 0.414 = 4.97 W
 ```
 
-### Thermal Via Array Under Each Driver
+### 8.2 Thermal Via Array Under Each Driver
 
 | Parameter | Specification |
 |-----------|--------------|
@@ -311,7 +311,7 @@ Total for 12 drivers: 12 × 0.414 = 4.97 W
 | Connected to | L2 GND plane (primary or secondary, per zone) |
 | Copper pour on L1 | 15 mm × 15 mm minimum under IC exposed pad |
 
-### Thermal Calculation
+### 8.3 Thermal Calculation
 
 ```
 Rth_jc (STGAP2SiC, SO-16W) ≈ 30°C/W (estimated from package)
@@ -335,7 +335,7 @@ The STGAP2SiC integrates DESAT detection for short-circuit protection. Layout co
 | Blanking time | Set by external capacitor on DESAT pin |
 | Response time | <3 µs from overcurrent to gate shutdown |
 
-### DESAT Sense Connection
+### 9.1 DESAT Sense Connection
 
 ```
   MOSFET Drain ─── [BAS516 diode] ─── [R_desat 47kΩ] ─── DESAT pin (STGAP2SiC)

@@ -12,7 +12,7 @@ This document defines the EMI-aware layout strategies for the DC-DC LLC resonant
 
 ## 2. EMI Source Identification
 
-### Primary EMI Sources on the DC-DC Board
+### 2.1 Primary EMI Sources on the DC-DC Board
 
 | Source | Mechanism | Frequency Range | Severity |
 |--------|-----------|-----------------|----------|
@@ -24,7 +24,7 @@ This document defines the EMI-aware layout strategies for the DC-DC LLC resonant
 | DC bus ripple current | Capacitor ESR/ESL, switching harmonics | 100 kHz – 5 MHz | Medium |
 | Output cable radiation | CM current on cable acts as antenna | 150 kHz – 30 MHz | **High** (conducted EMI) |
 
-### LLC Topology EMI Advantages
+### 2.2 LLC Topology EMI Advantages
 
 The LLC resonant converter operating at or near the resonant frequency achieves:
 
@@ -47,11 +47,11 @@ The LLC resonant converter operating at or near the resonant frequency achieves:
 
 ## 3. Switching Node Area Control
 
-### Requirement
+### 3.1 Requirement
 
 Each LLC half-bridge switching node must have a copper pour area of **≤1.5 cm²** to limit electric-field (E-field) emissions from the high-dV/dt surface.
 
-### Switching Node Physics
+### 3.2 Switching Node Physics
 
 The displacement current radiated from a switching node is:
 
@@ -73,7 +73,7 @@ During hard-switching (61 kV/µs, loss of ZVS):
   I_disp_pcb = 21.7e-12 × 61e9 = 1.3 mA (significant at HF)
 ```
 
-### Area Budget Per Phase
+### 3.3 Area Budget Per Phase
 
 | Element on Switching Node | Area (cm²) | Notes |
 |--------------------------|------------|-------|
@@ -88,7 +88,7 @@ During hard-switching (61 kV/µs, loss of ZVS):
 > [!warning] Do Not Expand the Switching Node Pour
 > It is tempting to make the switching node copper pour wider for better current handling. **Resist this.** The switching node carries current only during the brief transition; it does not need to handle steady-state DC. Use the minimum copper width per IPC-2152 for the RMS current, and keep the total area under 1.5 cm².
 
-### Switching Node Shielding
+### 3.4 Switching Node Shielding
 
 Place the switching node pour on **L1 only**, with L2 GND plane directly underneath providing an electrostatic shield:
 
@@ -104,7 +104,7 @@ The L2 GND plane capacitively couples to the switching node, but the resulting d
 
 ## 4. Resonant Tank Layout — Lr/Cr Symmetry
 
-### Why Symmetry Matters
+### 4.1 Why Symmetry Matters
 
 The 3-phase interleaved LLC converter depends on balanced current sharing between phases. The resonant tank components (Lr and Cr) set the resonant frequency for each phase:
 
@@ -118,7 +118,7 @@ If Lr or Cr vary between phases, f_r varies, causing:
   - Increased output ripple (imperfect interleaving)
 ```
 
-### Symmetry Targets
+### 4.2 Symmetry Targets
 
 | Parameter | Matching Target | Impact of Mismatch |
 |-----------|----------------|-------------------|
@@ -128,7 +128,7 @@ If Lr or Cr vary between phases, f_r varies, causing:
 | PCB parasitic capacitance (Cr path) | ±1 pF between phases | Adds to Cr; negligible at nF level |
 | Transformer leakage inductance | ±2% between phases | Major contributor to total Lr |
 
-### Layout Strategy for Resonant Tank Symmetry
+### 4.3 Layout Strategy for Resonant Tank Symmetry
 
 | Rule | Requirement | Rationale |
 |------|-------------|-----------|
@@ -139,7 +139,7 @@ If Lr or Cr vary between phases, f_r varies, causing:
 | **R-5** | If Lr is integrated into transformer leakage, ensure equal air-gap tolerance | Mechanical tolerance directly affects Lr |
 | **R-6** | Use matched Cr components from same production lot | Capacitance tolerance matching |
 
-### Resonant Tank Physical Layout
+### 4.4 Resonant Tank Physical Layout
 
 ```
   Per Phase (replicated ×3):
@@ -153,7 +153,7 @@ If Lr or Cr vary between phases, f_r varies, causing:
   Must be identical (±1 mm) across all 3 phases
 ```
 
-### Resonant Current Loop
+### 4.5 Resonant Current Loop
 
 The resonant tank carries **high circulating current** (potentially exceeding the load current due to the resonant nature):
 
@@ -169,7 +169,7 @@ The resonant current flows in a loop: **C_bus → Q1 → SW node → Lr → Cr �
 
 ## 5. Transformer Common-Mode Current
 
-### CM Current Generation
+### 5.1 CM Current Generation
 
 The transformer is the primary source of common-mode (CM) noise coupling between the primary and secondary domains. CM current flows through the inter-winding capacitance (C_winding) driven by the dV/dt across the transformer:
 
@@ -192,7 +192,7 @@ During loss of ZVS:
 > [!warning] CM Current Path
 > The 1.8–5.4 mA CM current must have a defined, low-impedance return path. If no return path is provided, the CM current flows through parasitic capacitances to the chassis/PE, through the mains earth, and back — radiating along the way. The defined return path is provided by **Y-capacitors** between primary GND and secondary GND, placed at the isolation barrier.
 
-### CM Current Mitigation Layout
+### 5.2 CM Current Mitigation Layout
 
 | Strategy | Implementation | Effectiveness |
 |----------|---------------|---------------|
@@ -202,7 +202,7 @@ During loss of ZVS:
 | **CM choke on output** | Nanocrystalline CM choke on output cables | High — blocks CM current on output leads |
 | **Stitching via fence** | Dense vias around transformer cutout, connecting L1 to L2 GND | Medium — reduces PCB-level coupling |
 
-### Y-Capacitor Placement
+### 5.3 Y-Capacitor Placement
 
 ```
   Primary GND ───┬─── [Y-cap 4.7nF] ───┬─── Secondary GND
@@ -224,7 +224,7 @@ During loss of ZVS:
 
 ## 6. Inter-Phase Isolation
 
-### Stitching Via Fences Between Phases
+### 6.1 Stitching Via Fences Between Phases
 
 Although the three LLC phases share the same primary and secondary voltage domains, they must be isolated from each other to prevent:
 - Magnetic coupling between resonant inductors
@@ -238,7 +238,7 @@ Although the three LLC phases share the same primary and secondary voltage domai
 | Around each transformer cutout | Single row of stitching vias, 3 mm pitch, full perimeter of cutout |
 | Board perimeter | Single row, 5 mm pitch |
 
-### Via Fence Physical Implementation
+### 6.2 Via Fence Physical Implementation
 
 ```
   Phase A      │ Via Fence │     Phase B      │ Via Fence │     Phase C
@@ -252,7 +252,7 @@ Although the three LLC phases share the same primary and secondary voltage domai
   Double row, 2.5mm pitch, staggered
 ```
 
-### Via Fence Shielding Effectiveness
+### 6.3 Via Fence Shielding Effectiveness
 
 ```
 For a via fence with pitch p at frequency f:
@@ -270,7 +270,7 @@ Actual shielding effectiveness: >40 dB up to several GHz.
 
 ## 7. L2 GND Plane Management
 
-### Continuity Rules
+### 7.1 Continuity Rules
 
 The L2 GND plane is the foundation of the EMI strategy. Its continuity must be preserved:
 
@@ -287,7 +287,7 @@ The L2 GND plane is the foundation of the EMI strategy. Its continuity must be p
 > [!warning] GND Plane Splits — Only at Isolation Barrier
 > The L2 GND plane may **only** be split at the primary-secondary isolation barrier. Do NOT split the GND plane between phases, between power and signal, or for any other reason. A split GND plane forces return currents to find alternative paths, dramatically increasing loop area and EMI.
 
-### GND Plane Voiding Strategy
+### 7.2 GND Plane Voiding Strategy
 
 Where copper must be removed from L2 (e.g., for high-voltage clearance around mounting holes or transformer cutouts):
 
@@ -300,7 +300,7 @@ Where copper must be removed from L2 (e.g., for high-voltage clearance around mo
 
 ## 8. Output Cable EMI
 
-### The Output Cable as an Antenna
+### 8.1 The Output Cable as an Antenna
 
 The output cables connecting the PDU to the EV carry up to 100 A DC. Any CM noise current on these cables radiates efficiently because the cable length (typically 2–5 m) is comparable to λ/4 at EMI frequencies of interest:
 
@@ -309,7 +309,7 @@ At 30 MHz: λ = 10 m, λ/4 = 2.5 m → cable is a quarter-wave antenna
 At 150 kHz (start of conducted EMI band): λ = 2000 m → cable is electrically short
 ```
 
-### Output EMI Mitigation
+### 8.2 Output EMI Mitigation
 
 | Strategy | Implementation | Location |
 |----------|---------------|----------|
@@ -318,7 +318,7 @@ At 150 kHz (start of conducted EMI band): λ = 2000 m → cable is electrically 
 | Cable shielding | Shielded output cable with shield grounded at PDU end | External (cable specification) |
 | Ferrite clamp | Snap-on ferrite on output cable | External (field fix if needed) |
 
-### Output CM Choke Sizing
+### 8.3 Output CM Choke Sizing
 
 ```
 For conducted EMI compliance (EN 61000-6-3 / CISPR 11 Class B):
@@ -353,7 +353,7 @@ For conducted EMI compliance (EN 61000-6-3 / CISPR 11 Class B):
 
 ## 10. EMI Testing Considerations
 
-### Test Points for Pre-Compliance
+### 10.1 Test Points for Pre-Compliance
 
 Include the following test provisions on the PCB:
 
@@ -365,7 +365,7 @@ Include the following test provisions on the PCB:
 | Current probe loop in output path | Output zone | Output ripple current measurement |
 | GND test point near isolation barrier | L1, both sides | Measure CM voltage across barrier |
 
-### Pre-Compliance EMI Scan Frequencies
+### 10.2 Pre-Compliance EMI Scan Frequencies
 
 | Standard | Frequency Range | Measurement |
 |----------|----------------|-------------|

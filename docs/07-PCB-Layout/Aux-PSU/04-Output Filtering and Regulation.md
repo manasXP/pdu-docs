@@ -6,11 +6,11 @@ status: draft
 
 # 04 — Output Filtering and Regulation
 
-## 1 Purpose
+## 1. Purpose
 
 This document specifies the output filtering and post-regulation design for each Aux PSU rail. The flyback converter produces raw rectified voltages from its multiple secondary windings; these must be filtered and regulated to meet the stringent ripple and noise specifications required by sensitive downstream loads — particularly the gate driver supplies (where ripple can cause shoot-through or gate oxide stress) and the MCU logic supply (where noise corrupts ADC readings).
 
-## 2 Ripple Specification Summary
+## 2. Ripple Specification Summary
 
 | Rail | Voltage | Current | Max Ripple (pk-pk) | Max Noise (20 MHz BW) | Load Type | Criticality |
 |------|---------|---------|-------------------|----------------------|-----------|-------------|
@@ -26,9 +26,9 @@ This document specifies the output filtering and post-regulation design for each
 > [!tip] Ripple vs. Noise Distinction
 > **Ripple** is the fundamental switching frequency component (65–130 kHz) and its harmonics. **Noise** includes all high-frequency content up to 20 MHz, including switching transient spikes and ringing. The output filter must address both — the LC filter handles fundamental ripple while ceramic decoupling caps handle high-frequency noise.
 
-## 3 Per-Rail Filter Design
+## 3. Per-Rail Filter Design
 
-### +18 V Gate Drive Rails (VDRV_AC, VDRV_DC)
+### 3.1 +18 V Gate Drive Rails (VDRV_AC, VDRV_DC)
 
 Each +18 V rail is derived from a dedicated secondary winding and rectified by a Schottky diode. The gate drive supply is the most layout-sensitive output because ripple directly modulates the gate-source voltage of the SiC MOSFETs.
 
@@ -91,7 +91,7 @@ Resulting ripple after LC filter: $\frac{77}{37} \approx 2.1$ mV pp — well wit
 4. **C_cer** directly at the P4 connector pins (last cap before the cable)
 5. **C_hf** adjacent to C_cer, between C_cer and connector pad
 
-### −5 V Negative Gate Bias Rails (VNEG_AC, VNEG_DC)
+### 3.2 −5 V Negative Gate Bias Rails (VNEG_AC, VNEG_DC)
 
 The −5 V rails provide negative turn-off bias for the SiC MOSFET gates, ensuring reliable turn-off and preventing false turn-on from dV/dt-induced gate charge.
 
@@ -122,7 +122,7 @@ sec. (−5V tap) ──→ ──|>|── ──┤LLLL├── ──┬─�
 > [!warning] −5 V Rail Polarity
 > The −5 V rail is negative with respect to the isolated return (RTN_AC or RTN_DC). Verify that the rectifier diode is oriented correctly — the diode cathode connects to the isolated return, and the anode connects through the inductor to the −5 V output. An incorrectly oriented diode will produce +5 V instead of −5 V and may damage gate driver ICs.
 
-### +12 V Fan Drive Rail
+### 3.3 +12 V Fan Drive Rail
 
 The fan motor is tolerant of ripple and noise. The +12 V rail has the most relaxed filtering requirements but carries the highest current (2 A).
 
@@ -152,7 +152,7 @@ No output inductor is required — the 220 uF electrolytic plus 22 uF ceramic pr
 
 **Ripple estimate:** $\Delta V = I/(C \cdot f) = 2.0 / (22e{-6} \times 65000) \approx 140$ mV pp from ceramic; electrolytic further smooths to ~100 mV pp total. Within 200 mV spec.
 
-### +5 V Logic Rail
+### 3.4 +5 V Logic Rail
 
 The +5 V rail feeds the CAN transceiver and digital I/O. It requires moderate ripple performance and must be independently regulated.
 
@@ -193,7 +193,7 @@ Buck regulator efficiency: ~88% at 12 V to 5 V, 1 A. Dissipation: $5 \times 1.0 
 | C_out_bulk | 22 uF | 1206 X7R | LDO output or buck output cap |
 | C_out_hf | 100 nF | 0603 C0G | High-frequency decoupling at connector |
 
-### +3.3 V MCU Logic Rail
+### 3.5 +3.3 V MCU Logic Rail
 
 The +3.3 V rail is the most noise-sensitive output — it powers the MCU ADCs and any precision voltage references on the controller board. A low-noise LDO is mandatory.
 
@@ -243,7 +243,7 @@ $(5.0 - 3.3) \times 0.5 = 0.85$ W — dissipated in the LDO. Manageable with SOT
 > [!warning] LDO Stability — ESR Sensitivity
 > Many LDOs are sensitive to output capacitor ESR. The TPS7A20 requires a minimum output capacitance of 1 uF with ESR <1 ohm. Ceramic capacitors (X7R, X5R) easily meet this. However, some older LDO designs require a minimum ESR (e.g., 0.1–1 ohm) for stability — verify the selected LDO's capacitor requirements before finalizing the BOM.
 
-### Standby Rail (3.3 V, 50 mA)
+### 3.6 Standby Rail (3.3 V, 50 mA)
 
 The standby rail must be operational within 50 ms of the DC bus voltage appearing. It powers the MCU wake-up logic and the CAN transceiver in standby mode.
 
@@ -259,9 +259,9 @@ The flyback transformer's auxiliary (bias) winding on the primary side normally 
 
 Placement: Near the transformer secondary side, within the logic domain (SEC_GND).
 
-## 4 Load Transient Response
+## 4. Load Transient Response
 
-### Gate Driver Transient
+### 4.1 Gate Driver Transient
 
 When the gate drivers switch SiC MOSFETs, the +18 V rail experiences a transient current step. The worst case occurs at maximum switching frequency when all drivers on one board switch simultaneously:
 
@@ -279,7 +279,7 @@ $$\Delta V = \frac{I_{peak} \times t_{pulse}}{C_{cer}} = \frac{4 \times 25 \time
 
 This is well within the 100 mV ripple budget. The ceramic capacitor handles the transient; the electrolytic handles the average current.
 
-### Fan Motor Start-Up
+### 4.2 Fan Motor Start-Up
 
 The fan motor draws an inrush current of 3–5x the steady-state current at start-up (~6–10 A for a 2 A fan). The +12 V output cap must handle this:
 
@@ -290,11 +290,11 @@ This is clearly excessive — the 220 uF cap cannot support 10 A for 10 ms witho
 > [!warning] Fan Inrush Current
 > Do not connect the fan directly to the +12 V output. Use the controller's PWM output through a MOSFET to soft-start the fan. The +12 V_FAN rail on P5 should feed through a low-side MOSFET on the controller board, controlled by a PWM signal. This limits inrush and allows variable fan speed control based on temperature. See [[07-PCB-Layout/Controller/__init]] for fan drive circuit details.
 
-## 5 Output Connector Decoupling
+## 5. Output Connector Decoupling
 
 The final line of defense for output noise is a decoupling capacitor placed **at the output connector pins** — as close to P4 and P5 as physically possible:
 
-### P4 Connector (Gate Drive Outputs)
+### 5.1 P4 Connector (Gate Drive Outputs)
 
 | Pin | Signal | Decoupling Cap | Package | Notes |
 |-----|--------|---------------|---------|-------|
@@ -305,7 +305,7 @@ The final line of defense for output noise is a decoupling capacitor placed **at
 | 6 | VNEG_DC (−5 V) | 100 nF C0G + 4.7 uF X7R | 0603 + 0805 | Within 3 mm of pin 6 pad |
 | 7 | RTN_DC | — | — | Return pin |
 
-### P5 Connector (Logic + Fan Outputs)
+### 5.2 P5 Connector (Logic + Fan Outputs)
 
 | Pin | Signal | Decoupling Cap | Package | Notes |
 |-----|--------|---------------|---------|-------|
@@ -314,7 +314,7 @@ The final line of defense for output noise is a decoupling capacitor placed **at
 | 3 | GND | — | — | Return pin |
 | 4 | +12 V_FAN | 100 nF X7R + 22 uF X7R | 0603 + 1210 | Within 5 mm of pin 4 pad |
 
-## 6 Design Verification Checklist
+## 6. Design Verification Checklist
 
 - [ ] All output capacitors placed within specified distance of connectors and LDOs
 - [ ] LC filter resonant frequencies verified below switching frequency for each rail
@@ -326,7 +326,7 @@ The final line of defense for output noise is a decoupling capacitor placed **at
 - [ ] Ground returns for each domain are separate (no shared current paths between domains)
 - [ ] Decoupling caps at connector pins verified per placement rules
 
-## 7 Cross-References
+## 7. Cross-References
 
 - [[__init]] — Output rail summary, isolation domains
 - [[02-Isolated Converter Layout]] — Transformer secondaries, rectifier placement

@@ -46,19 +46,19 @@ See [[00-Board Partitioning]] for inter-board connector pinouts, harness design,
 
 ## 3. Documents
 
-### System-Level
+### 3.1 System-Level
 
 | Doc | Title | Key Focus |
 |-----|-------|-----------|
 | [[00-Board Partitioning]] | Board partitioning | 5-board rationale, connector/harness definitions, grounding strategy |
 
-### Power Entry Board (Contactor and Relay Board)
+### 3.2 Power Entry Board (Contactor and Relay Board)
 
 | Doc | Title | Key Focus |
 |-----|-------|-----------|
 | [[07-PCB-Layout/Power-Entry/__init\|Power Entry Overview]] | Board overview | 150×120 mm, 2-layer, 4 oz Cu, NTC/relay/contactor zones, creepage analysis |
 
-### AC-DC Board (Vienna Rectifier PFC)
+### 3.3 AC-DC Board (Vienna Rectifier PFC)
 
 | Doc | Title | Key Focus |
 |-----|-------|-----------|
@@ -70,7 +70,7 @@ See [[00-Board Partitioning]] for inter-board connector pinouts, harness design,
 | [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout\|AC-DC EMI]] | EMI-aware layout | CM choke placement, switching node area, filter grounding |
 | [[07-PCB-Layout/AC-DC/06-Creepage and Clearance\|AC-DC Creepage]] | Creepage and clearance | AC input 530 VAC, DC bus 920 VDC, safety distances |
 
-### DC-DC Board (LLC Resonant Converter)
+### 3.4 DC-DC Board (LLC Resonant Converter)
 
 | Doc | Title | Key Focus |
 |-----|-------|-----------|
@@ -82,7 +82,7 @@ See [[00-Board Partitioning]] for inter-board connector pinouts, harness design,
 | [[07-PCB-Layout/DC-DC/05-EMI-Aware Layout\|DC-DC EMI]] | EMI-aware layout | Resonant tank shielding, output cable EMI |
 | [[07-PCB-Layout/DC-DC/06-Creepage and Clearance\|DC-DC Creepage]] | Creepage and clearance | Primary-secondary 4 kV isolation, output 1000 VDC |
 
-### Controller Board
+### 3.5 Controller Board
 
 | Doc | Title | Key Focus |
 |-----|-------|-----------|
@@ -93,7 +93,7 @@ See [[00-Board Partitioning]] for inter-board connector pinouts, harness design,
 | [[07-PCB-Layout/Controller/04-Power Distribution\|Power Distribution]] | Power distribution | 3.3 V / 5 V rails, decoupling, LDO placement |
 | [[07-PCB-Layout/Controller/05-EMC and Grounding\|EMC and Grounding]] | EMC and grounding | Digital/analog ground, connector filtering, ESD |
 
-### Auxiliary PSU Board
+### 3.6 Auxiliary PSU Board
 
 | Doc | Title | Key Focus |
 |-----|-------|-----------|

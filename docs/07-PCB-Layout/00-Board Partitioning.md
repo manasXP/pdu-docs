@@ -59,7 +59,7 @@ status: draft
 
 ## 4. Power Interfaces
 
-### P1a: AC Mains → Power Entry Board (External Input)
+### 4.1 P1a: AC Mains → Power Entry Board (External Input)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
@@ -68,7 +68,7 @@ status: draft
 | 3 | L3 (Phase C) | 530 VAC, 60 A | M6 stud |
 | 4 | PE (Protective Earth) | Safety ground | M6 stud, bonded to chassis |
 
-### P1b: Power Entry Board → AC-DC Board (Internal)
+### 4.2 P1b: Power Entry Board → AC-DC Board (Internal)
 
 AC is routed through the NTC thermistors and bypass relays on the [[07-PCB-Layout/Power-Entry/__init|Power Entry board]] before reaching the AC-DC board's EMI filter.
 
@@ -78,7 +78,7 @@ AC is routed through the NTC thermistors and bypass relays on the [[07-PCB-Layou
 | 2 | L2_FILT (Phase B, post-NTC/relay) | 530 VAC, 60 A | — |
 | 3 | L3_FILT (Phase C, post-NTC/relay) | 530 VAC, 60 A | — |
 
-### P2: AC-DC Board → DC-DC Board (DC Bus)
+### 4.3 P2: AC-DC Board → DC-DC Board (DC Bus)
 
 > [!warning] Critical Interface
 > This is a high-current, high-voltage bus bar connection. Parasitic inductance must be minimized (<5 nH) to avoid voltage overshoot on the LLC primary.
@@ -95,14 +95,14 @@ AC is routed through the NTC thermistors and bypass relays on the [[07-PCB-Layou
 - Laminated pair (+ and − sandwiched with 0.2 mm Kapton) for low inductance
 - Length: ≤80 mm between boards
 
-### P3a: DC-DC Board → Power Entry Board (Internal, Pre-Contactor)
+### 4.4 P3a: DC-DC Board → Power Entry Board (Internal, Pre-Contactor)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
 | 1 | DC_PRE_CONT+ | 150–1000 VDC, 100 A | M8 stud or bus bar, 8 AWG min |
 | 2 | DC_PRE_CONT− | 150–1000 VDC, 100 A | M8 stud or bus bar |
 
-### P3b: Power Entry Board → DC Output (External)
+### 4.5 P3b: Power Entry Board → DC Output (External)
 
 DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layout/Power-Entry/__init|Power Entry board]] before reaching the external connector.
 
@@ -112,7 +112,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 | 2 | DC_OUT− | 150–1000 VDC, 100 A | M8 stud or Anderson SB175 |
 | 3 | PE | Safety ground | M6 stud |
 
-### P4: Aux PSU Board → Power Boards (Gate Drive Power)
+### 4.6 P4: Aux PSU Board → Power Boards (Gate Drive Power)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
@@ -128,7 +128,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 > [!tip] Isolation Domains
 > Each gate drive supply pair (VDRV/VNEG) is independently isolated from logic ground and from each other. The Aux PSU provides 2 isolated gate drive channels — one per power board.
 
-### P5: Aux PSU Board → Controller Board (Logic Power)
+### 4.7 P5: Aux PSU Board → Controller Board (Logic Power)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
@@ -139,7 +139,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 
 ## 5. Signal Interfaces
 
-### S1: Controller → AC-DC Board (Control Harness)
+### 5.1 S1: Controller → AC-DC Board (Control Harness)
 
 | Pin | Signal | Type | Connector |
 |-----|--------|------|-----------|
@@ -156,7 +156,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 | 11 | FAULT_PFC | Open-drain, active low | — |
 | 12 | GND_SENSE | Analog ground reference | — |
 
-### S2: Controller → DC-DC Board (Control Harness)
+### 5.2 S2: Controller → DC-DC Board (Control Harness)
 
 | Pin | Signal | Type | Connector |
 |-----|--------|------|-----------|
@@ -171,7 +171,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 | 9 | FAULT_LLC | Open-drain, active low | — |
 | 10 | GND_SENSE | Analog ground reference | — |
 
-### S3: Controller → CAN Bus (External)
+### 5.3 S3: Controller → CAN Bus (External)
 
 | Pin | Signal | Type | Connector |
 |-----|--------|------|-----------|
@@ -180,7 +180,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 | 3 | GND | CAN ground reference | — |
 | 4 | Shield | Cable shield | — |
 
-### S4: Controller → Power Entry Board (Relay/Contactor Control)
+### 5.4 S4: Controller → Power Entry Board (Relay/Contactor Control)
 
 | Pin | Signal | Type | Connector |
 |-----|--------|------|-----------|

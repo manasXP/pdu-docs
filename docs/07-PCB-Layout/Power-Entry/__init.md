@@ -61,7 +61,7 @@ The board is organized into three physically separated zones:
   AC from mains                          DC to vehicle
 ```
 
-### Zone 1: AC Input Zone (~60 mm width)
+### 3.1 Zone 1: AC Input Zone (~60 mm width)
 
 Houses the AC mains entry point and inrush limiting components.
 
@@ -75,7 +75,7 @@ Houses the AC mains entry point and inrush limiting components.
 
 **Current path:** Mains → P1a → NTC → relay contact (bypasses NTC when closed) → P1b → AC-DC board EMI filter.
 
-### Zone 2: Control Zone (~30 mm width)
+### 3.2 Zone 2: Control Zone (~30 mm width)
 
 Provides coil drive circuits and feedback sensing. All control signals run at 24 VDC or logic level (3.3 V).
 
@@ -87,7 +87,7 @@ Provides coil drive circuits and feedback sensing. All control signals run at 24
 | Status LEDs | AC present, relay state, contactor state | 3 | Visual diagnostics |
 | Signal connector (S4) | Molex Micro-Fit 3.0, 8-pin | 1 | To Controller board |
 
-### Zone 3: DC Output Zone (~60 mm width)
+### 3.3 Zone 3: DC Output Zone (~60 mm width)
 
 Houses the main DC output contactor and output connector.
 
@@ -116,7 +116,7 @@ The Power Entry board carries two distinct high-voltage domains that must be sep
 > [!warning] AC-to-DC Zone Separation
 > The AC input zone and DC output zone carry voltages from independent sources (grid and vehicle battery). A routed PCB slot (≥2 mm wide, ≥20 mm creepage path around the slot) provides the required reinforced insulation barrier between these domains per IEC 62368-1.
 
-### PCB Slot Detail
+### 4.1 PCB Slot Detail
 
 ```
          AC Input Zone                    DC Output Zone
@@ -136,7 +136,7 @@ The control zone signal traces route around the ends of the slot, maintaining �
 
 ## 5. Power Interfaces
 
-### P1a: AC Mains → Power Entry Board (External Input)
+### 5.1 P1a: AC Mains → Power Entry Board (External Input)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
@@ -145,7 +145,7 @@ The control zone signal traces route around the ends of the slot, maintaining �
 | 3 | L3 (Phase C) | 530 VAC, 60 A | M6 stud |
 | 4 | PE (Protective Earth) | Safety ground | M6 stud, bonded to chassis |
 
-### P1b: Power Entry Board → AC-DC Board (Internal)
+### 5.2 P1b: Power Entry Board → AC-DC Board (Internal)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
@@ -155,14 +155,14 @@ The control zone signal traces route around the ends of the slot, maintaining �
 
 > [!note] PE is not carried on P1b. The AC-DC board bonds to chassis PE independently via its own M4 stud, per the [[07-PCB-Layout/00-Board Partitioning#Grounding Strategy|grounding strategy]].
 
-### P3a: DC-DC Board → Power Entry Board (Internal)
+### 5.3 P3a: DC-DC Board → Power Entry Board (Internal)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
 | 1 | DC_PRE_CONT+ | 150–1000 VDC, 100 A | M8 stud or bus bar, 8 AWG min |
 | 2 | DC_PRE_CONT− | 150–1000 VDC, 100 A | M8 stud or bus bar |
 
-### P3b: Power Entry Board → DC Output (External)
+### 5.4 P3b: Power Entry Board → DC Output (External)
 
 | Pin | Signal | Rating | Connector |
 |-----|--------|--------|-----------|
@@ -172,7 +172,7 @@ The control zone signal traces route around the ends of the slot, maintaining �
 
 ## 6. Signal Interface
 
-### S4: Controller → Power Entry Board (Signal Harness)
+### 6.1 S4: Controller → Power Entry Board (Signal Harness)
 
 | Pin | Signal | Type | Direction | Notes |
 |-----|--------|------|-----------|-------|
