@@ -566,3 +566,11 @@ The DC-DC stage target is >98% efficiency. The magnetics loss is only part of th
 - R. Erickson & D. Maksimović, *Fundamentals of Power Electronics*, 3rd ed. — LLC analysis methodology
 - B. Lu, W. Liu, et al., "Optimal Design Methodology for LLC Resonant Converter," IEEE APEC 2006
 - Ferroxcube Application Note — "Design of Planar Power Transformers"
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

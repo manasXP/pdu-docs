@@ -8,7 +8,7 @@ status: draft
 
 This document defines the 4-layer PCB stack-up for the Controller Board of the 30 kW PDU. The stack-up is optimized for a **digital/mixed-signal control board** — not a power converter board — so the emphasis is on signal integrity, controlled impedance, and clean power distribution rather than high-current capacity.
 
-## Layer Stack-Up
+## 1. Layer Stack-Up
 
 | Layer | Name | Type | Cu weight | Material | Thickness |
 |---|---|---|---|---|---|
@@ -25,7 +25,7 @@ This document defines the 4-layer PCB stack-up for the Controller Board of the 3
 > [!tip] Why this order matters
 > Placing GND on L2 directly beneath L1 (the primary signal layer) gives every L1 trace a tight, low-inductance return path. The 200 µm prepreg spacing between L1 and L2 supports controlled impedance for CAN differential pairs and HRTIM outputs.
 
-## Controlled Impedance Targets
+## 2. Controlled Impedance Targets
 
 The following impedance values are required for specific signal classes. They must be communicated to the PCB fabricator with a tolerance of +/-10%.
 
@@ -67,7 +67,7 @@ Used for the CAN bus differential pair (CANH / CANL) and any Ethernet differenti
 > [!warning] Fabricator note
 > Specify impedance control on the fabrication drawing. Request a **TDR coupon** on the panel for impedance verification. The fab should adjust trace widths to hit targets based on their actual prepreg thickness and Er.
 
-## Layer Assignment Rules
+## 3. Layer Assignment Rules
 
 ### L1 — Top Signal/Component Layer
 
@@ -147,7 +147,7 @@ Avoid routing the following on L4:
 - HRTIM PWM outputs (keep on L1 for matched impedance)
 - CAN differential pair (keep on L1 for impedance control)
 
-## Via Strategy
+## 4. Via Strategy
 
 ### Via Types
 
@@ -167,7 +167,7 @@ Avoid routing the following on L4:
 > [!tip] Return-current stitching
 > Every time a signal transitions between L1 and L4, the return current must also transition between L2 (GND reference for L1) and the reference for L4. Place a GND via adjacent to every signal via to ensure this transition is low-inductance.
 
-## Board Zoning and Placement Strategy
+## 5. Board Zoning and Placement Strategy
 
 The 120 x 100 mm board is divided into functional zones. Component placement follows the zoning defined in the [[__init|Controller Board Overview]]:
 
@@ -180,7 +180,7 @@ The 120 x 100 mm board is divided into functional zones. Component placement fol
 | Power entry | Southeast corner | P5 connector, bulk caps, ferrite beads, LDO |
 | PWM / Harness | South edge | P1 (PFC PWM), P2 (LLC PWM), P3 (analog sense) |
 
-## Fabrication Notes
+## 6. Fabrication Notes
 
 | Parameter | Specification |
 |---|---|
@@ -194,7 +194,7 @@ The 120 x 100 mm board is divided into functional zones. Component placement fol
 | Impedance control | Yes — 50 ohm SE, 100 ohm diff (L1 referenced to L2) |
 | Panelization | Per fab recommendation |
 
-## Cross-References
+## 7. Cross-References
 
 - [[__init|Controller Board Overview]] — board-level summary and block diagram
 - [[02-Signal Integrity]] — trace routing rules for analog and PWM signals
@@ -204,6 +204,6 @@ The 120 x 100 mm board is divided into functional zones. Component placement fol
 
 ## Revision History
 
-| Rev | Date | Author | Notes |
-|---|---|---|---|
-| 0.1 | 2026-02-22 | — | Initial draft |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

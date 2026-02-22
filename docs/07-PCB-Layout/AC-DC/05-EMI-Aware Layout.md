@@ -6,19 +6,19 @@ status: draft
 
 # 05 — EMI-Aware Layout
 
-## Purpose
+## 1. Purpose
 
 This document defines the EMI-aware layout strategy for the Vienna Rectifier PFC board. At 30 kW with SiC MOSFETs switching at 35+ kV/µs and 10+ A/ns, this board is a significant source of both conducted and radiated electromagnetic interference. The layout must minimize EMI generation at the source and contain residual emissions within the board boundaries to avoid corrupting the EMI filter performance.
 
 The three primary EMI mechanisms in the Vienna PFC are:
 
-1. **Differential-mode (DM) conducted emissions** — caused by high dI/dt switching currents through parasitic loop inductances. Addressed by loop minimization (see [[02-Power Loop Analysis]]).
+1. **Differential-mode (DM) conducted emissions** — caused by high dI/dt switching currents through parasitic loop inductances. Addressed by loop minimization (see [[07-PCB-Layout/AC-DC/02-Power Loop Analysis]]).
 
 2. **Common-mode (CM) conducted emissions** — caused by high dV/dt on the switching node coupling through parasitic capacitances to the heatsink, chassis, and PE conductor. This is typically the dominant EMI source in SiC-based PFC converters.
 
 3. **Radiated emissions** — caused by loop antennas (current loops with large area) and electric field radiation from high dV/dt nodes. Addressed by minimizing loop areas and switching node copper area.
 
-## Common-Mode Current Budget
+## 2. Common-Mode Current Budget
 
 ### CM Current Sources
 
@@ -54,7 +54,7 @@ This is the dominant CM current source. It flows through the heatsink to chassis
 
 #### 2. Gate Driver Isolation Capacitance (Cdh_driver)
 
-Per [[03-Gate Driver Layout]], each STGAP2SiC contributes:
+Per [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]], each STGAP2SiC contributes:
 
 $$I_{CM\_driver} = 6 \times 5 \text{ pF} \times 35 \text{ kV/µs} = **1.05 \text{ A (peak)}$$
 
@@ -87,7 +87,7 @@ The PCB bottom layer (L6) has parasitic capacitance to the metal chassis/enclosu
 >
 > The EMI filter must attenuate this CM current to below the EN 55032 / CISPR 32 Class B limits at the AC input terminals.
 
-## Switching Node Area Minimization
+## 3. Switching Node Area Minimization
 
 ### Why Switching Node Area Matters
 
@@ -137,7 +137,7 @@ Since the TO-247 drain pad alone is ~150 mm², achieving <100 mm² total switchi
 | 5 | No switching node traces crossing EMI filter zone | Prevents re-injection |
 | 6 | L2 ground plane continuous beneath switching node | Provides shielding and CM return |
 
-## EMI Filter Zone Separation
+## 4. EMI Filter Zone Separation
 
 ### Separation Requirement
 
@@ -196,11 +196,11 @@ The double-row stitching via fence creates a low-impedance ground connection acr
 | No shared return paths | EMI filter ground returns to the input connector, not through the power stage | Prevents CM noise injection into filter |
 | Separate ground tie point | EMI filter GND connects to L2 at the input connector only | Star-ground topology for CM |
 
-## L2 Ground Plane Integrity
+## 5. L2 Ground Plane Integrity
 
 ### Critical Importance
 
-The L2 ground plane is the single most important EMI mitigation element on the board. As detailed in [[01-Stack-Up and Layer Assignment]], L2 must remain continuous and unbroken. This section specifies the EMI-related reasons:
+The L2 ground plane is the single most important EMI mitigation element on the board. As detailed in [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]], L2 must remain continuous and unbroken. This section specifies the EMI-related reasons:
 
 1. **Shield between L1 (switching noise) and L3 (sensitive signals):** The L2 plane attenuates electric field coupling by >40 dB.
 
@@ -234,13 +234,13 @@ Every signal via that transitions from L1 to L3 (or L6 to L3) must have a compan
     L3:  ──── sig ────○──────────────────
 ```
 
-## Sensitive Signal Routing
+## 6. Sensitive Signal Routing
 
 ### Signal Categories and Routing Rules
 
 | Signal Category | Examples | Layer | Routing Rules |
 |----------------|----------|-------|---------------|
-| Gate drive (high dV/dt) | STGAP2SiC to MOSFET gate | L1 | <5mm, on L1 only, see [[03-Gate Driver Layout]] |
+| Gate drive (high dV/dt) | STGAP2SiC to MOSFET gate | L1 | <5mm, on L1 only, see [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] |
 | Current sense (analog) | Shunt resistor voltage | L3 | Differential pair, guard traces, away from SW node |
 | Temperature sense | NTC thermistor | L3 | Away from power traces, guard traces |
 | SPI control | STGAP2SiC daisy chain | L3 | ≥2mm from HV, standard digital routing |
@@ -285,7 +285,7 @@ The Vienna PFC board does not use a split ground plane (L2 is continuous). Howev
 - Place anti-aliasing filters and protection circuits in this quiet zone
 - Connect this zone to L2 through a cluster of vias at a single point (quasi-star-ground)
 
-## EMI Filter Component Placement
+## 7. EMI Filter Component Placement
 
 ### Zone A Layout Strategy
 
@@ -343,7 +343,7 @@ The EMI filter components in Zone A must be arranged to maximize filter attenuat
 >
 > This is below the 3.5 mA limit for fixed equipment (IEC 62368-1). However, increasing Y-cap values for better CM attenuation will increase leakage. Check the total leakage budget before sizing Y-caps.
 
-## Board Edge Stitching
+## 8. Board Edge Stitching
 
 In addition to the zone-boundary via fence, place stitching vias along all four board edges:
 
@@ -355,7 +355,7 @@ In addition to the zone-boundary via fence, place stitching vias along all four 
 | Net | GND (L2) |
 | Purpose | Contains fringing fields, reduces edge radiation |
 
-## EMI Verification
+## 9. EMI Verification
 
 ### Pre-Layout EMI Estimate
 
@@ -384,17 +384,17 @@ On the first prototype, perform near-field scanning with an H-field probe to ide
 - CM current paths through the heatsink mounting
 - Coupling between EMI filter and power stage
 
-## Cross-References
+## 10. Cross-References
 
 - [[__init]] — Board overview and zone map
-- [[01-Stack-Up and Layer Assignment]] — L2 ground plane definition
-- [[02-Power Loop Analysis]] — Power loop area minimization (DM emissions)
-- [[03-Gate Driver Layout]] — Driver CM current contribution
-- [[04-Thermal Layout]] — Airflow path and heatsink coupling
-- [[06-Creepage and Clearance]] — Safety spacings affect routing options
+- [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]] — L2 ground plane definition
+- [[07-PCB-Layout/AC-DC/02-Power Loop Analysis]] — Power loop area minimization (DM emissions)
+- [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] — Driver CM current contribution
+- [[07-PCB-Layout/AC-DC/04-Thermal Layout]] — Airflow path and heatsink coupling
+- [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] — Safety spacings affect routing options
 
 ## Revision History
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: CM budget, switching node area, filter separation, L2 rules |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

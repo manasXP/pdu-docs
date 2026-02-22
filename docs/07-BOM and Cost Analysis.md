@@ -356,3 +356,11 @@ All volume discounts fall within the expected 15–35% range for qty 100 → qty
 - Ferroxcube E65/32/27 datasheet — Core pricing via authorized distributors
 - Magnetics Inc. Kool Mu catalog — Powder core pricing
 - Vacuumschmelze VITROPERM 500F — Nanocrystalline core pricing
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

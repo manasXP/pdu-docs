@@ -6,14 +6,14 @@ status: draft
 
 # 02 — Power Loop Analysis
 
-## Purpose
+## 1. Purpose
 
 This document analyzes the two critical power commutation loops in the LLC resonant converter: the **primary half-bridge loop** and the **secondary rectifier loop**. Both loops must be minimized to limit voltage overshoot during switching transitions. The primary loop is particularly critical — it has only **8V margin** to the MOSFET absolute maximum rating without a snubber.
 
 > [!warning] CRITICAL — Primary Loop Margin
 > Without an RC snubber, the LLC primary half-bridge produces a **1192V peak** on 1200V-rated SiC MOSFETs — a mere 8V margin (0.67%). This is unacceptable for production. The **RC snubber is mandatory**, not optional. Even with the snubber, the margin is 139V (11.6%), which is tight by power electronics standards. Every nanohenry matters in this layout.
 
-## Loop 1: LLC Primary Half-Bridge
+## 2. Loop 1: LLC Primary Half-Bridge
 
 ### Circuit Description
 
@@ -181,7 +181,7 @@ Plus SW node trace (~1-2 nH): total ~4-5 nH
 This is comfortably below the 8 nH target.
 ```
 
-## Loop 2: Secondary Rectifier
+## 3. Loop 2: Secondary Rectifier
 
 ### Circuit Description
 
@@ -260,7 +260,7 @@ Margin  = 650 - 610 = 40 V (6.2%)
 | **S-5** | Keep secondary gate drivers outside rectifier loop | Prevent dI/dt coupling |
 | **S-6** | Match layout across all 3 phases | Current sharing depends on matched parasitics |
 
-## Phase Symmetry Requirements
+## 4. Phase Symmetry Requirements
 
 With 3 interleaved phases sharing the output current equally, parasitic mismatches cause current imbalance:
 
@@ -301,7 +301,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
   Equal trace/pour length from bus bar split point to each phase
 ```
 
-## Decoupling Capacitor Strategy
+## 5. Decoupling Capacitor Strategy
 
 ### Primary Bus Decoupling (per phase)
 
@@ -324,7 +324,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 > [!tip] Capacitor Placement Priority
 > Always place Tier 0 caps first, as close to the MOSFETs as physically possible. Then place Tier 1 caps radiating outward. The diminishing-returns curve is steep: the first nanohenry of ESL reduction (from Tier 0 placement) prevents far more overshoot than the last nanohenry from Tier 2 optimization.
 
-## Loop Inductance Verification
+## 6. Loop Inductance Verification
 
 ### Pre-Fabrication (Simulation)
 
@@ -349,7 +349,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 > - At the switching node (for dV/dt scope measurement)
 > Use 0 Ω resistor footprints (0603) in series with the loop for easy insertion of a current probe.
 
-## Summary of Voltage Margins
+## 7. Summary of Voltage Margins
 
 | Loop | V_bus/V_out | L_total | dI/dt | V_overshoot | V_peak | V_rated | Margin | Snubber |
 |------|-------------|---------|-------|-------------|--------|---------|--------|---------|
@@ -358,7 +358,7 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 | Secondary (no snub) | 500 V | 22 nH | 5 A/ns | 110 V | 610 V | 650 V | 40 V (6.2%) | — |
 | Secondary (with snub) | 500 V | 22 nH | 5 A/ns | ~70 V | ~570 V | 650 V | 80 V (12.3%) | 4.7Ω + 470pF |
 
-## Cross-References
+## 8. Cross-References
 
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]] — Board-level design targets
 - [[07-PCB-Layout/DC-DC/01-Stack-Up and Layer Assignment|Stack-Up and Layer Assignment]] — Layer usage for power loop routing
@@ -366,3 +366,11 @@ At ~1 nH/mm of trace, this allows only ~0.7 mm variation in trace length between
 - [[07-PCB-Layout/DC-DC/05-EMI-Aware Layout|EMI-Aware Layout]] — Switching node area limits derived from this analysis
 - [[01-Topology Selection]] — LLC topology choice and operating conditions
 - [[SiC Device Thermal Parameters]] — MOSFET switching characteristics (dI/dt, C_oss)
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

@@ -6,11 +6,11 @@ status: draft
 
 # 05 — EMI-Aware Layout
 
-## Purpose
+## 1. Purpose
 
 This document defines the EMI-aware layout strategies for the DC-DC LLC resonant converter board. The LLC topology has inherent EMI advantages over hard-switched topologies (ZVS reduces dV/dt-related emissions), but the 3-phase interleaved architecture and high-frequency transformer introduce unique challenges: **resonant tank symmetry**, **transformer CM capacitance**, and **inter-phase coupling**. The output cable connecting to the EV battery is also a significant EMI antenna.
 
-## EMI Source Identification
+## 2. EMI Source Identification
 
 ### Primary EMI Sources on the DC-DC Board
 
@@ -45,7 +45,7 @@ The LLC resonant converter operating at or near the resonant frequency achieves:
 > ```
 > This is a **13× reduction** in dV/dt, translating to ~22 dB lower displacement current EMI. However, this advantage is only present at the resonant operating point. During startup, overload, or frequency modulation away from resonance, the LLC may lose ZVS and dV/dt increases dramatically.
 
-## Switching Node Area Control
+## 3. Switching Node Area Control
 
 ### Requirement
 
@@ -102,7 +102,7 @@ Place the switching node pour on **L1 only**, with L2 GND plane directly underne
 
 The L2 GND plane capacitively couples to the switching node, but the resulting displacement current flows into the GND plane (contained) rather than radiating. The GND plane must be **continuous** under the switching node — no splits, no vias, no trace interruptions.
 
-## Resonant Tank Layout — Lr/Cr Symmetry
+## 4. Resonant Tank Layout — Lr/Cr Symmetry
 
 ### Why Symmetry Matters
 
@@ -167,7 +167,7 @@ The resonant current flows in a loop: **C_bus → Q1 → SW node → Lr → Cr �
 > [!note] Resonant Loop vs. Commutation Loop
 > Do not confuse the resonant current loop with the commutation loop. The **commutation loop** (analyzed in [[07-PCB-Layout/DC-DC/02-Power Loop Analysis|Power Loop Analysis]]) is the high-frequency path during switching transitions and must be minimized to <8 nH. The **resonant loop** carries the sinusoidal resonant current and can tolerate more inductance (the extra PCB inductance just adds slightly to Lr, which can be compensated in the inductor design).
 
-## Transformer Common-Mode Current
+## 5. Transformer Common-Mode Current
 
 ### CM Current Generation
 
@@ -222,7 +222,7 @@ During loss of ZVS:
 > [!warning] Y-Capacitor Leakage Current
 > The Y-capacitor leakage current at full bus voltage and switching frequency approaches the 10 mA safety limit. Verify with the actual switching waveform (not a continuous sine wave). If needed, reduce to 2.2 nF per capacitor to halve the leakage current. See [[09-Protection and Safety]] for earth leakage requirements.
 
-## Inter-Phase Isolation
+## 6. Inter-Phase Isolation
 
 ### Stitching Via Fences Between Phases
 
@@ -268,7 +268,7 @@ At 2.5 mm pitch, the fence is effective well beyond 200 MHz.
 Actual shielding effectiveness: >40 dB up to several GHz.
 ```
 
-## L2 GND Plane Management
+## 7. L2 GND Plane Management
 
 ### Continuity Rules
 
@@ -298,7 +298,7 @@ Where copper must be removed from L2 (e.g., for high-voltage clearance around mo
 | High-voltage trace crossing on L3 | Allowed over unbroken L2 (L2 acts as shield, not signal return for HV) |
 | Bus bar mounting holes | 1 mm clearance from bolt hole |
 
-## Output Cable EMI
+## 8. Output Cable EMI
 
 ### The Output Cable as an Antenna
 
@@ -335,7 +335,7 @@ For conducted EMI compliance (EN 61000-6-3 / CISPR 11 Class B):
 > [!tip] CM Choke Placement
 > Mount the CM choke as close to the output connector P3 as possible. Any PCB trace between the choke and the connector adds parasitic capacitance that bypasses the choke at high frequency. Ideally, the choke is the last component in the signal path before the connector.
 
-## EMI-Critical Component Placement Summary
+## 9. EMI-Critical Component Placement Summary
 
 | Component | EMI Constraint | Placement Rule |
 |-----------|---------------|----------------|
@@ -351,7 +351,7 @@ For conducted EMI compliance (EN 61000-6-3 / CISPR 11 Class B):
 | Output CM choke | Last filter element | Adjacent to P3 connector |
 | Bus decoupling caps | Contain HF current | Directly at MOSFET pads (Tier 0) |
 
-## EMI Testing Considerations
+## 10. EMI Testing Considerations
 
 ### Test Points for Pre-Compliance
 
@@ -373,7 +373,7 @@ Include the following test provisions on the PCB:
 | CISPR 11 Class B (radiated) | 30 MHz – 1 GHz | Antenna measurement (3 m or 10 m) |
 | EN 61000-6-3 | 150 kHz – 30 MHz | Conducted emissions limit |
 
-## Cross-References
+## 11. Cross-References
 
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]] — Board summary
 - [[07-PCB-Layout/DC-DC/02-Power Loop Analysis|Power Loop Analysis]] — Commutation loop inductance (drives dV/dt)
@@ -381,3 +381,11 @@ Include the following test provisions on the PCB:
 - [[07-PCB-Layout/DC-DC/06-Creepage and Clearance|Creepage and Clearance]] — Isolation barrier physical dimensions
 - [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout|AC-DC EMI-Aware Layout]] — Input-side EMI strategies
 - [[09-Protection and Safety]] — EMC compliance requirements, earth leakage limits
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

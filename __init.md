@@ -64,3 +64,11 @@ For medical/precision applications like your robotics work, prioritize SiC-based
 - [[3-Phase PFC Topology Selection]] -- Vienna rectifier vs B6, Swiss rectifier, two-level VSI
 - [[DC-DC Topology Trade Study]] -- LLC vs DAB vs PSFB vs CLLC vs SRC
 - [[Commercial Reference Designs Survey]] -- Wolfspeed, ST, Infineon, onsemi, TI, ADI platforms
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

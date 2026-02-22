@@ -650,3 +650,11 @@ Estimated field replacement time: < 15 minutes per board.
 - [[09-Protection and Safety]] — Fan failure detection logic, OTP thresholds, fault response matrix
 - [[08-Power-On Sequence and Inrush Management]] — Startup sequence, pre-charge contactor mechanical placement
 - [[SiC Device Thermal Parameters]] — Package thermal resistance data (Rth_jc, Rth_jb) for all selected SiC MOSFETs
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

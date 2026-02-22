@@ -6,7 +6,7 @@ status: draft
 
 # 02 — Power Loop Analysis
 
-## Purpose
+## 1. Purpose
 
 This document analyzes the critical commutation loops in the Vienna Rectifier PFC stage and defines the parasitic inductance budget, decoupling capacitor placement strategy, and layout rules required to achieve the target loop inductance of **≤10 nH PCB contribution** per phase.
 
@@ -16,7 +16,7 @@ In a Vienna PFC switching at 48–65 kHz with SiC MOSFETs, the commutation loop 
 - **EMI emissions** (loop area is proportional to radiated emissions)
 - **Device stress** (repetitive overshoot accelerates gate oxide degradation)
 
-## Vienna PFC Commutation Loops
+## 2. Vienna PFC Commutation Loops
 
 ### Topology Review
 
@@ -65,9 +65,9 @@ This loop carries the average inductor current (up to 40 A) but at a lower dI/dt
 
 ### Loop 3 — Gate Drive Loop
 
-See [[03-Gate Driver Layout]] for the gate loop analysis. The gate loop is a separate, smaller loop with its own inductance budget (<5 nH).
+See [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] for the gate loop analysis. The gate loop is a separate, smaller loop with its own inductance budget (<5 nH).
 
-## Parasitic Inductance Budget
+## 3. Parasitic Inductance Budget
 
 ### Component-Level Parasitics
 
@@ -129,7 +129,7 @@ At maximum switching current with the target loop inductance:
 
 With 1200V devices, the 18 nH total budget provides adequate margin. The 10 nH PCB target remains the design goal.
 
-## Decoupling Capacitor Array
+## 4. Decoupling Capacitor Array
 
 ### Tiered Decoupling Strategy
 
@@ -217,7 +217,7 @@ The decoupling is organized in three tiers, each serving a different frequency r
 > - Match capacitor values within ±10% (same manufacturer lot preferred)
 > - Verify ripple current rating is adequate for the total bus ripple at 3× fsw
 
-## DC Bus Charge Loop (Loop 2)
+## 5. DC Bus Charge Loop (Loop 2)
 
 The DC bus charge loop extends from the boost inductor through the boost diode to the bulk capacitors and back. This loop carries continuous current (up to 40 A) and must be sized for low resistive loss.
 
@@ -241,7 +241,7 @@ The DC bus connects from the bulk capacitors (Zone C) to the output connector (Z
 | Connector type | High-current PCB terminal block or bus bar |
 | Rated current | ≥50 A (with derating) |
 
-## Layout Rules Summary
+## 6. Layout Rules Summary
 
 ### Power Loop (Loop 1) — Mandatory Rules
 
@@ -264,7 +264,7 @@ All components in the hot commutation loop (MOSFET, snubber caps, boost diode) *
 
 Exception: If the boost diode is placed on L6 (bottom), the via transition inductance (~1 nH for a 4-via array) may be acceptable if it enables a shorter overall loop path. Evaluate on a case-by-case basis with field solver simulation.
 
-## Simulation and Verification
+## 7. Simulation and Verification
 
 ### Pre-Layout Estimation
 
@@ -297,14 +297,14 @@ After completing the layout, extract loop inductance using:
 >
 > Target: measured loop inductance should be within 20% of the simulated value.
 
-## Cross-References
+## 8. Cross-References
 
 - [[__init]] — Board overview and component list
-- [[01-Stack-Up and Layer Assignment]] — Stack-up that enables low-inductance loops
-- [[03-Gate Driver Layout]] — Gate loop (separate inductance budget)
-- [[04-Thermal Layout]] — MOSFET placement affects loop path
-- [[05-EMI-Aware Layout]] — Loop area minimization for EMI
-- [[06-Creepage and Clearance]] — Spacing constraints that may increase loop path
+- [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]] — Stack-up that enables low-inductance loops
+- [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] — Gate loop (separate inductance budget)
+- [[07-PCB-Layout/AC-DC/04-Thermal Layout]] — MOSFET placement affects loop path
+- [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] — Loop area minimization for EMI
+- [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] — Spacing constraints that may increase loop path
 - [[01-Topology Selection]] — Vienna PFC topology and device selection
 - [[SiC Device Thermal Parameters]] — MOSFET package parasitic data
 
@@ -312,4 +312,4 @@ After completing the layout, extract loop inductance using:
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: loop analysis, parasitic budget, decoupling strategy |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

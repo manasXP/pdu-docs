@@ -6,13 +6,13 @@ status: draft
 
 # 04 — Thermal Layout
 
-## Purpose
+## 1. Purpose
 
 This document specifies the thermal design aspects of the Vienna Rectifier PFC board layout, including MOSFET heatsink mounting, thermal interface materials, thermal via arrays, copper pour sizing for current capacity, airflow path optimization, and gate driver thermal management.
 
 At 30 kW with >96% efficiency, the board dissipates up to **1200 W** of heat (at 96%). With SiC-based designs at >98% efficiency, dissipation drops to ~600 W, but this is still substantial and requires careful thermal management to keep junction temperatures within safe operating limits.
 
-## Thermal Budget Overview
+## 2. Thermal Budget Overview
 
 ### Power Dissipation Breakdown (Per Phase, 10 kW)
 
@@ -23,7 +23,7 @@ At 30 kW with >96% efficiency, the board dissipates up to **1200 W** of heat (at
 | Boost diode | Conduction (Vf × Iavg) | 20–30 | SiC Schottky: Vf ≈ 1.5V |
 | Boost inductor | Core + copper loss | 40–60 | External or board-mounted |
 | Snubber/bus caps | ESR loss | 5–10 | Ripple current × ESR |
-| Gate driver | Gate charge + quiescent | 0.3 | Per [[03-Gate Driver Layout]] |
+| Gate driver | Gate charge + quiescent | 0.3 | Per [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] |
 | PCB copper | I²R loss | 10–20 | Depends on pour width/length |
 | **Total per phase** | | **135–220 W** | |
 | **Total 3-phase** | | **400–660 W** | Consistent with 98–96% efficiency |
@@ -38,7 +38,7 @@ At 30 kW with >96% efficiency, the board dissipates up to **1200 W** of heat (at
 | Electrolytic capacitors | 105°C (case) | ≤85°C | Lifetime doubles per 10°C reduction |
 | FR-4 PCB | 170°C (Tg) | ≤100°C locally | Near MOSFET mounting area |
 
-## TO-247 Heatsink Mounting
+## 3. TO-247 Heatsink Mounting
 
 ### Mechanical Specification
 
@@ -86,7 +86,7 @@ $$T_j = T_{amb} + P_{diss} \times R_{th\_ja} = 55 + 50 \times 1.5 = 130°C$$
 This is within the 175°C absolute max but above the 125°C operating target. **The heatsink Rth_sa must be ≤1.0°C/W** with forced-air cooling to meet the target.
 
 > [!tip] Heatsink Selection Drives Layout
-> The heatsink dimensions and mounting hole pattern directly affect the PCB layout. Select the heatsink early in the design process and incorporate its footprint into the PCB layout from the beginning. The heatsink mounting holes must align with the PCB mounting holes and maintain creepage from drain copper to PE. See [[06-Creepage and Clearance]].
+> The heatsink dimensions and mounting hole pattern directly affect the PCB layout. Select the heatsink early in the design process and incorporate its footprint into the PCB layout from the beginning. The heatsink mounting holes must align with the PCB mounting holes and maintain creepage from drain copper to PE. See [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]].
 
 ### PCB Mounting Pad Design
 
@@ -102,13 +102,13 @@ The TO-247 package has three elements that contact the PCB:
 |-----------|-------|
 | Drill diameter | 3.2 mm (for M3 screw clearance) |
 | Pad diameter | 6.0 mm (annular ring for structural support) |
-| Copper keepout around hole | Per creepage requirements — see [[06-Creepage and Clearance]] |
+| Copper keepout around hole | Per creepage requirements — see [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] |
 | Plating | Non-plated (NPTH) if heatsink is PE-connected; plated if drain-connected |
 
 > [!warning] Mounting Hole Creepage
-> The M3 mounting hole passes through the PCB in close proximity to the drain copper pad. The drain is at switching node voltage (up to 920V). If the heatsink is connected to PE or chassis ground, the creepage from drain copper to the mounting hole must meet the DC bus creepage requirement (**14 mm** per [[06-Creepage and Clearance]]). This often requires a large copper keepout zone around the mounting hole and may necessitate a PCB slot to increase the effective creepage path.
+> The M3 mounting hole passes through the PCB in close proximity to the drain copper pad. The drain is at switching node voltage (up to 920V). If the heatsink is connected to PE or chassis ground, the creepage from drain copper to the mounting hole must meet the DC bus creepage requirement (**14 mm** per [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]]). This often requires a large copper keepout zone around the mounting hole and may necessitate a PCB slot to increase the effective creepage path.
 
-## Thermal Via Arrays
+## 4. Thermal Via Arrays
 
 Thermal vias conduct heat from the top copper layer (L1) through the PCB stack-up to inner and bottom layers, increasing the effective thermal conduction area.
 
@@ -159,7 +159,7 @@ For the TO-247 drain pad on L1, a thermal via array conducts heat to L5/L6:
 | Plugged + plated (VIPPO) | Flat surface, best thermal, allows SMD on pad | Most expensive | **Recommended for production** |
 | Filled with epoxy | Moderate cost, flat surface | Lower thermal conductivity than copper fill | Acceptable alternative |
 
-## Gate Driver Thermal Management
+## 5. Gate Driver Thermal Management
 
 ### STGAP2SiC Thermal Design
 
@@ -210,7 +210,7 @@ At 55°C ambient: Tj = 55 + 23 = **78°C** — well within the 150°C maximum.
     └─────────────────────────────┘
 ```
 
-## IPC-2152 Bus Trace / Pour Sizing
+## 6. IPC-2152 Bus Trace / Pour Sizing
 
 ### AC Input Traces (60 A per phase)
 
@@ -267,7 +267,7 @@ $$P_{total\_AC} = 3 \times 60^2 \times \frac{1.72 \times 10^{-8} \times 0.2}{0.0
 
 This is significant and motivates using the widest possible pours and parallel layers.
 
-## Airflow Path Design
+## 7. Airflow Path Design
 
 ### Airflow Direction
 
@@ -312,7 +312,7 @@ Ensure components are arranged with increasing height along the airflow directio
 > [!tip] CM Choke Height
 > The CM choke in Zone A is often the tallest component. Position it so the heatsink and capacitors downstream are not in its flow shadow. If necessary, offset the CM choke toward one edge of the board.
 
-## Thermal Management Summary Table
+## 8. Thermal Management Summary Table
 
 | Component | Cooling Method | Rth_ja Target | Max Dissipation | Max Temp Rise |
 |-----------|---------------|---------------|-----------------|---------------|
@@ -323,7 +323,7 @@ Ensure components are arranged with increasing height along the airflow directio
 | Snubber caps | PCB copper | N/A | <1 W each | Negligible |
 | PCB copper pours | Convection + conduction | N/A | 18 W total (I²R) | 20–30°C local |
 
-## Thermal Design Verification
+## 9. Thermal Design Verification
 
 ### Pre-Layout Thermal Simulation
 
@@ -342,18 +342,18 @@ After layout completion:
 4. Check that no thermal relief pads exist on power connections
 5. Verify heatsink mounting hole clearances meet creepage requirements
 
-## Cross-References
+## 10. Cross-References
 
 - [[__init]] — Board overview and component list
-- [[01-Stack-Up and Layer Assignment]] — Copper weights and layer assignments
-- [[02-Power Loop Analysis]] — Snubber placement (affects thermal layout)
-- [[03-Gate Driver Layout]] — Driver power dissipation and thermal pour spec
-- [[05-EMI-Aware Layout]] — Airflow and zone separation considerations
-- [[06-Creepage and Clearance]] — Mounting hole creepage requirements
+- [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]] — Copper weights and layer assignments
+- [[07-PCB-Layout/AC-DC/02-Power Loop Analysis]] — Snubber placement (affects thermal layout)
+- [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] — Driver power dissipation and thermal pour spec
+- [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] — Airflow and zone separation considerations
+- [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] — Mounting hole creepage requirements
 - [[SiC Device Thermal Parameters]] — MOSFET and diode thermal data
 
 ## Revision History
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: heatsink mounting, thermal vias, bus sizing, airflow |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

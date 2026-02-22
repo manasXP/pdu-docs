@@ -8,7 +8,7 @@ status: draft
 
 This document defines the electromagnetic compatibility (EMC) and grounding strategy for the Controller Board. As a digital/mixed-signal control board operating inside a PDU enclosure that also contains high-power switching converters (Vienna PFC at up to 100 kHz, LLC at up to 500 kHz), robust EMC design is essential for reliable operation.
 
-## Grounding Philosophy
+## 1. Grounding Philosophy
 
 ### Single GND Plane — No Splits
 
@@ -50,7 +50,7 @@ Location: near the P5 power entry connector, where the main GND from the Aux PSU
 > [!tip] Star-ground implementation
 > On a continuous plane, the "star point" is implemented by ensuring that the high-current digital return and the sensitive analog return both reach the P5 GND pins through low-impedance paths. Place the P5 connector at the boundary between analog and digital zones so that neither return current must cross the other zone to reach the connector.
 
-## Board Edge Stitching Vias
+## 2. Board Edge Stitching Vias
 
 A perimeter ring of GND stitching vias connects L1 GND copper (guard traces, edge copper) to the L2 GND plane around the entire board perimeter. This ring provides:
 
@@ -87,7 +87,7 @@ Board edge
 > [!tip] Stitching via spacing
 > The 2 mm via pitch provides effective shielding up to approximately 15 GHz (lambda/20 at 2 mm), which is far above the highest frequency of concern on this board (the HRTIM switching harmonics at a few hundred MHz). For the communication interfaces (CAN at 1 MHz, Ethernet at 25 MHz, PLC at 30 MHz), this pitch is more than adequate.
 
-## Connector EMC Filtering
+## 3. Connector EMC Filtering
 
 Every external connector on the board is a potential EMC ingress/egress point. Each connector has a dedicated filtering and protection scheme.
 
@@ -159,7 +159,7 @@ The coupling transformer provides inherent galvanic isolation. The GDT (gas disc
 | Bulk bypass | 100 µF + 4.7 µF per rail | At connector |
 | TVS on PGOOD | PESD5V0S1BL (5 V clamp) | At PGOOD pin |
 
-## ESD Protection Strategy
+## 4. ESD Protection Strategy
 
 ### Design Target
 
@@ -208,7 +208,7 @@ Key rules:
 - The signal trace to the IC branches **after** the TVS, so the ESD current does not flow along the signal trace
 - Route the TVS-to-GND path as a **wide, short trace** (0.5 mm minimum width)
 
-## Cable Shield Grounding
+## 5. Cable Shield Grounding
 
 All shielded cables entering the board (CAN, Ethernet, PLC, analog sense) must have their shields terminated at the connector entry point:
 
@@ -222,7 +222,7 @@ All shielded cables entering the board (CAN, Ethernet, PLC, analog sense) must h
 > [!tip] 360-degree shield termination
 > For maximum EMC performance, use connectors with metal shells that provide 360-degree contact with the cable shield. Pigtail connections (drain wire) are inferior because they create an inductive loop at the shield termination point. For the CAN and coax connectors, this is straightforward. For the Molex-style analog connector (P3), use a shield drain wire connected to a GND pad within 5 mm of the connector body.
 
-## Board-Level EMC Design Rules
+## 6. Board-Level EMC Design Rules
 
 ### Bypass Capacitor Strategy
 
@@ -257,7 +257,7 @@ Ferrite beads are used at three locations:
 | No stubs | All series components placed in-line, no T-branches |
 | Loop area minimization | Signal trace and return (on L2 plane) separated by only 0.2 mm prepreg |
 
-## Ground Plane Integrity Audit
+## 7. Ground Plane Integrity Audit
 
 Before releasing the PCB layout for fabrication, verify the following on L2:
 
@@ -272,7 +272,7 @@ Before releasing the PCB layout for fabrication, verify the following on L2:
 > [!warning] Thermal relief on GND vias
 > Standard PCB tools add thermal relief patterns (spoke connections) to plane-connected vias by default. For GND stitching vias and decoupling cap GND vias, **disable thermal relief** and use solid connections. Thermal relief adds inductance to the ground connection, degrading bypass capacitor effectiveness. Only use thermal relief on through-hole component GND pins to ensure solderability.
 
-## EMC Test Plan
+## 8. EMC Test Plan
 
 The assembled controller board should be evaluated for EMC compliance before integration into the full PDU:
 
@@ -284,16 +284,16 @@ The assembled controller board should be evaluated for EMC compliance before int
 | Burst immunity | IEC 61000-4-4 | Level 3 (2 kV) | Apply to power and signal ports |
 | Surge immunity | IEC 61000-4-5 | Level 3 (1 kV diff, 2 kV CM) | Apply to CAN and Ethernet ports |
 
-## Cross-References
+## 9. Cross-References
 
-- [[01-Stack-Up and Layer Assignment]] — L2 GND plane definition, edge stitching via spec
+- [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]] — L2 GND plane definition, edge stitching via spec
 - [[02-Signal Integrity]] — guard traces, analog routing over GND plane
 - [[03-Communication Interfaces]] — CAN CMC, Ethernet magnetics, PLC transformer
 - [[04-Power Distribution]] — ferrite bead filtering, power entry bypass
 - [[__init|Controller Board Overview]] — connector map and board zoning
 - [[00-Board Partitioning]] — PDU enclosure grounding, board-to-chassis connections
 
-## Design Checklist
+## 10. Design Checklist
 
 | Item | Check |
 |---|---|
@@ -313,6 +313,6 @@ The assembled controller board should be evaluated for EMC compliance before int
 
 ## Revision History
 
-| Rev | Date | Author | Notes |
-|---|---|---|---|
-| 0.1 | 2026-02-22 | — | Initial draft |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

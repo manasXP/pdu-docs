@@ -6,11 +6,11 @@ status: draft
 
 # 06 — Creepage and Clearance
 
-## Purpose
+## 1. Purpose
 
 This document specifies the creepage (surface distance) and clearance (air gap) requirements for the DC-DC LLC resonant converter board. The DC-DC board has the most demanding isolation requirements in the PDU due to the **primary-secondary isolation barrier** (4 kV hipot, reinforced insulation) and the presence of **two independent high-voltage domains** (920V primary, up to 1000V secondary).
 
-## Applicable Standards
+## 2. Applicable Standards
 
 | Standard | Scope | Key Requirements |
 |----------|-------|-----------------|
@@ -32,7 +32,7 @@ This document specifies the creepage (surface distance) and clearance (air gap) 
 | Operating temperature | −20°C to +75°C | PDU specification |
 | Conformal coating | Yes (Humiseal 1A33 or equivalent) | Applied to isolation-critical areas |
 
-## Voltage Domains and Boundaries
+## 3. Voltage Domains and Boundaries
 
 The DC-DC board has four distinct voltage domains:
 
@@ -72,7 +72,7 @@ The DC-DC board has four distinct voltage domains:
   └─────────────────────────────────────────────────────────────┘
 ```
 
-## Clearance and Creepage Requirements
+## 4. Clearance and Creepage Requirements
 
 ### External (PCB Surface) Requirements
 
@@ -102,7 +102,7 @@ Internal clearances are significantly smaller than external because the insulati
 > [!warning] No Internal Primary-Secondary Crossing
 > Unlike external clearances that can be satisfied with adequate spacing, the primary-secondary isolation **cannot** be achieved by merely spacing internal layer copper. The barrier must be a **physical slot** through the full PCB stack-up, removing all FR-4 and copper between the primary and secondary domains. No copper on L2, L3, L4, or L5 may bridge the isolation barrier.
 
-## Primary-Secondary Isolation Barrier — Detailed Design
+## 5. Primary-Secondary Isolation Barrier — Detailed Design
 
 ### Physical Implementation
 
@@ -191,7 +191,7 @@ Design approach:
   - Total surface path: ≥20 mm ✓
 ```
 
-## STGAP2SiC Driver Isolation
+## 6. STGAP2SiC Driver Isolation
 
 Each of the 12 STGAP2SiC gate drivers has its own internal isolation barrier between input and output pins. The PCB must support this isolation:
 
@@ -229,7 +229,7 @@ Each of the 12 STGAP2SiC gate drivers has its own internal isolation barrier bet
 | Input pad → Output pad (on PCB) | ≥5 mm (slot + clearance) | Supplemented by IC package | Meets |
 | Input trace → Output trace (nearest approach) | ≥3 mm (slot enforces) | Basic insulation for driver supply voltage | Meets |
 
-## DRC Net Class Table
+## 7. DRC Net Class Table
 
 Configure the KiCad DRC (Design Rule Check) with the following net classes to automatically enforce clearance and creepage rules:
 
@@ -272,7 +272,7 @@ Configure the KiCad DRC (Design Rule Check) with the following net classes to au
 | **Primary → Secondary** | **N/A** | **No internal crossing permitted** |
 | Any HV → PE (via/pad) | 0.6 mm | Around mounting holes |
 
-## IPC-2221B Internal Clearance Reference
+## 8. IPC-2221B Internal Clearance Reference
 
 For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 
@@ -289,7 +289,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 > [!note] Internal vs. External
 > Internal clearances in IPC-2221B are much smaller than external because FR-4 has a dielectric strength of ~40 kV/mm (at 1.6 mm thickness). Even at 920V working voltage, the 0.63 mm internal clearance provides a safety factor of ~100. However, this assumes no voids, delamination, or contamination in the FR-4 — which is why IPC Class 2 fabrication quality is specified.
 
-## Special Creepage Zones
+## 9. Special Creepage Zones
 
 ### Zone 1: DC Bus Input (Bus Bar to Capacitors)
 
@@ -334,7 +334,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | P3 output pad → nearest mounting hole (PE) | 8.5 mm | 15 mm |
 | Output bus bar → PE copper | 8.5 mm | 15 mm |
 
-## Conformal Coating Strategy
+## 10. Conformal Coating Strategy
 
 ### Coating Application Map
 
@@ -362,7 +362,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 > [!tip] Coating Does Not Replace Distance
 > Conformal coating adds margin but does not replace the required creepage/clearance distances. Design the PCB to meet all requirements **without** coating, then apply coating as an additional layer of protection. Certification bodies may not accept coating as a substitute for physical distance in reinforced insulation applications.
 
-## Hipot Test Requirements
+## 11. Hipot Test Requirements
 
 ### Factory Test Specification
 
@@ -383,7 +383,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 | PCB quality | IPC Class 2 minimum; no delamination, no voids near barrier |
 | Test point isolation | All test points on one side of barrier only |
 
-## Layout Checklist — Creepage and Clearance
+## 12. Layout Checklist — Creepage and Clearance
 
 - [ ] KiCad DRC net classes configured per the matrix in this document
 - [ ] Isolation barrier slot drawn in board outline (4 mm wide, full board width)
@@ -401,7 +401,7 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 - [ ] Solder mask covers isolation barrier area (prevents solder bridging)
 - [ ] Hipot test procedure documented for factory acceptance testing
 
-## Cross-References
+## 13. Cross-References
 
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]] — Board-level isolation requirements
 - [[07-PCB-Layout/DC-DC/01-Stack-Up and Layer Assignment|Stack-Up and Layer Assignment]] — Internal layer clearances
@@ -409,3 +409,11 @@ For reference, IPC-2221B Table 6-1 (Internal Conductors, B1 class):
 - [[07-PCB-Layout/DC-DC/05-EMI-Aware Layout|EMI-Aware Layout]] — Y-capacitors at barrier, CM current path
 - [[07-PCB-Layout/AC-DC/06-Creepage and Clearance|AC-DC Creepage and Clearance]] — Companion board creepage (simpler — no isolation barrier)
 - [[09-Protection and Safety]] — System-level safety requirements, hipot test specifications
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

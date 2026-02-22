@@ -8,7 +8,7 @@ status: draft
 
 This document describes the power distribution network (PDN) for the Controller Board. The board receives all power from the [[07-PCB-Layout/Aux-PSU/__init|Aux PSU Board]] via the P5 connector. There are no on-board switching regulators — only an LDO for clean analog supply and passive filtering. This keeps the controller board free of switching noise.
 
-## Power Rails Summary
+## 1. Power Rails Summary
 
 | Rail | Voltage | Source | Max current | Purpose |
 |---|---|---|---|---|
@@ -17,7 +17,7 @@ This document describes the power distribution network (PDN) for the Controller 
 | 5 V | 5.0 V +/- 5% | Aux PSU via P5 | 100 mA | CAN transceiver (TCAN1044) |
 | 12 V | 12.0 V +/- 10% | Aux PSU via P5 | 2 A | Fan drive pass-through |
 
-## P5 Power Connector
+## 2. P5 Power Connector
 
 The P5 connector is a Molex Micro-Fit 3.0 (or equivalent), placed at the **southeast corner** of the board.
 
@@ -37,7 +37,7 @@ The P5 connector is a Molex Micro-Fit 3.0 (or equivalent), placed at the **south
 > [!tip] PGOOD signal
 > The PGOOD input from the Aux PSU indicates that all supply rails are stable. The MCU monitors this on a GPIO input. If PGOOD deasserts, the firmware enters a safe shutdown state, disabling all PWM outputs within one switching cycle. See [[06-Firmware Architecture]] for the fault handling sequence and [[08-Power-On Sequence and Inrush Management]] for startup sequencing.
 
-## Power Entry Filtering
+## 3. Power Entry Filtering
 
 Each power rail entering the board through P5 passes through an input filter stage before reaching the distribution network:
 
@@ -92,7 +92,7 @@ P5 pin 4,5 ──── Polyfuse (2A) ──┬── J1 Fan connector
 > [!warning] Fan drive routing
 > Route 12 V traces on L4 with 0.5 mm (20 mil) minimum width to handle 2 A. Keep 12 V traces away from the analog section (minimum 5 mm clearance). The 12 V trace does not use the L3 power plane — it is routed as a discrete trace on L4 to avoid contaminating the 3.3 V power plane.
 
-## Local LDO: Analog 3.3 V Supply
+## 4. Local LDO: Analog 3.3 V Supply
 
 The analog circuits (op-amps, ADC reference) require a cleaner 3.3 V supply than what the Aux PSU provides after cable and connector drops. A low-noise LDO generates 3.3 V analog (AVDD) from the 3.3 V digital rail.
 
@@ -144,7 +144,7 @@ LDO placement rules:
 - Route AVDD to the analog power island on L3 via a dedicated via
 - The LDO GND pin connects to the analog star-ground point on L2
 
-## STM32G474RE Decoupling Strategy
+## 5. STM32G474RE Decoupling Strategy
 
 The STM32G474RE (LQFP-64) has multiple VDD and VSS pins. Each VDD pin requires local decoupling.
 
@@ -186,9 +186,9 @@ In addition to per-pin 100 nF caps, place bulk capacitors at strategic points:
 | Near QCA7000 | C_bulk_PLC | 10 µF / 10 V MLCC, 0805 | PLC modem TX bursts |
 | Near P5 entry | C_bulk_entry | 100 µF / 6.3 V polymer | Board-level energy reservoir |
 
-## Power Plane Partitioning on L3
+## 6. Power Plane Partitioning on L3
 
-The L3 power plane is divided into regions as described in [[01-Stack-Up and Layer Assignment]]:
+The L3 power plane is divided into regions as described in [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]]:
 
 ### Plane Region Table
 
@@ -226,7 +226,7 @@ L3 Power Plane Map
 └──────────────────────────────────────────────────┘
 ```
 
-## Power Distribution Routing Rules
+## 7. Power Distribution Routing Rules
 
 | Rule | Detail |
 |---|---|
@@ -237,7 +237,7 @@ L3 Power Plane Map
 | GND distribution | Via L2 plane — universal ground, no routing needed |
 | GND returns from caps | Each cap GND pad gets a dedicated via to L2 |
 
-## Power Consumption Estimate
+## 8. Power Consumption Estimate
 
 | Subsystem | Rail | Current (mA) | Power (mW) |
 |---|---|---|---|
@@ -253,16 +253,16 @@ L3 Power Plane Map
 > [!tip] Thermal note
 > Total board dissipation (excluding fan pass-through) is approximately 2.3 W. This is easily handled by natural convection in an enclosed PDU, but the board will also benefit from forced airflow from the fans it controls. No heatsinks are required on any controller board component.
 
-## Cross-References
+## 9. Cross-References
 
-- [[01-Stack-Up and Layer Assignment]] — L3 power plane partitioning details
+- [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]] — L3 power plane partitioning details
 - [[02-Signal Integrity]] — analog supply noise requirements, star-ground
 - [[05-EMC and Grounding]] — ferrite bead filtering, power entry EMC
 - [[07-PCB-Layout/Aux-PSU/__init|Aux PSU Board]] — source of all power rails
 - [[__init|Controller Board Overview]] — P5 connector location and board zoning
 - [[08-Power-On Sequence and Inrush Management]] — startup sequencing, PGOOD signaling
 
-## Design Checklist
+## 10. Design Checklist
 
 | Item | Check |
 |---|---|
@@ -279,6 +279,6 @@ L3 Power Plane Map
 
 ## Revision History
 
-| Rev | Date | Author | Notes |
-|---|---|---|---|
-| 0.1 | 2026-02-22 | — | Initial draft |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

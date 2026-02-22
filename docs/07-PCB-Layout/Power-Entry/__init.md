@@ -7,7 +7,7 @@ aliases: [Power Entry Board, Contactor Board, PE-CONT-01]
 
 # Power Entry Board — Contactor and Relay Board
 
-## Overview
+## 1. Overview
 
 The Power Entry board (PE-CONT-01) consolidates all **electromechanical power-path components** onto a single, independently replaceable PCB. It handles AC input protection (NTC inrush limiting, bypass relay), DC output isolation (main contactor, optional pre-charge), and provides the physical home for all external power connectors.
 
@@ -17,7 +17,7 @@ This board was introduced as part of the transition from 4-board to **[[07-PCB-L
 2. **Thermal isolation** — NTCs dissipate significant I²R heat during inrush (~75 A × 10 Ω per phase). Relay and contactor coils add ~8 W continuous. Separating these from the AC-DC board's EMI filter zone prevents heating of temperature-sensitive CM choke cores.
 3. **Voltage domain separation** — The AC input bypass relay (530 VAC, 60 A) and DC output contactor (1000 VDC, 100 A) serve different voltage domains. A dedicated board with physical separation avoids creepage/clearance challenges that arise from mixing both on a power stage board.
 
-## Board Summary
+## 2. Board Summary
 
 | Parameter | Value |
 |-----------|-------|
@@ -34,7 +34,7 @@ This board was introduced as part of the transition from 4-board to **[[07-PCB-L
 > [!tip] No High-Frequency Switching
 > Unlike the AC-DC and DC-DC boards, the Power Entry board contains no active switching components. EMI generation is minimal — limited to relay/contactor coil transients, which are suppressed by flyback diodes and RC snubbers. This simplifies the design to a 2-layer board with heavy copper.
 
-## Functional Zones
+## 3. Functional Zones
 
 The board is organized into three physically separated zones:
 
@@ -101,7 +101,7 @@ Houses the main DC output contactor and output connector.
 
 **Current path:** DC-DC board → P3a → contactor → P3b → vehicle connector.
 
-## Creepage and Clearance
+## 4. Creepage and Clearance
 
 The Power Entry board carries two distinct high-voltage domains that must be separated from each other and from the control zone (PE-referenced).
 
@@ -134,7 +134,7 @@ The Power Entry board carries two distinct high-voltage domains that must be sep
 
 The control zone signal traces route around the ends of the slot, maintaining ≥10 mm creepage to both AC and DC copper on adjacent layers.
 
-## Power Interfaces
+## 5. Power Interfaces
 
 ### P1a: AC Mains → Power Entry Board (External Input)
 
@@ -170,7 +170,7 @@ The control zone signal traces route around the ends of the slot, maintaining �
 | 2 | DC_OUT− | 150–1000 VDC, 100 A | M8 stud or Anderson SB175 |
 | 3 | PE | Safety ground | M6 stud |
 
-## Signal Interface
+## 6. Signal Interface
 
 ### S4: Controller → Power Entry Board (Signal Harness)
 
@@ -190,7 +190,7 @@ The control zone signal traces route around the ends of the slot, maintaining �
 > [!tip] Coil Drive Architecture
 > The 3.3 V logic signals from the Controller board drive N-channel MOSFETs (e.g., IRLML6244) on the Power Entry board. The MOSFETs switch the 24 VDC coil current. This keeps high-current coil wiring local to the Power Entry board and only routes low-current logic signals in the harness.
 
-## Thermal Considerations
+## 7. Thermal Considerations
 
 | Heat Source | Power (W) | Duty | Notes |
 |-------------|----------|------|-------|
@@ -205,7 +205,7 @@ The Power Entry board does not require a dedicated heatsink. Natural convection 
 > [!note] Board Placement
 > The Power Entry board should be mounted at the **enclosure edge** (AC input on one face, DC output on the opposite face) to keep power cable runs short and provide direct access for connector replacement. It sits upstream of the AC-DC board and downstream of the DC-DC board in the power flow.
 
-## Mechanical Integration
+## 8. Mechanical Integration
 
 - **Mounting:** 4× M3 standoffs, secured to chassis or DIN rail bracket
 - **Connector orientation:** AC input (P1a) and DC output (P3b) face outward toward enclosure panel cutouts; internal connectors (P1b, P3a, S4) face inward toward the other boards
@@ -213,7 +213,7 @@ The Power Entry board does not require a dedicated heatsink. Natural convection 
 - **NTC mounting:** Disc NTCs soldered to heavy-copper pads (4 oz) or mounted with spring clips if through-hole leads are used
 - **Relay mounting:** PCB-mount relays (e.g., Panasonic HE1AN has PCB pins) or chassis-mount with wire connections
 
-## Design Verification Checklist
+## 9. Design Verification Checklist
 
 - [ ] PCB slot width ≥2 mm between AC and DC zones
 - [ ] Creepage AC zone → PE ≥10 mm verified in layout
@@ -227,7 +227,7 @@ The Power Entry board does not require a dedicated heatsink. Natural convection 
 - [ ] 4 oz copper trace widths per IPC-2152 for 60 A (AC) and 100 A (DC) paths
 - [ ] Board PE bond via M4 stud to chassis verified in grounding strategy
 
-## Related Documents
+## 10. Related Documents
 
 - [[07-PCB-Layout/00-Board Partitioning]] — 5-board architecture overview and all interfaces
 - [[07-PCB-Layout/AC-DC/__init|AC-DC Board]] — Receives AC input from this board via P1b
@@ -240,4 +240,4 @@ The Power Entry board does not require a dedicated heatsink. Natural convection 
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: board definition, zone map, interfaces, creepage analysis |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

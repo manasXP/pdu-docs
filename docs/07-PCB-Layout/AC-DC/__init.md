@@ -7,13 +7,13 @@ aliases: [Vienna PFC Board, AC-DC Board]
 
 # AC-DC Board — Vienna Rectifier PFC
 
-## Overview
+## 1. Overview
 
 This subfolder documents the PCB layout design for the **Vienna Rectifier PFC stage** of the 30 kW Power Delivery Unit. The AC-DC board converts 3-phase AC mains input into a regulated DC bus voltage suitable for the downstream [[07-PCB-Layout/DC-DC/__init|DC-DC]] converter (LLC or PSFB).
 
 The Vienna PFC topology was selected based on the analysis in [[01-Topology Selection]] for its superior harmonic performance, bidirectional blocking capability, and high power density at the 30 kW level.
 
-## Board Summary
+## 2. Board Summary
 
 | Parameter | Value |
 |-----------|-------|
@@ -29,7 +29,7 @@ The Vienna PFC topology was selected based on the analysis in [[01-Topology Sele
 | Board thickness | 1.6 mm nominal |
 | Material | FR-4 Tg 170°C minimum |
 
-## Functional Zones
+## 3. Functional Zones
 
 The board is organized into four functional zones arranged along the airflow axis (left-to-right when viewed from the component side):
 
@@ -50,7 +50,7 @@ The board is organized into four functional zones arranged along the airflow axi
 > [!note] NTC and Bypass Relay Relocated
 > The NTC inrush thermistors and bypass relay previously shown in the EMI Filter zone have been moved to the [[07-PCB-Layout/Power-Entry/__init|Power Entry board]] (PE-CONT-01). The AC-DC board now receives pre-conditioned AC input via the P1b internal connector from the Power Entry board. See [[07-PCB-Layout/00-Board Partitioning]] for the full 5-board architecture and interface definitions.
 
-## Key Design Parameters
+## 4. Key Design Parameters
 
 | Parameter | Target | Reference |
 |-----------|--------|-----------|
@@ -66,7 +66,7 @@ The board is organized into four functional zones arranged along the airflow axi
 | Creepage DC bus→PE | 14 mm | [[07-PCB-Layout/AC-DC/06-Creepage and Clearance|06-Creepage and Clearance]] |
 | Efficiency target | >98% (SiC-based) | [[__init]] |
 
-## Key Components
+## 5. Key Components
 
 ### Power Semiconductors
 
@@ -96,7 +96,7 @@ The board is organized into four functional zones arranged along the airflow axi
 > - Gate driver selection rationale: [[07-PCB-Layout/AC-DC/03-Gate Driver Layout|03-Gate Driver Layout]]
 > - DC bus capacitor sizing: [[07-PCB-Layout/AC-DC/02-Power Loop Analysis|02-Power Loop Analysis]]
 
-## Document Index
+## 6. Document Index
 
 This subfolder contains the following detailed layout design notes:
 
@@ -112,7 +112,7 @@ This subfolder contains the following detailed layout design notes:
 
 6. **[[07-PCB-Layout/AC-DC/06-Creepage and Clearance|06-Creepage and Clearance]]** — IEC 62368-1 creepage and clearance analysis for AC input, DC bus, and gate drive circuits; PCB slot strategy; DRC net class definitions.
 
-## Design Constraints Summary
+## 7. Design Constraints Summary
 
 > [!warning] Critical Layout Constraints
 > - L2 (inner ground plane) must remain **continuous and unbroken** across the entire board — no routing, no splits, no thermal relief. This is the primary return path for both power loops and high-frequency signals.
@@ -120,7 +120,7 @@ This subfolder contains the following detailed layout design notes:
 > - All switching node copper must be confined to **L1 only** with an area **≤1 cm²** per phase to minimize capacitive coupling to the heatsink and chassis.
 > - Creepage distances must be maintained even after board assembly — verify that no component body, solder fillet, or conformal coating bridge reduces effective creepage below the rated value.
 
-## Related Documents
+## 8. Related Documents
 
 - [[__init]] — PDU top-level specifications
 - [[01-Topology Selection]] — Vienna PFC topology rationale
@@ -132,4 +132,4 @@ This subfolder contains the following detailed layout design notes:
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: board definition, zone map, component summary |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

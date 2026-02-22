@@ -270,7 +270,7 @@ Below 175°C limit by 88°C margin.
 - [ ] Clarify original intent for "SCTW90N120G2AG" — confirm SCTW100N120G2AG is correct substitution
 - [ ] Select heatsink extrusion profile — request thermal simulation from Aavid/Boyd for 300 × 200 mm footprint at 3 m/s, target Rth_sa < 0.08 °C/W
 - [ ] Model gate driver thermal: verify STGAP2SICS self-heating at 100 kHz switching for 6 devices with copper pour optimization
-- [ ] Run full [[Thermal Budget]] simulation with confirmed device values
+- [ ] Run full [[04-Thermal Budget]] simulation with confirmed device values
 
 ---
 
@@ -287,3 +287,11 @@ Below 175°C limit by 88°C margin.
 - [AN-1057 Heatsink Characteristics — Infineon](https://www.infineon.com/dgdl/an-1057.pdf?fileId=5546d462533600a401535591d3170fbd)
 - [100 × 300 × 83 mm Heatsink, 0.12 °C/W example — Enrgtech](https://www.enrgtech.co.uk/product/heatsinks/ET13906113/177AB1000B)
 - [SCTW70N120G2V 1200V 91A HiP247 — Mouser](https://www.mouser.com/new/stmicroelectronics/stm-sctw70n120g2v-1200v-sic-power-mosfet/)
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

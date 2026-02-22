@@ -6,11 +6,11 @@ status: draft
 
 # 04 — Thermal Layout
 
-## Purpose
+## 1. Purpose
 
 This document specifies the thermal management layout for the DC-DC LLC resonant converter board. The board dissipates approximately **600–900 W** at full load (30 kW at 96–98% efficiency), distributed across primary MOSFETs, secondary rectifier MOSFETs, transformers, and passive components. Effective thermal management is critical for reliability and must be coordinated with the mechanical enclosure design (see [[10-Mechanical Integration]]).
 
-## Power Loss Budget
+## 2. Power Loss Budget
 
 ### Per-Phase Loss Breakdown (at 10 kW per phase)
 
@@ -41,7 +41,7 @@ This document specifies the thermal management layout for the DC-DC LLC resonant
 > [!note] LLC Efficiency Advantage
 > The LLC resonant topology achieves ZVS on the primary and near-ZCS on the secondary, significantly reducing switching losses compared to hard-switched topologies. At the resonant frequency, switching losses are near zero, and conduction losses dominate. The thermal design should target the **300 W typical** case with margin for the **400 W conservative** case.
 
-## MOSFET Thermal Design — Primary (1200V SiC, TO-247)
+## 3. MOSFET Thermal Design — Primary (1200V SiC, TO-247)
 
 ### Thermal Interface
 
@@ -115,7 +115,7 @@ The TO-247 devices are through-hole mounted. The PCB area under and around the d
 > ```
 > With 16 vias in parallel: Rth_array ≈ 4.4°C/W. This is a secondary path — the primary heat path is through the TO-247 tab to the heatsink. The thermal vias provide ~15–20% additional heat dissipation into the PCB.
 
-## MOSFET Thermal Design — Secondary (650V SiC, TO-247)
+## 4. MOSFET Thermal Design — Secondary (650V SiC, TO-247)
 
 ### Thermal Parameters
 
@@ -143,7 +143,7 @@ T_j_max = 175°C → margin = 94°C (comfortable)
 > [!note] Secondary Has More Thermal Margin
 > The secondary MOSFETs dissipate less power (conduction-dominated in LLC SR mode) and have slightly better Rth_jc. Thermal design can be slightly relaxed on the secondary side, but maintain identical TIM and mounting for manufacturing consistency.
 
-## Transformer Thermal Design
+## 5. Transformer Thermal Design
 
 The transformers are the **largest individual heat sources** on the DC-DC board, each dissipating 30–50 W of combined core and winding losses.
 
@@ -203,7 +203,7 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 | Mechanical weakness (board flex) | Add stiffener ribs or support posts under transformer brackets |
 | Airflow disruption | Design cutout to not block forced-air channel |
 
-## Gate Driver Thermal
+## 6. Gate Driver Thermal
 
 ### Power Dissipation and Cooling
 
@@ -224,7 +224,7 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 | Connection to L2 | Via to L2 GND plane for heat spreading |
 | Temperature at full load | T_j = 55 + 0.41 × 40 = 71.4°C (well below 150°C max) |
 
-## Passive Component Thermal
+## 7. Passive Component Thermal
 
 ### Resonant Components (Lr, Cr)
 
@@ -245,7 +245,7 @@ The PCB cutout removes copper and FR-4 material, affecting nearby component cool
 > [!warning] Capacitor Placement and Lifetime
 > Electrolytic capacitor failure is the #1 reliability concern in power supplies. Place DC bus electrolytics in the **coolest zone** of the board (near the air inlet). The output electrolytics are less accessible to cool air (downstream in the airflow path), so use higher temperature-rated parts (125°C) for the output stage.
 
-## Airflow Path Design
+## 8. Airflow Path Design
 
 ### Forced-Air Cooling Architecture
 
@@ -304,7 +304,7 @@ Per the PDU specification, thermal derating begins at **55°C ambient**:
 | 65–75°C | Linear derating to 10 kW | Reduce further |
 | >75°C | Shutdown (OTP) | Over-temperature protection |
 
-## IPC-2152 Thermal Trace Sizing Summary
+## 9. IPC-2152 Thermal Trace Sizing Summary
 
 Consolidated from [[07-PCB-Layout/DC-DC/01-Stack-Up and Layer Assignment|Stack-Up and Layer Assignment]], with thermal context:
 
@@ -340,7 +340,7 @@ For all secondary copper paths: ~8 W total
 Total PCB I²R loss: ~14 W (included in efficiency calculation)
 ```
 
-## Thermal Simulation Recommendations
+## 10. Thermal Simulation Recommendations
 
 Before fabrication, perform a thermal simulation to validate the layout:
 
@@ -365,7 +365,7 @@ Before fabrication, perform a thermal simulation to validate the layout:
 | Snubber loss | 0.76 W total | Snubber analysis |
 | **Total simulated loss** | **~440 W** | Sum of above |
 
-## Layout Checklist — Thermal
+## 11. Layout Checklist — Thermal
 
 - [ ] TO-247 drain pad copper pour ≥15×20 mm on L1 and L6
 - [ ] 12–16 plugged thermal vias under each TO-247 drain pad
@@ -381,7 +381,7 @@ Before fabrication, perform a thermal simulation to validate the layout:
 - [ ] Resonant inductor mounting allows airflow contact
 - [ ] Board stiffeners specified near transformer cutouts
 
-## Cross-References
+## 12. Cross-References
 
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]] — Board dimensions and specifications
 - [[07-PCB-Layout/DC-DC/01-Stack-Up and Layer Assignment|Stack-Up and Layer Assignment]] — IPC-2152 trace widths
@@ -391,3 +391,11 @@ Before fabrication, perform a thermal simulation to validate the layout:
 - [[10-Mechanical Integration]] — Enclosure, heatsink, fan specifications
 - [[SiC Device Thermal Parameters]] — MOSFET Rth_jc values and Tj_max
 - [[02-Magnetics Design]] — Transformer and inductor loss budgets
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

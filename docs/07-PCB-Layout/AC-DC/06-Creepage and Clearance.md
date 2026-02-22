@@ -6,7 +6,7 @@ status: draft
 
 # 06 — Creepage and Clearance
 
-## Purpose
+## 1. Purpose
 
 This document defines the creepage and clearance requirements for the Vienna Rectifier PFC board, based on the applicable safety standards (IEC 62368-1, IEC 61851-23) and the board's operating voltages. Creepage and clearance violations are safety-critical defects that can lead to flashover, tracking, or dielectric breakdown — potentially causing fire or electric shock.
 
@@ -17,7 +17,7 @@ The AC-DC board operates at the highest voltages in the PDU system:
 
 These voltages, combined with pollution degree 2 (PD2) and material group IIIb (standard FR-4), determine the minimum creepage and clearance distances for every conductor pair on the board.
 
-## Applicable Standards
+## 2. Applicable Standards
 
 | Standard | Scope | Application |
 |----------|-------|-------------|
@@ -39,7 +39,7 @@ These voltages, combined with pollution degree 2 (PD2) and material group IIIb (
 > [!warning] Material Group Matters
 > FR-4 is classified as material group IIIb (CTI 100–174V), which requires the **largest creepage distances** of any material group. Using a higher-CTI material (e.g., polyimide, CTI >600V, material group I) would significantly reduce creepage requirements. However, FR-4 is used for cost and availability reasons, so the larger creepage distances must be accommodated in the layout.
 
-## Voltage Pairs and Insulation Requirements
+## 3. Voltage Pairs and Insulation Requirements
 
 ### Identification of Voltage Pairs
 
@@ -56,7 +56,7 @@ Every pair of conductors on the board that can have a voltage difference must be
 | Gate drive → MOSFET (functional) | 25 V (VDRV + VNEG) | 25 V | Functional | Same floating circuit |
 | LV control (5V/3.3V) → PE | 5 V | Negligible | Functional | SELV/PELV circuit |
 
-## Creepage and Clearance Requirements
+## 4. Creepage and Clearance Requirements
 
 ### AC Input to PE (Reinforced Insulation)
 
@@ -134,7 +134,7 @@ These are well within standard PCB trace/space capabilities (0.15 mm minimum).
 | Gate functional | 0.2 | 0.5 | Functional | Within floating gate circuit |
 | LV control → PE | 0.5 | 1.0 | Functional | SELV circuit |
 
-## PCB Slot Strategy
+## 5. PCB Slot Strategy
 
 Where the required creepage distance cannot be achieved by copper spacing alone (due to board area constraints), PCB slots are used to increase the effective creepage path:
 
@@ -187,7 +187,7 @@ The slot adds approximately 2× the board thickness to the creepage path (curren
 >
 > Verify structural integrity with the mechanical design team if multiple slots are used in close proximity.
 
-## Heatsink Mounting — Creepage to PE
+## 6. Heatsink Mounting — Creepage to PE
 
 ### Problem Statement
 
@@ -232,7 +232,7 @@ The creepage path from drain copper to the PE-connected mounting hole must meet 
 > - However, the floating heatsink will charge to the CM voltage, increasing radiated emissions
 > - A compromise: connect the heatsink to PE through a high-value Y-capacitor (4.7 nF) to provide a CM return path while maintaining isolation at DC
 
-## Internal Layer Clearances (IPC-2221B)
+## 7. Internal Layer Clearances (IPC-2221B)
 
 ### L1-to-L2 Clearance (Through Prepreg)
 
@@ -242,7 +242,7 @@ Conductors on adjacent layers are separated by the prepreg or core dielectric. I
 |-----------|-------|
 | Voltage between L1 and L2 | Up to 920 VDC (DC bus on L1, GND on L2) |
 | Dielectric material | FR-4 prepreg |
-| Dielectric thickness | 75–100 µm (per [[01-Stack-Up and Layer Assignment]]) |
+| Dielectric thickness | 75–100 µm (per [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]]) |
 | Dielectric strength of FR-4 | ~20 kV/mm (minimum per IPC-4101) |
 | Breakdown voltage at 100 µm | 20 kV/mm × 0.1 mm = 2000 V |
 | Safety margin | 2000 / 920 = 2.17:1 |
@@ -270,7 +270,7 @@ This means that copper features on L1 and L2 that belong to different nets must 
 
 No special internal clearance considerations for L3-L4.
 
-## DRC Net Class Table
+## 8. DRC Net Class Table
 
 Configure the EDA tool's Design Rule Check (DRC) with net classes to enforce creepage and clearance automatically:
 
@@ -305,7 +305,7 @@ Configure the EDA tool's Design Rule Check (DRC) with net classes to enforce cre
 >
 > **Important:** The DRC clearance values in the table above are the **creepage** values (worst case). The EDA tool's DRC checks clearance (air gap), not creepage (surface path). For flat PCB surfaces, clearance = creepage, so this is conservative. Where slots are used, the effective creepage is larger than the air clearance.
 
-## Conformal Coating Considerations
+## 9. Conformal Coating Considerations
 
 Conformal coating can reduce effective creepage on assembled boards if the coating bridges gaps:
 
@@ -325,7 +325,7 @@ Conformal coating can reduce effective creepage on assembled boards if the coati
 >
 > Until the conformal coating process is qualified, design the PCB to meet **uncoated** creepage requirements.
 
-## Assembly and Inspection Considerations
+## 10. Assembly and Inspection Considerations
 
 ### Critical Inspection Points
 
@@ -358,7 +358,7 @@ Per IEC 62368-1, the following hipot tests are required on the finished board/as
 > - Operators are trained in HV safety procedures
 > - Test equipment has current-limited outputs and interlock mechanisms
 
-## Design Review Checklist
+## 11. Design Review Checklist
 
 Before releasing the layout for fabrication, verify:
 
@@ -373,13 +373,13 @@ Before releasing the layout for fabrication, verify:
 - [ ] All solder mask openings near HV gaps have been reviewed for adequate coverage
 - [ ] Silkscreen does not bridge HV gaps (silkscreen ink can be slightly conductive when contaminated)
 
-## Cross-References
+## 12. Cross-References
 
 - [[__init]] — Board overview and operating voltages
-- [[01-Stack-Up and Layer Assignment]] — Prepreg thickness for internal clearance
-- [[03-Gate Driver Layout]] — STGAP2SiC isolation gap and PCB slot
-- [[04-Thermal Layout]] — Heatsink mounting hole proximity to drain copper
-- [[05-EMI-Aware Layout]] — Y-capacitor placement and leakage current
+- [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]] — Prepreg thickness for internal clearance
+- [[07-PCB-Layout/AC-DC/03-Gate Driver Layout]] — STGAP2SiC isolation gap and PCB slot
+- [[07-PCB-Layout/AC-DC/04-Thermal Layout]] — Heatsink mounting hole proximity to drain copper
+- [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] — Y-capacitor placement and leakage current
 - [[01-Topology Selection]] — Device voltage class selection
 - [[SiC Device Thermal Parameters]] — Package dimensions for pad sizing
 
@@ -387,4 +387,4 @@ Before releasing the layout for fabrication, verify:
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: creepage/clearance tables, slot strategy, DRC net classes |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

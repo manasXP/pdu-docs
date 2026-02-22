@@ -9,7 +9,7 @@ aliases: [Controller Board, Control PCB]
 
 This document describes the **Controller Board** for the 30 kW EV Charger PDU. The board hosts the central MCU and all supervisory, sensing, and communication electronics. It is physically separated from the power stages by a minimum of 50 mm and connects to the [[07-PCB-Layout/AC-DC/__init|AC-DC (Vienna PFC)]] and [[07-PCB-Layout/DC-DC/__init|DC-DC (LLC)]] boards via signal harness cables.
 
-## Board Summary
+## 1. Board Summary
 
 | Parameter | Value |
 |---|---|
@@ -22,7 +22,7 @@ This document describes the **Controller Board** for the 30 kW EV Charger PDU. T
 | **Secondary supplies** | 5 V (CAN transceiver), 12 V pass-through (fans) |
 | **Mounting** | 4x M3 mounting holes, 5 mm inset from corners |
 
-## Functional Block Diagram
+## 2. Functional Block Diagram
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -52,7 +52,7 @@ This document describes the **Controller Board** for the 30 kW EV Charger PDU. T
 └──────────────────────────────────────────────────────────┘
 ```
 
-## Key Interfaces
+## 3. Key Interfaces
 
 ### HRTIM PWM Generation
 
@@ -90,7 +90,7 @@ The STM32G474RE HRTIM peripheral generates all gate-drive PWM signals:
 | OCPP 1.6 | UART or Ethernet PHY | JSON over WebSocket | P6 (RJ45 or header) |
 | ISO 15118 | QCA7000 PLC modem | SPI to MCU | P7 (BNC / coax coupler) |
 
-## Board Zoning
+## 4. Board Zoning
 
 The 120 x 100 mm board area is divided into functional zones:
 
@@ -113,17 +113,17 @@ The 120 x 100 mm board area is divided into functional zones:
 > [!tip] Placement rationale
 > Communication connectors are grouped on the **north** edge to keep harness cables away from the power-stage connectors on the **south** edge. Analog circuits sit on the **west** side, nearest to the analog input connector P3, to minimize trace lengths for sensitive signals.
 
-## Topic Documents
+## 5. Topic Documents
 
 | # | Document | Content |
 |---|---|---|
-| 1 | [[01-Stack-Up and Layer Assignment]] | 4-layer stack-up, impedance targets, via strategy |
+| 1 | [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]] | 4-layer stack-up, impedance targets, via strategy |
 | 2 | [[02-Signal Integrity]] | ADC routing, HRTIM matched pairs, guard traces |
 | 3 | [[03-Communication Interfaces]] | CAN, OCPP, ISO 15118 layout details |
 | 4 | [[04-Power Distribution]] | Decoupling, LDO, power plane partitioning |
 | 5 | [[05-EMC and Grounding]] | Grounding strategy, ESD, connector filtering |
 
-## Cross-References
+## 6. Cross-References
 
 - [[06-Firmware Architecture]] — software that runs on this board
 - [[00-Board Partitioning]] — how this board fits in the overall PDU assembly
@@ -131,7 +131,7 @@ The 120 x 100 mm board area is divided into functional zones:
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board]] — LLC power stage driven by this controller
 - [[07-PCB-Layout/Aux-PSU/__init|Aux PSU Board]] — provides 3.3 V / 5 V / 12 V to this board
 
-## Design Status
+## 7. Design Status
 
 | Milestone | Status |
 |---|---|
@@ -146,6 +146,6 @@ The 120 x 100 mm board area is divided into functional zones:
 
 ## Revision History
 
-| Rev | Date | Author | Notes |
-|---|---|---|---|
-| 0.1 | 2026-02-22 | — | Initial draft |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

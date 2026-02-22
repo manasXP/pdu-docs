@@ -262,3 +262,11 @@ The 150–1000 VDC output range (6.7:1 ratio) is the primary design challenge. S
 - [x] Detailed BOM and cost analysis → [[07-BOM and Cost Analysis]]
 - [x] PCB layout — power loop optimization for SiC dV/dt → [[07-PCB-Layout/__init|07-PCB Layout]]
 - [x] Power-on sequence — inrush limiting, pre-charge, contactor, startup/shutdown timing → [[08-Power-On Sequence and Inrush Management]]
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

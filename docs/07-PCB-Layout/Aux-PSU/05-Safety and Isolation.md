@@ -6,13 +6,13 @@ status: draft
 
 # 05 — Safety and Isolation
 
-## Purpose
+## 1 Purpose
 
 This document specifies the safety and isolation design for the Aux PSU board. The board bridges the most dangerous voltage boundary in the entire PDU: the 920 VDC bus (hazardous energy source) to all low-voltage secondary outputs that are accessible through connectors and harnesses. This makes the Aux PSU the **most safety-critical PCB** in the system — a single insulation failure here can expose operators or downstream boards to lethal voltage.
 
 All isolation requirements are derived from **IEC 62368-1** (Audio/video, information and technology equipment — Safety requirements), which is the harmonized standard for IT/telecom power supplies and is accepted by UL (UL 62368-1) and CE (EN 62368-1).
 
-## Applicable Safety Standards
+## 2 Applicable Safety Standards
 
 | Standard | Scope | Key Requirements for Aux PSU |
 |----------|-------|------------------------------|
@@ -22,7 +22,7 @@ All isolation requirements are derived from **IEC 62368-1** (Audio/video, inform
 | UL 2202 | EV charging equipment | Additional requirements for EV DCFC safety |
 | IEC 60112 | CTI testing | Material group classification for creepage calculation |
 
-## Voltage Classification
+## 3 Voltage Classification
 
 ### Primary Side
 
@@ -51,7 +51,7 @@ All isolation requirements are derived from **IEC 62368-1** (Audio/video, inform
 | Gate drive A ↔ Gate drive B | PS1 | PS1 | Functional | Different isolated returns, max 50 V differential |
 | Gate drive ↔ Logic | PS1 | PS1 | Functional | Different returns, max 18 V differential |
 
-## Creepage and Clearance Requirements
+## 4 Creepage and Clearance Requirements
 
 ### Primary to Secondary (Reinforced Insulation)
 
@@ -97,7 +97,7 @@ Creepage and clearance are calculated per IEC 62368-1, Table 28 and Table G.9:
 >
 > When measuring creepage across the PCB slot, the path goes: primary copper edge → down the slot wall → across the slot bottom (if any) → up the opposite wall → to secondary copper edge. The 4 mm slot width contributes approximately 4 + 1.6 + 1.6 = 7.2 mm of path (slot width + two wall descents of ~0.8 mm each for 1.6 mm board).
 
-## PCB Slot Specification
+## 5 PCB Slot Specification
 
 The primary isolation barrier is a **routed PCB slot** that spans the full board height (80 mm):
 
@@ -140,7 +140,7 @@ Only two component types are permitted to physically bridge the PCB slot:
 > [!tip] Slot Bridging Verification
 > After layout, generate a DRC report with a custom rule that flags any copper, solder mask, or silkscreen crossing the defined slot zone (33–37 mm from left edge, all layers). Only the transformer pads, Y-capacitor pads, and optocoupler pads should appear as intentional violations.
 
-## Conformal Coating
+## 6 Conformal Coating
 
 ### Coating Specification
 
@@ -172,7 +172,7 @@ Conformal coating provides several safety benefits:
 4. Cure per manufacturer specifications
 5. Inspect under UV light (acrylic coatings fluoresce under UV for inspection)
 
-## Hipot (Dielectric Withstand) Testing
+## 7 Hipot (Dielectric Withstand) Testing
 
 ### Test Specification
 
@@ -212,7 +212,7 @@ Provide dedicated test pads for hipot testing:
 
 Test pads: 2 mm diameter, ENIG finish, not covered by solder mask. Place at board edges for probe access.
 
-## Y1 Safety Capacitor
+## 8 Y1 Safety Capacitor
 
 ### Purpose
 
@@ -251,7 +251,7 @@ A Y1-class capacitor is placed across the isolation barrier (from PRI_GND to SEC
                     ←── 4mm ──→
 ```
 
-## Leakage Current Budget
+## 9 Leakage Current Budget
 
 ### Requirement
 
@@ -282,7 +282,7 @@ $$C_{Y1\_max} = \frac{I_{leak\_max}}{2\pi \times f \times V_{bus}} = \frac{3.5 \
 
 The selected 2.2 nF provides a 4.6x margin to the leakage limit. Increasing to 4.7 nF would improve CM filtering but reduce margin to 2.1x.
 
-## Isolation Between Gate Drive Domains
+## 10 Isolation Between Gate Drive Domains
 
 ### Functional Isolation (Domain A ↔ Domain B)
 
@@ -305,7 +305,7 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 4. Connector P4 has dedicated return pins for each domain (pin 3 = RTN_AC, pin 7 = RTN_DC)
 5. No component straddles the boundary between domains A and B
 
-## Safety Marking and Silkscreen
+## 11 Safety Marking and Silkscreen
 
 ### Required Markings
 
@@ -318,7 +318,7 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 | Hipot test points | Near TP1–TP5 | "HIPOT TEST" labels |
 | Creepage boundaries | Along 14 mm paths | Hatched keepout zone markings |
 
-## Design Verification Checklist
+## 12 Design Verification Checklist
 
 - [ ] Creepage ≥14 mm measured across every primary-to-secondary path (PCB surface, component bodies)
 - [ ] Clearance ≥8 mm measured through air across every primary-to-secondary gap
@@ -334,18 +334,18 @@ The two gate drive supply channels (AC-DC and DC-DC) must be isolated from each 
 - [ ] Safety silkscreen markings present on both sides of PCB
 - [ ] DRC configured with net classes enforcing creepage/clearance per domain
 
-## Cross-References
+## 13 Cross-References
 
 - [[__init]] — Board overview, isolation domain map
-- [[01-Stack-Up and Layer Assignment]] — Split ground plane, slot location
+- [[07-PCB-Layout/Aux-PSU/01-Stack-Up and Layer Assignment]] — Split ground plane, slot location
 - [[02-Isolated Converter Layout]] — Transformer placement across barrier, optocoupler
 - [[03-Thermal Layout]] — Conformal coating interaction with thermal dissipation
 - [[04-Output Filtering and Regulation]] — Y-capacitor role in CM filtering
 - [[00-Board Partitioning]] — System-level grounding strategy
-- [[06-Creepage and Clearance]] — AC-DC board creepage analysis (reference methodology)
+- [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] — AC-DC board creepage analysis (reference methodology)
 
 ## Revision History
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: IEC 62368-1 analysis, creepage/clearance, PCB slot, hipot, Y-cap, leakage budget |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

@@ -6,7 +6,7 @@ status: draft
 
 # 02 — Isolated Converter Layout
 
-## Purpose
+## 1 Purpose
 
 This document specifies the layout of the isolated flyback converter that forms the heart of the Aux PSU board. The flyback topology is used because it naturally supports multiple isolated outputs from a single transformer, making it ideal for generating the diverse rail voltages required by the PDU system (+18 V, −5 V, +12 V, +5 V, +3.3 V, standby).
 
@@ -16,7 +16,7 @@ The primary layout challenges are:
 3. Placing the RCD clamp snubber close to the transformer primary to absorb leakage inductance energy
 4. Routing multiple secondary windings to their respective rectifiers without crossing isolation domain boundaries
 
-## Topology Selection — Multi-Output Flyback
+## 2 Topology Selection — Multi-Output Flyback
 
 ### Why Flyback?
 
@@ -43,7 +43,7 @@ The primary layout challenges are:
 > [!tip] Quasi-Resonant Operation
 > At 920 V input, the flyback operates in discontinuous conduction mode (DCM) with valley switching. This reduces turn-on switching loss in the primary MOSFET. The switching frequency varies between 65 kHz (full load, low input) and 130 kHz (light load, high input). Layout must accommodate the higher harmonic content at 130 kHz.
 
-## Component Placement Strategy
+## 3 Component Placement Strategy
 
 ### Overall Placement
 
@@ -193,7 +193,7 @@ Post-rectification LC filter inductors for each output rail:
 
 See [[04-Output Filtering and Regulation]] for detailed capacitor selection per rail.
 
-## Primary Switching Loop Optimization
+## 4 Primary Switching Loop Optimization
 
 The primary switching loop is the most EMI-critical loop on the Aux PSU board. It consists of:
 
@@ -250,7 +250,7 @@ Primary switching loop (minimize this area):
     └──────────────────────────────────┘
 ```
 
-## Clamp Snubber Layout Detail
+## 5 Clamp Snubber Layout Detail
 
 The RCD clamp must intercept the leakage inductance energy spike immediately as Q1 turns off. Placement tolerance is critical:
 
@@ -287,7 +287,7 @@ The RCD clamp must intercept the leakage inductance energy spike immediately as 
 > [!tip] Clamp Resistor Power Rating
 > The clamp resistor dissipates the leakage inductance energy: $P_{clamp} = \frac{1}{2} L_{leak} \cdot I_{pk}^2 \cdot f_{sw}$. At worst case (920 V input, 65 kHz, ~0.5 A peak, ~5 uH leakage), this is approximately 0.04 W — negligible. However, use a 1 W resistor for margin and to handle transient overloads during startup. A 1206 or 2010 SMD resistor is adequate.
 
-## Multiple Secondary Windings — Routing Strategy
+## 6 Multiple Secondary Windings — Routing Strategy
 
 The transformer has multiple secondary windings, each routed to its respective isolation domain:
 
@@ -305,7 +305,7 @@ The transformer has multiple secondary windings, each routed to its respective i
 3. The center-tap (if used) of each +18 V / −5 V pair is the return for that domain (RTN_AC or RTN_DC)
 4. The bias winding routes entirely on the primary side — it does not cross the isolation barrier
 
-## Optocoupler Feedback Path
+## 7 Optocoupler Feedback Path
 
 The output voltage feedback from the secondary to the primary uses an optocoupler that bridges the isolation barrier:
 
@@ -322,7 +322,7 @@ The output voltage feedback from the secondary to the primary uses an optocouple
 > [!warning] Optocoupler Creepage
 > Standard DIP-4 optocouplers have pin-to-pin distance of only 7.62 mm — insufficient for reinforced insulation at 920 V. Use a **wide-body** optocoupler package (e.g., LSOP-6 with 8 mm lead spacing) or a dedicated safety-rated optocoupler (e.g., Broadcom ACPL-xxx series with 8 mm minimum creepage). Alternatively, route the optocoupler pads with extended creepage traces and use the PCB slot to supplement the package creepage.
 
-## Design Verification Checklist
+## 8 Design Verification Checklist
 
 - [ ] Primary switching loop enclosed area <2 cm², path length <30 mm
 - [ ] C_in within 10 mm of both T1 primary pin 1 and Q1 drain
@@ -334,10 +334,10 @@ The output voltage feedback from the secondary to the primary uses an optocouple
 - [ ] Primary loop return path on L2 (PRI_GND) directly beneath L1 switching loop traces
 - [ ] All primary-side components maintain 14 mm creepage to any secondary-side copper
 
-## Cross-References
+## 9 Cross-References
 
 - [[__init]] — Board overview, output rails, isolation domains
-- [[01-Stack-Up and Layer Assignment]] — Layer assignments, split ground plane
+- [[07-PCB-Layout/Aux-PSU/01-Stack-Up and Layer Assignment]] — Layer assignments, split ground plane
 - [[03-Thermal Layout]] — Primary MOSFET and rectifier diode thermal management
 - [[04-Output Filtering and Regulation]] — Output capacitor and filter design per rail
 - [[05-Safety and Isolation]] — Reinforced insulation requirements, creepage distances
@@ -347,4 +347,4 @@ The output voltage feedback from the secondary to the primary uses an optocouple
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: flyback layout, primary loop, clamp placement, transformer positioning |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

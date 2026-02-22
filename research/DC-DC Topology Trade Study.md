@@ -500,3 +500,11 @@ The market is bifurcating into two camps:
 - [Reconfigurable Two-Stage 11 kW DC-DC for 150-1000 V Output](https://www.researchgate.net/publication/370996365/)
 - [50 kW Two-Stage Converter for Wide Output 150-1000 V](https://www.researchgate.net/publication/389230716/)
 - [ScienceDirect: Review on Classification of Resonant Converters for EV Application](https://www.sciencedirect.com/science/article/pii/S2352484721014517)
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

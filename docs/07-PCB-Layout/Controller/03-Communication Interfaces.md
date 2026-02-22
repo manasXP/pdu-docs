@@ -8,7 +8,7 @@ status: draft
 
 This document covers the PCB layout of all communication interfaces on the Controller Board. The board implements three communication channels: **CAN bus** for inter-module stacking, **OCPP 1.6** for cloud connectivity, and **ISO 15118** for vehicle-to-charger communication via PLC. All communication connectors are grouped on the **north edge** of the board to simplify cable management within the PDU enclosure.
 
-## Connector Placement Strategy
+## 1. Connector Placement Strategy
 
 All external communication connectors are placed along the north edge of the 120 mm board width:
 
@@ -34,7 +34,7 @@ North edge (120 mm)
 | P6 | OCPP 1.6 | RJ45 (Ethernet) or 6-pin header | TX+/-, RX+/-, GND, Shield | North center |
 | P7 | ISO 15118 PLC | SMA or BNC coax | Signal, GND | Northeast corner |
 
-## CAN Bus Interface
+## 2. CAN Bus Interface
 
 ### CAN Transceiver: TCAN1044
 
@@ -120,7 +120,7 @@ A common-mode choke (CMC) is placed between the TCAN1044 and the P4 connector to
 
 Placement: between TCAN1044 bus pins and the 120 ohm termination / P4 connector. The CMC must be on the bus side of the termination resistor.
 
-## OCPP 1.6 Interface
+## 3. OCPP 1.6 Interface
 
 ### Architecture Options
 
@@ -172,7 +172,7 @@ MCU SPI ──────┤ SPI  TX+ ├──── Integrated ────�
 - The RJ45 connector's shield pins connect to chassis GND through a 1 Mohm resistor in parallel with a 4.7 nF capacitor (RC filter to chassis)
 - Place ESD protection (TVS diode array) between the magnetics and the W5500 inputs
 
-## ISO 15118 PLC Modem Interface
+## 4. ISO 15118 PLC Modem Interface
 
 ### QCA7000 Overview
 
@@ -229,7 +229,7 @@ If the QCA7000 boots from external SPI flash (rather than MCU-loaded firmware):
 | SPI routing | Dedicated SPI bus (not shared with MCU SPI) |
 | Decoupling | 100 nF at flash VDD pin |
 
-## Communication Interface Summary
+## 5. Communication Interface Summary
 
 | Interface | Transceiver IC | Bus type | Connector | Board zone |
 |---|---|---|---|---|
@@ -237,7 +237,7 @@ If the QCA7000 boots from external SPI flash (rather than MCU-loaded firmware):
 | OCPP 1.6 | W5500 | SPI-to-Ethernet | P6 RJ45 | North center |
 | ISO 15118 | QCA7000 | SPI-to-PLC | P7 SMA / BNC | Northeast |
 
-## Connector Pin Assignments
+## 6. Connector Pin Assignments
 
 ### P4 — CAN Bus (Molex Micro-Fit 3.0, 4-pin)
 
@@ -267,16 +267,16 @@ Standard Ethernet pinout (T568B), integrated magnetics in jack.
 | Center | PLC signal | AC-coupled via transformer |
 | Shield | GND | Chassis ground at connector |
 
-## Cross-References
+## 7. Cross-References
 
-- [[01-Stack-Up and Layer Assignment]] — impedance targets for differential and single-ended traces
+- [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]] — impedance targets for differential and single-ended traces
 - [[02-Signal Integrity]] — SPI routing rules, series termination
 - [[05-EMC and Grounding]] — connector ESD protection, common-mode filtering
 - [[04-Power Distribution]] — 5 V supply for CAN transceiver, 3.3 V for W5500 and QCA7000
 - [[__init|Controller Board Overview]] — board zoning, connector map
 - [[06-Firmware Architecture]] — CAN protocol stack, OCPP implementation, ISO 15118 stack
 
-## Design Checklist
+## 8. Design Checklist
 
 | Item | Check |
 |---|---|
@@ -294,6 +294,6 @@ Standard Ethernet pinout (T568B), integrated magnetics in jack.
 
 ## Revision History
 
-| Rev | Date | Author | Notes |
-|---|---|---|---|
-| 0.1 | 2026-02-22 | — | Initial draft |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

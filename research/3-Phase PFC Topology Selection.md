@@ -268,3 +268,11 @@ The Vienna rectifier is the **most commonly used topology** in commercial 30 kW 
 6. [onsemi: Demystifying Three-Phase PFC Topologies](https://www.onsemi.com/site/pdf/H2PToday2102_design_ONSemi.pdf)
 7. [Vincotech: Benchmarking Highly Efficient Three-Level PFC Topologies](https://www.vincotech.com/fileadmin/user_upload/content_media/documents/pdf/support-documents/technical-papers/Vincotech_TP_2016-05-001-v01_Benchmark_of_High_Efficient_Three-Level_PFC_Topologies.pdf)
 8. [Swiss Rectifier -- IEEE (Soeiro et al., APEC 2012)](https://ieeexplore.ieee.org/document/6166192/)
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

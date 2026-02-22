@@ -6,7 +6,7 @@ status: draft
 
 # 03 — Gate Driver Layout
 
-## Purpose
+## 1. Purpose
 
 This document specifies the PCB layout rules for the STGAP2SiC isolated gate drivers used to drive the 6 SiC MOSFETs in the Vienna Rectifier PFC stage. The gate driver layout is critical because:
 
@@ -16,7 +16,7 @@ This document specifies the PCB layout rules for the STGAP2SiC isolated gate dri
 
 The STGAP2SiC was selected for its high dV/dt immunity (>100 V/ns), 4A peak gate current capability, integrated Miller clamp, and SPI configurability. See [[01-Topology Selection]] for driver selection rationale.
 
-## Gate Driver Overview — STGAP2SiC
+## 2. Gate Driver Overview — STGAP2SiC
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
@@ -31,7 +31,7 @@ The STGAP2SiC was selected for its high dV/dt immunity (>100 V/ns), 4A peak gate
 | DESAT detection | Integrated | Programmable threshold and blanking time |
 | Miller clamp | Integrated | Active clamp on output during off-state |
 
-## Placement Strategy
+## 3. Placement Strategy
 
 ### Driver-to-MOSFET Relationship
 
@@ -63,7 +63,7 @@ Each STGAP2SiC drives one SiC MOSFET. The 6 driver ICs are placed in close proxi
 > [!warning] Driver Placement Near Switching Node
 > The STGAP2SiC output pins (OUTH, OUTL) must be close to the MOSFET gate, but the driver body must be kept **≥5 mm away from switching node copper** (the drain-side copper that transitions between V_bus and 0V at each switching event). The dV/dt on the switching node (35 kV/µs) will capacitively couple into the driver through the PCB dielectric if the driver overlaps the switching node area on an adjacent layer.
 
-## Gate Loop Analysis
+## 4. Gate Loop Analysis
 
 ### Gate Loop Path
 
@@ -110,7 +110,7 @@ The gate drive loop includes all conductors carrying the gate charge/discharge c
 > - Use 0402 passives for Rg to minimize package inductance
 > - Never route gate traces through vias
 
-## Gate Resistor Design
+## 5. Gate Resistor Design
 
 ### Turn-On Path — Rg_on
 
@@ -165,7 +165,7 @@ This is well below the SiC MOSFET threshold voltage (~2.5–4V), so **no parasit
 > [!tip] Negative Gate Bias is Critical for SiC
 > SiC MOSFETs have lower threshold voltages (2.5–4V) compared to Si IGBTs (5–7V). Without negative gate bias during off-state, dV/dt-induced Miller current can easily push the gate above threshold and cause shoot-through. The STGAP2SiC's VNEG supply (−5V) provides this protection. **Never omit the negative gate supply.**
 
-## Kelvin Source Connection
+## 6. Kelvin Source Connection
 
 ### Why Kelvin Source Matters
 
@@ -208,7 +208,7 @@ With Kelvin source:
 > [!warning] Kelvin Source Isolation
 > The Kelvin source trace must be **electrically isolated** from the power source copper pour on L1. Use a clearance of ≥1 mm between the Kelvin source trace and the power source pour. If they connect at any point, the benefit of the Kelvin source is lost because power loop dI/dt will couple into the gate loop.
 
-## Driver Decoupling
+## 7. Driver Decoupling
 
 ### VDRV Supply (Positive Gate Drive, +15V to +20V)
 
@@ -247,7 +247,7 @@ A 20 mV droop is negligible. The 10 µF is adequate.
     VNEG ──┤C_VNEG_1├──┤C_VNEG_2├── Kelvin Source
 ```
 
-## dV/dt Immunity Layout Measures
+## 8. dV/dt Immunity Layout Measures
 
 The switching node transitions at 35 kV/µs or more. Capacitive coupling from the switching node to the gate driver can cause malfunction. The following layout measures mitigate this risk:
 
@@ -295,9 +295,9 @@ For 6 drivers total:
 
 $$I_{CM\_total\_drivers} = 6 \times 0.175 = **1.05 \text{ A}**$$
 
-This 1 A of CM current must return through the EMI filter Y-capacitors and chassis ground. It contributes to conducted emissions and must be included in the EMI filter design. See [[05-EMI-Aware Layout]] for the complete CM current budget.
+This 1 A of CM current must return through the EMI filter Y-capacitors and chassis ground. It contributes to conducted emissions and must be included in the EMI filter design. See [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] for the complete CM current budget.
 
-## SPI Bus Routing (Primary Side)
+## 9. SPI Bus Routing (Primary Side)
 
 The STGAP2SiC supports SPI configuration on the primary (low-voltage) side. For a 6-driver daisy chain:
 
@@ -323,7 +323,7 @@ The STGAP2SiC supports SPI configuration on the primary (low-voltage) side. For 
 
 Route the SPI bus on L3, keeping it physically separated from all secondary-side (high-voltage) copper by at least 2 mm on every layer.
 
-## DESAT Detection Routing
+## 10. DESAT Detection Routing
 
 The STGAP2SiC includes desaturation detection (DESAT) for short-circuit protection. The DESAT pin connects to the MOSFET drain through a high-voltage diode and sense resistor.
 
@@ -340,7 +340,7 @@ The STGAP2SiC includes desaturation detection (DESAT) for short-circuit protecti
 > [!tip] DESAT Noise Immunity
 > The DESAT input is sensitive to noise. Route the DESAT trace on L1 with a ground guard ring on L2 beneath it. Keep the trace short and away from the switching node copper. Use the STGAP2SiC's programmable blanking time (via SPI) to filter legitimate switching transients.
 
-## Thermal Management
+## 11. Thermal Management
 
 Gate driver ICs dissipate power from:
 1. Gate charge delivery: P_gate = Qg × (VDRV − VNEG) × fsw = 200 nC × 23V × 65 kHz = **0.3 W per driver**
@@ -348,9 +348,9 @@ Gate driver ICs dissipate power from:
 3. Total per driver: **~0.33 W**
 4. Total for 6 drivers: **~2 W**
 
-See [[04-Thermal Layout]] for the driver thermal management specification (15×15 mm copper pour + 9 thermal vias per driver, target Rth_jA ~60–80°C/W).
+See [[07-PCB-Layout/AC-DC/04-Thermal Layout]] for the driver thermal management specification (15×15 mm copper pour + 9 thermal vias per driver, target Rth_jA ~60–80°C/W).
 
-## Layout Checklist
+## 12. Layout Checklist
 
 - [ ] Each STGAP2SiC placed ≤15 mm from its MOSFET
 - [ ] Gate trace length <5 mm (OUTH to gate pin)
@@ -365,14 +365,14 @@ See [[04-Thermal Layout]] for the driver thermal management specification (15×1
 - [ ] SPI bus on L3, ≥2 mm from HV copper
 - [ ] DESAT trace short, guarded, on L1
 
-## Cross-References
+## 13. Cross-References
 
 - [[__init]] — Board overview and driver IC summary
-- [[01-Stack-Up and Layer Assignment]] — Layer assignments for gate traces
-- [[02-Power Loop Analysis]] — Power loop (separate from gate loop)
-- [[04-Thermal Layout]] — Driver IC thermal management
-- [[05-EMI-Aware Layout]] — CM current contribution from driver Cdh
-- [[06-Creepage and Clearance]] — Isolation gap and slot dimensions
+- [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment]] — Layer assignments for gate traces
+- [[07-PCB-Layout/AC-DC/02-Power Loop Analysis]] — Power loop (separate from gate loop)
+- [[07-PCB-Layout/AC-DC/04-Thermal Layout]] — Driver IC thermal management
+- [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] — CM current contribution from driver Cdh
+- [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] — Isolation gap and slot dimensions
 - [[01-Topology Selection]] — STGAP2SiC selection rationale
 - [[SiC Device Thermal Parameters]] — MOSFET gate charge data
 
@@ -380,4 +380,4 @@ See [[04-Thermal Layout]] for the driver thermal management specification (15×1
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: placement rules, gate loop budget, decoupling, dV/dt measures |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

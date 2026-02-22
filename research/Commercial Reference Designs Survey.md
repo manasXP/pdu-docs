@@ -214,3 +214,11 @@ TI offers modular 10-11 kW blocks (3x = 30 kW):
 4. **1200 V SiC MOSFETs** in the 25-65 mohm range are standard across all vendors
 5. **Power density** benchmarks: 4-6.5 kW/L (air-cooled); >10 kW/L (liquid-cooled, emerging)
 6. The [Wolfspeed EV Charging Power Topologies Design Guidebook (PRD-08367)](https://assets.wolfspeed.com/uploads/2024/01/Wolfspeed_PRD-08367_EV_Charging_Power_Topologies_Design_Guidebook_Application_Note.pdf) is an excellent free resource
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

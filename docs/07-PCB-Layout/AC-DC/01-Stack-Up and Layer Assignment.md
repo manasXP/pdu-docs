@@ -6,11 +6,11 @@ status: draft
 
 # 01 — Stack-Up and Layer Assignment
 
-## Purpose
+## 1. Purpose
 
 This document defines the 6-layer PCB stack-up for the Vienna Rectifier PFC board, optimized for low power-loop inductance, effective EMI shielding, and adequate thermal performance. The stack-up is the single most critical layout decision — it determines the achievable loop inductance, EMC performance, and thermal capacity of every copper pour on the board.
 
-## Stack-Up Definition
+## 2. Stack-Up Definition
 
 ### Layer Table
 
@@ -63,7 +63,7 @@ While this is primarily a power board, controlled impedance is needed for:
 | CAN bus differential | 120 Ω differential | L3 | ~0.15 mm, 0.2 mm gap | If CAN transceiver is on this board |
 | Current sense analog | Not controlled | L3 | 0.2 mm minimum | Guard traces recommended |
 
-## Zone Map
+## 3. Zone Map
 
 The board is divided into four functional zones arranged along the primary axis (250 mm dimension). Airflow moves left-to-right.
 
@@ -99,7 +99,7 @@ The board is divided into four functional zones arranged along the primary axis 
 - Separation from Zone B: **≥20 mm clear zone** with double stitching via fence
 
 > [!warning] EMI Filter Isolation
-> The EMI filter zone must be physically and electrically isolated from the power stage zone. Conducted emissions from the switching node will couple back into the filter and degrade attenuation if the zones share return paths or have insufficient separation. See [[05-EMI-Aware Layout]] for the stitching via fence specification.
+> The EMI filter zone must be physically and electrically isolated from the power stage zone. Conducted emissions from the switching node will couple back into the filter and degrade attenuation if the zones share return paths or have insufficient separation. See [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] for the stitching via fence specification.
 
 ### Zone B — Vienna Rectifier Power Stage (~100 mm)
 
@@ -173,7 +173,7 @@ This is the most layout-critical zone on the board. It contains:
 - CAN bus connector (for module stacking communication)
 - Signal/interlock connectors
 
-## IPC-2152 Trace Width Calculations
+## 4. IPC-2152 Trace Width Calculations
 
 Current-carrying traces must be sized per IPC-2152 for the required current and allowable temperature rise. The following table assumes 2 oz (70 µm) external copper and a 30°C temperature rise above ambient.
 
@@ -210,7 +210,7 @@ These layers carry only signal and low-current auxiliary power. Maximum recommen
 | 0.5 | 0.3 | Signal traces |
 | 0.1 | 0.15 | Gate drive, analog sense |
 
-## L2 Ground Plane Rules
+## 5. L2 Ground Plane Rules
 
 The L2 ground plane is the most critical element of the stack-up. It serves three functions simultaneously:
 
@@ -231,7 +231,7 @@ The L2 ground plane is the most critical element of the stack-up. It serves thre
 > [!warning] L2 Integrity Check
 > Before releasing the layout for fabrication, perform a dedicated L2 integrity review. Visually inspect the ground plane for any unintended cuts, narrow necks, or missing connections. Use the EDA tool's copper connectivity check to verify L2 is a single net with no islands.
 
-## Via Strategy
+## 6. Via Strategy
 
 ### Power Vias (L1 ↔ L5/L6)
 
@@ -256,7 +256,7 @@ Power transitions between L1 and L5/L6 must use via arrays. Place vias in a grid
 
 ### Thermal Vias
 
-See [[04-Thermal Layout]] for thermal via arrays under MOSFET pads and gate driver packages.
+See [[07-PCB-Layout/AC-DC/04-Thermal Layout]] for thermal via arrays under MOSFET pads and gate driver packages.
 
 ### Stitching Vias
 
@@ -267,9 +267,9 @@ See [[04-Thermal Layout]] for thermal via arrays under MOSFET pads and gate driv
 | Pitch | 2 mm (single fence), 2 mm staggered (double fence) |
 | Usage | Zone boundaries, board edges, EMI containment |
 
-See [[05-EMI-Aware Layout]] for stitching via fence placement rules.
+See [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] for stitching via fence placement rules.
 
-## Design for Manufacturing (DFM) Notes
+## 7. Design for Manufacturing (DFM) Notes
 
 | Parameter | Value | Standard |
 |-----------|-------|----------|
@@ -293,16 +293,16 @@ See [[05-EMI-Aware Layout]] for stitching via fence placement rules.
 >
 > The fabricator will provide actual achievable values and adjust core/prepreg selections.
 
-## Cross-References
+## 8. Cross-References
 
 - [[__init]] — Board overview and component summary
-- [[02-Power Loop Analysis]] — How the stack-up enables low-inductance power loops
-- [[04-Thermal Layout]] — Thermal via strategy and copper pour sizing
-- [[05-EMI-Aware Layout]] — Stitching via fences and L2 ground plane integrity
-- [[06-Creepage and Clearance]] — Internal layer clearances per IPC-2221B
+- [[07-PCB-Layout/AC-DC/02-Power Loop Analysis]] — How the stack-up enables low-inductance power loops
+- [[07-PCB-Layout/AC-DC/04-Thermal Layout]] — Thermal via strategy and copper pour sizing
+- [[07-PCB-Layout/AC-DC/05-EMI-Aware Layout]] — Stitching via fences and L2 ground plane integrity
+- [[07-PCB-Layout/AC-DC/06-Creepage and Clearance]] — Internal layer clearances per IPC-2221B
 
 ## Revision History
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: 6-layer stack-up, zone map, IPC-2152 tables |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

@@ -564,3 +564,11 @@ This table maps each protection function to the applicable clause in each releva
 | [[00-Board Partitioning]] | Inter-board fault signal routing, isolated interface definitions |
 | [[SiC Device Thermal Parameters]] | Device SOA curves, DESAT voltage characteristics, short-circuit withstand time |
 | [[07-BOM and Cost Analysis]] | Protection component selection, MOV/TVS/NTC part numbers, cost impact |
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

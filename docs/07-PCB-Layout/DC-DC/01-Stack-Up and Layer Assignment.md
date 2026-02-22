@@ -6,11 +6,11 @@ status: draft
 
 # 01 — Stack-Up and Layer Assignment
 
-## Purpose
+## 1. Purpose
 
 This document defines the 6-layer PCB stack-up for the DC-DC LLC resonant converter board. The stack-up is **standardized with the AC-DC board** (see [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment|AC-DC Stack-Up]]) to unify fabrication specifications across both power boards in the PDU.
 
-## 6-Layer Stack-Up Definition
+## 2. 6-Layer Stack-Up Definition
 
 ### Cross-Section
 
@@ -68,7 +68,7 @@ This document defines the 6-layer PCB stack-up for the DC-DC LLC resonant conver
 > [!tip] Impedance Control
 > Request impedance-controlled fabrication for L3 and L4. The fab house will adjust prepreg thickness slightly to hit 50 Ω. Specify Dk = 4.2–4.5 for FR-4 at 100 kHz–1 MHz (LLC switching range).
 
-## Board Zone Map — Detailed
+## 3. Board Zone Map — Detailed
 
 The 250 mm × 180 mm board area is divided into functional zones arranged for optimal power flow and thermal management. The **primary-to-secondary isolation barrier** runs horizontally across the board, creating two electrically isolated halves.
 
@@ -143,7 +143,7 @@ Each of the 3 phases occupies approximately **80 mm × 60 mm** in the primary br
 > [!tip] Phase Symmetry
 > All three phases must be **mirror-symmetric** in layout. Use KiCad's "Replicate Layout" feature: design Phase A completely, then replicate to Phase B and Phase C with identical component placement and routing. This ensures matched parasitic inductances and balanced current sharing. See [[07-PCB-Layout/DC-DC/02-Power Loop Analysis|Power Loop Analysis]] for inductance matching requirements.
 
-## Transformer Cutout / Mounting
+## 4. Transformer Cutout / Mounting
 
 The transformer mounting strategy is the single biggest board-level mechanical decision. Two approaches are under consideration:
 
@@ -172,7 +172,7 @@ The transformer mounting strategy is the single biggest board-level mechanical d
 > [!note] Decision Pending
 > The transformer mounting method is tracked as an open issue in [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]]. Either approach must maintain the **4 kV primary-secondary isolation** requirement. See [[07-PCB-Layout/DC-DC/06-Creepage and Clearance|Creepage and Clearance]] for isolation barrier requirements around the transformer.
 
-## IPC-2152 Trace and Pour Sizing
+## 5. IPC-2152 Trace and Pour Sizing
 
 All current-carrying conductors are sized per **IPC-2152** (2009) for the specified current, copper weight, and allowable temperature rise. The target temperature rise is **30°C** above ambient for internal layers and **20°C** for external layers (more conservative for external due to proximity to other components).
 
@@ -224,7 +224,7 @@ Resistive loss check:
   P = I²R = 100² × 28.7e-6 = 0.287 W (negligible)
 ```
 
-## Via Specifications
+## 6. Via Specifications
 
 ### Power Vias (L1 ↔ L5, L1 ↔ L6)
 
@@ -255,7 +255,7 @@ Resistive loss check:
 | Spacing | ≤λ/20 at highest frequency of concern (~5 mm for 200 MHz) |
 | Placement | Perimeter of each phase, around transformer cutouts, board edges |
 
-## Layer Assignment by Zone
+## 7. Layer Assignment by Zone
 
 ### DC Bus Input Zone (0–40 mm)
 
@@ -315,7 +315,7 @@ Resistive loss check:
 | L5 | Output positive plane (connected to bus bar) |
 | L6 | Output return plane |
 
-## Design Rules Summary
+## 8. Design Rules Summary
 
 | Parameter | Value | Reference |
 |-----------|-------|-----------|
@@ -327,10 +327,18 @@ Resistive loss check:
 | Solder mask expansion | 0.05 mm per side | Standard |
 | Board edge clearance | 0.5 mm (copper), 1.0 mm (component) | Mechanical |
 
-## Cross-References
+## 9. Cross-References
 
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]] — Board summary and design targets
 - [[07-PCB-Layout/DC-DC/02-Power Loop Analysis|Power Loop Analysis]] — Why switching node pour area is minimized
 - [[07-PCB-Layout/DC-DC/04-Thermal Layout|Thermal Layout]] — Thermal via specifications and heatsink interface
 - [[07-PCB-Layout/DC-DC/06-Creepage and Clearance|Creepage and Clearance]] — Isolation barrier dimensions
 - [[07-PCB-Layout/AC-DC/01-Stack-Up and Layer Assignment|AC-DC Stack-Up]] — Identical stack-up for fabrication standardization
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

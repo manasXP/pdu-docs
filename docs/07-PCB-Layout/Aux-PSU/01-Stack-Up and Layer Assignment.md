@@ -6,13 +6,13 @@ status: draft
 
 # 01 — Stack-Up and Layer Assignment
 
-## Purpose
+## 1 Purpose
 
 This document defines the 4-layer PCB stack-up for the Aux PSU board. Unlike the power boards (AC-DC and DC-DC) where the stack-up is optimized for minimal power loop inductance, the Aux PSU stack-up is primarily driven by **isolation barrier management** — the board must physically separate 920 VDC primary-side circuitry from all secondary-side outputs with reinforced insulation per IEC 62368-1.
 
 The 4-layer stack-up provides adequate routing density for the low-complexity Aux PSU circuit while maintaining a continuous ground reference on L2 within each isolation domain.
 
-## Stack-Up Definition
+## 2 Stack-Up Definition
 
 ### Layer Table
 
@@ -46,7 +46,7 @@ The board uses 1 oz copper as the baseline, with **2 oz copper pours selectively
 > [!warning] Selective Copper Weight
 > Not all fabricators support selective copper weight on the same layer. If selective 2 oz is unavailable, use full 2 oz on L1 and L4, or use 1 oz throughout with wider pours. Confirm with the fabricator during stack-up review.
 
-## Board Zone Map
+## 3 Board Zone Map
 
 The board is divided into two primary zones by the isolation barrier, with the secondary side further subdivided by function:
 
@@ -77,7 +77,7 @@ The board is divided into two primary zones by the isolation barrier, with the s
 - Only the flyback transformer footprint and Y1 safety capacitor bridge the slot
 - No copper, solder mask, or silkscreen may cross the slot except at designated bridge points
 
-## Layer Assignments by Zone
+## 4 Layer Assignments by Zone
 
 ### Primary Side (35 mm width)
 
@@ -118,7 +118,7 @@ The board is divided into two primary zones by the isolation barrier, with the s
 | L3 | Standby regulator, feedback divider routing | STBY, V5V, SEC_GND |
 | L4 | Connector P5 routing, fan output, additional filtering | V12V, V5V, V3V3, SEC_GND |
 
-## L2 Ground Plane — Split Configuration
+## 5 L2 Ground Plane — Split Configuration
 
 Unlike the power boards where L2 is a single continuous ground plane, the Aux PSU L2 is **intentionally split** into four isolated ground zones:
 
@@ -156,7 +156,7 @@ L2 Ground Plane (view from top):
 >
 > This enforces isolation distances automatically during layout.
 
-## Via Strategy
+## 6 Via Strategy
 
 ### Power Vias (L1 ↔ L4)
 
@@ -202,7 +202,7 @@ See [[03-Thermal Layout]] for thermal via placement under dissipative components
 > [!warning] No Stitching Vias Across Isolation Barrier
 > Stitching vias must only connect copper within the **same isolation domain**. A via that connects primary-side L1 copper through L2 PRI_GND to L4 primary copper is correct. A via that connects any primary copper to any secondary copper is a catastrophic isolation failure. Verify via assignments against net classes after placement.
 
-## Impedance Considerations
+## 7 Impedance Considerations
 
 The Aux PSU has minimal controlled-impedance requirements. All signals are low-frequency (PWM controller at 65–130 kHz, feedback loop bandwidth <10 kHz):
 
@@ -212,7 +212,7 @@ The Aux PSU has minimal controlled-impedance requirements. All signals are low-f
 | Optocoupler feedback | Not controlled | L3 | Low bandwidth, <5 kHz loop |
 | Bias winding sense | Not controlled | L3 | Low current, shield with ground pour |
 
-## Design for Manufacturing (DFM) Notes
+## 8 Design for Manufacturing (DFM) Notes
 
 | Parameter | Value | Standard |
 |-----------|-------|----------|
@@ -230,7 +230,7 @@ The Aux PSU has minimal controlled-impedance requirements. All signals are low-f
 > [!tip] PCB Slot Fabrication
 > The 4 mm isolation slot must be **routed** (milled) by the fabricator, not V-scored. Specify the slot on the board outline layer (Edge.Cuts in KiCad) or as a routed cutout on the mechanical layer. The slot walls should be smooth and free of copper burrs to prevent tracking. Confirm with the fabricator that the slot meets the specified width tolerance (+/- 0.1 mm).
 
-## Cross-References
+## 9 Cross-References
 
 - [[__init]] — Board overview, rail summary, isolation domain map
 - [[02-Isolated Converter Layout]] — Transformer placement across isolation barrier
@@ -242,4 +242,4 @@ The Aux PSU has minimal controlled-impedance requirements. All signals are low-f
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: 4-layer stack-up, split ground plane, zone map, via strategy |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

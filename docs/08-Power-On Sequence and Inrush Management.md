@@ -460,3 +460,11 @@ At −30°C, inrush is ~41 A peak — **less** than the 63 A breaker continuous 
 - EN 60898-1 — MCB trip curves (Type B, C, D definitions)
 - TE Connectivity EV200 datasheet — DC contactor specifications
 - Ametherm SL32 datasheet — Power NTC thermistor R-T curves and energy ratings
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

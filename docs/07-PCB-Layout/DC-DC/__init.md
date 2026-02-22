@@ -7,7 +7,7 @@ aliases: [DC-DC Board Layout, LLC Board]
 
 # DC-DC Converter Board — LLC Resonant Converter
 
-## Overview
+## 1. Overview
 
 This subfolder documents the PCB layout design for the **DC-DC stage** of the 30 kW PDU. The board implements a **3-phase interleaved LLC resonant converter** that converts the 920 VDC bus (from the [[07-PCB-Layout/AC-DC/__init|AC-DC board]]) down to the 150–1000 VDC output required for EV battery charging.
 
@@ -20,7 +20,7 @@ The DC-DC board is the most layout-critical board in the PDU due to:
 > [!warning] Critical Design Risk
 > The LLC primary half-bridge overshoot analysis shows only **8V margin** to the 1200V MOSFET rating without RC snubbers. The snubber (10 Ω + 1 nF per MOSFET) is **mandatory** and reduces peak voltage to ~1061V, providing 139V margin. This is still tighter than the AC-DC board's PFC stage and demands the most aggressive loop minimization possible.
 
-## Board Summary
+## 2. Board Summary
 
 | Parameter | Value |
 |-----------|-------|
@@ -37,7 +37,7 @@ The DC-DC board is the most layout-critical board in the PDU due to:
 | **Switching Frequency** | ~100–200 kHz (variable, LLC resonant control) |
 | **Peak Efficiency Target** | >98% (SiC-based) |
 
-## Key Design Targets
+## 3. Key Design Targets
 
 | Metric | Target | Criticality |
 |--------|--------|-------------|
@@ -54,7 +54,7 @@ The DC-DC board is the most layout-critical board in the PDU due to:
 | Phase current symmetry | ≤2% imbalance at full load | Medium |
 | Board temperature rise | ≤40°C above ambient (forced air) | Medium |
 
-## 6-Layer Stack-Up
+## 4. 6-Layer Stack-Up
 
 The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/AC-DC/__init|AC-DC board]] to simplify fabrication and reduce cost:
 
@@ -70,7 +70,7 @@ The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/A
 > [!tip] Stack-Up Standardization
 > Using the identical 6-layer stack-up across both AC-DC and DC-DC boards enables a single PCB fabrication order with shared layer specifications, reducing lead time and cost.
 
-## Board Zone Map (Top View)
+## 5. Board Zone Map (Top View)
 
 ```
 ┌───────────────────────────────────────────────────────────┐
@@ -108,7 +108,7 @@ The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/A
 > [!note] DC Output Routing
 > The DC-DC board output connects to the [[07-PCB-Layout/Power-Entry/__init|Power Entry board]] via P3a (internal bus bar / cable). The output contactor (TE EV200) resides on the Power Entry board and isolates the vehicle-facing DC output connector (P3b). See [[07-PCB-Layout/00-Board Partitioning]] for the complete power interface chain.
 
-## Design Document Index
+## 6. Design Document Index
 
 | # | Document | Description |
 |---|----------|-------------|
@@ -119,7 +119,7 @@ The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/A
 | 5 | [[07-PCB-Layout/DC-DC/05-EMI-Aware Layout|EMI-Aware Layout]] | Switching node area, resonant tank symmetry, CM current |
 | 6 | [[07-PCB-Layout/DC-DC/06-Creepage and Clearance|Creepage and Clearance]] | Isolation barrier design, DRC net classes, IPC-2221B |
 
-## Cross-References
+## 7. Cross-References
 
 ### Topology and Component Selection
 - [[01-Topology Selection]] — LLC resonant converter topology rationale and trade-offs
@@ -133,7 +133,7 @@ The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/A
 - [[10-Mechanical Integration]] — Enclosure, heatsink mounting, bus bar routing between boards
 - [[09-Protection and Safety]] — OVP, OCP, OTP requirements that influence layout
 
-## Open Issues
+## 8. Open Issues
 
 - [ ] Transformer mounting method: through-board cutout vs. surface-mount planar — affects zone sizing
 - [ ] Resonant inductor (Lr) integration: discrete inductor vs. integrated into transformer leakage
@@ -142,6 +142,6 @@ The DC-DC board uses the **same standardized stack-up** as the [[07-PCB-Layout/A
 
 ## Revision History
 
-| Date | Rev | Author | Changes |
-|------|-----|--------|---------|
-| 2026-02-22 | 0.1 | — | Initial draft structure |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

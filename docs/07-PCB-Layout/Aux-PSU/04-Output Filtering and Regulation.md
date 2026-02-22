@@ -6,11 +6,11 @@ status: draft
 
 # 04 — Output Filtering and Regulation
 
-## Purpose
+## 1 Purpose
 
 This document specifies the output filtering and post-regulation design for each Aux PSU rail. The flyback converter produces raw rectified voltages from its multiple secondary windings; these must be filtered and regulated to meet the stringent ripple and noise specifications required by sensitive downstream loads — particularly the gate driver supplies (where ripple can cause shoot-through or gate oxide stress) and the MCU logic supply (where noise corrupts ADC readings).
 
-## Ripple Specification Summary
+## 2 Ripple Specification Summary
 
 | Rail | Voltage | Current | Max Ripple (pk-pk) | Max Noise (20 MHz BW) | Load Type | Criticality |
 |------|---------|---------|-------------------|----------------------|-----------|-------------|
@@ -26,7 +26,7 @@ This document specifies the output filtering and post-regulation design for each
 > [!tip] Ripple vs. Noise Distinction
 > **Ripple** is the fundamental switching frequency component (65–130 kHz) and its harmonics. **Noise** includes all high-frequency content up to 20 MHz, including switching transient spikes and ringing. The output filter must address both — the LC filter handles fundamental ripple while ceramic decoupling caps handle high-frequency noise.
 
-## Per-Rail Filter Design
+## 3 Per-Rail Filter Design
 
 ### +18 V Gate Drive Rails (VDRV_AC, VDRV_DC)
 
@@ -259,7 +259,7 @@ The flyback transformer's auxiliary (bias) winding on the primary side normally 
 
 Placement: Near the transformer secondary side, within the logic domain (SEC_GND).
 
-## Load Transient Response
+## 4 Load Transient Response
 
 ### Gate Driver Transient
 
@@ -290,7 +290,7 @@ This is clearly excessive — the 220 uF cap cannot support 10 A for 10 ms witho
 > [!warning] Fan Inrush Current
 > Do not connect the fan directly to the +12 V output. Use the controller's PWM output through a MOSFET to soft-start the fan. The +12 V_FAN rail on P5 should feed through a low-side MOSFET on the controller board, controlled by a PWM signal. This limits inrush and allows variable fan speed control based on temperature. See [[07-PCB-Layout/Controller/__init]] for fan drive circuit details.
 
-## Output Connector Decoupling
+## 5 Output Connector Decoupling
 
 The final line of defense for output noise is a decoupling capacitor placed **at the output connector pins** — as close to P4 and P5 as physically possible:
 
@@ -314,7 +314,7 @@ The final line of defense for output noise is a decoupling capacitor placed **at
 | 3 | GND | — | — | Return pin |
 | 4 | +12 V_FAN | 100 nF X7R + 22 uF X7R | 0603 + 1210 | Within 5 mm of pin 4 pad |
 
-## Design Verification Checklist
+## 6 Design Verification Checklist
 
 - [ ] All output capacitors placed within specified distance of connectors and LDOs
 - [ ] LC filter resonant frequencies verified below switching frequency for each rail
@@ -326,7 +326,7 @@ The final line of defense for output noise is a decoupling capacitor placed **at
 - [ ] Ground returns for each domain are separate (no shared current paths between domains)
 - [ ] Decoupling caps at connector pins verified per placement rules
 
-## Cross-References
+## 7 Cross-References
 
 - [[__init]] — Output rail summary, isolation domains
 - [[02-Isolated Converter Layout]] — Transformer secondaries, rectifier placement
@@ -339,4 +339,4 @@ The final line of defense for output noise is a decoupling capacitor placed **at
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: per-rail filter design, ripple analysis, LDO selection, transient analysis |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

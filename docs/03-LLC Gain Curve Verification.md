@@ -160,3 +160,11 @@ The simulation confirms clean operation across the primary charging range. The 3
 
 > [!success] Overall Verdict
 > The resonant tank design (Lr = 43 µH, Cr = 26 nF, Lm = 258 µH) is validated for the full 300–1000 V constant-power operating range. The 1000 V ZVS issue has been resolved by extending the PFC bus voltage to 700–920 V. All affected documents ([[01-Topology Selection]], [[02-Magnetics Design]]) have been updated.
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

@@ -8,7 +8,7 @@ status: draft
 
 This document covers signal integrity considerations for the Controller Board. The board carries three classes of signals with distinct routing requirements: **analog sense inputs** (high accuracy, low noise), **HRTIM PWM outputs** (high speed, matched timing), and **digital communication buses** (controlled impedance). Each class is addressed below with specific layout rules.
 
-## Analog Sense Input Routing
+## 1. Analog Sense Input Routing
 
 The controller board receives six analog signals from the power stages via the P3 connector. These signals represent current and voltage measurements that directly affect control loop accuracy. A 1% error in sensing translates to a 1% error in output regulation.
 
@@ -97,7 +97,7 @@ Each OPA2376 op-amp has a GND guard ring surrounding its footprint:
 > [!tip] Star-ground for analog reference
 > The VREF+ pin of the STM32 connects to the analog 3.3 V supply (3.3VA) through a dedicated trace. The GND return for VREF is routed as a separate trace from the VSSA pin back to the analog ground star point — the single point where analog and digital ground domains meet on L2. This star point should be located near the Aux PSU power entry connector P5.
 
-## HRTIM PWM Output Routing
+## 2. HRTIM PWM Output Routing
 
 The STM32G474 HRTIM peripheral generates 12 PWM channels (6 for the Vienna PFC, 6 for the LLC DC-DC). These signals control SiC MOSFET gate drivers on the power boards via harness cables.
 
@@ -155,7 +155,7 @@ Purpose:
 | Layer | L1 exclusively |
 | Reference plane | L2 GND (continuous, no breaks) |
 
-## Current Sense Signal Conditioning Layout
+## 3. Current Sense Signal Conditioning Layout
 
 The current sense circuit is the most noise-sensitive analog subsystem. Layout for each current sense channel:
 
@@ -196,7 +196,7 @@ To achieve 12-bit accuracy, total input-referred noise (including layout-induced
 > [!warning] PCB pickup dominance
 > The PCB layout contribution dominates the noise budget. Poor routing (long traces, missing guard traces, crossing digital signals) can easily exceed the 200 µV budget. Follow all analog routing rules strictly.
 
-## SPI Bus Routing (QCA7000 Interface)
+## 4. SPI Bus Routing (QCA7000 Interface)
 
 The SPI interface to the QCA7000 PLC modem runs at up to 24 MHz (STM32G474 SPI maximum). Layout considerations:
 
@@ -211,7 +211,7 @@ The SPI interface to the QCA7000 PLC modem runs at up to 24 MHz (STM32G474 SPI m
 - Keep SPI traces at least 2 mm from analog traces
 - Place a 100 nF bypass capacitor at the QCA7000 VDD pin within 1 mm
 
-## MCU Crystal / Oscillator Layout
+## 5. MCU Crystal / Oscillator Layout
 
 The STM32G474RE uses an 8 MHz crystal (HSE) with a PLL to generate the 170 MHz system clock. Crystal layout is critical for reliable startup and low jitter.
 
@@ -228,16 +228,16 @@ The STM32G474RE uses an 8 MHz crystal (HSE) with a PLL to generate the 170 MHz s
 > [!tip] Crystal ground pad
 > If the crystal has a metal case or ground pad, connect it to L2 GND with a via directly under the crystal. This provides shielding and reduces EMI from the oscillator.
 
-## Cross-References
+## 6. Cross-References
 
-- [[01-Stack-Up and Layer Assignment]] — layer definitions and impedance targets
+- [[07-PCB-Layout/Controller/01-Stack-Up and Layer Assignment]] — layer definitions and impedance targets
 - [[03-Communication Interfaces]] — CAN differential pair routing details
 - [[04-Power Distribution]] — analog vs. digital power separation
 - [[05-EMC and Grounding]] — guard rings, ground strategy
 - [[06-Firmware Architecture]] — ADC sampling configuration, HRTIM timer setup
 - [[__init|Controller Board Overview]] — board zoning and connector pinout
 
-## Design Checklist
+## 7. Design Checklist
 
 | Item | Check |
 |---|---|
@@ -254,6 +254,6 @@ The STM32G474RE uses an 8 MHz crystal (HSE) with a PLL to generate the 170 MHz s
 
 ## Revision History
 
-| Rev | Date | Author | Notes |
-|---|---|---|---|
-| 0.1 | 2026-02-22 | — | Initial draft |
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

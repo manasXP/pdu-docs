@@ -6,13 +6,13 @@ status: draft
 
 # 03 — Thermal Layout
 
-## Purpose
+## 1 Purpose
 
 This document specifies the thermal design aspects of the Aux PSU board. Unlike the main power boards (AC-DC and DC-DC) which dissipate hundreds of watts and require dedicated heatsinks with forced-air cooling, the Aux PSU dissipates only **5–10 W total**. This modest dissipation level allows the board to rely on **natural convection and PCB conduction** to the enclosure chassis, supplemented by incidental airflow from the main system fan.
 
 Despite the low total dissipation, individual hot spots — particularly the primary MOSFET and secondary rectifier diodes — require careful thermal layout to stay within safe operating limits at the 55°C ambient maximum.
 
-## Thermal Budget Overview
+## 2 Thermal Budget Overview
 
 ### Power Dissipation Breakdown
 
@@ -46,7 +46,7 @@ Despite the low total dissipation, individual hot spots — particularly the pri
 | PWM controller U1 | SOIC-8 | 150°C | ≤100°C | 0.3 W |
 | Electrolytic output caps | Radial | 105°C (case) | ≤85°C | ESR loss only |
 
-## Cooling Strategy — Natural Convection + Conduction
+## 3 Cooling Strategy — Natural Convection + Conduction
 
 ### No Dedicated Forced Air
 
@@ -101,7 +101,7 @@ $$T_j = 55 + 1.0 \times 50 = 105°C \quad \text{(meets target)}$$
 > [!warning] LDO Thermal Pads Are Mandatory
 > Both the +5 V and +3.3 V LDOs **must** have dedicated copper pour thermal pads on L1, connected through thermal vias to L4 bottom-side pours. Without these pours, the SOT-223 packages will overheat at 55°C ambient. Minimum copper pour: 4 cm² per LDO.
 
-## Thermal Via Arrays
+## 4 Thermal Via Arrays
 
 ### Under Primary MOSFET (Q1) — TO-263
 
@@ -157,7 +157,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | L1 copper pour | 4 cm² minimum |
 | L4 copper pour | 4 cm² minimum, matching |
 
-## Copper Pour Heat Spreading
+## 5 Copper Pour Heat Spreading
 
 ### Primary Side Thermal Pours
 
@@ -180,7 +180,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 > [!tip] Check LDO Tab Connection
 > Some LDOs connect the tab (exposed pad) to the output pin, others to the ground pin. Verify the specific LDO datasheet before assigning the thermal pour net. Connecting the tab to the wrong net will short the output.
 
-## Operating Temperature Analysis at 55°C Ambient
+## 6 Operating Temperature Analysis at 55°C Ambient
 
 ### Thermal Summary Table
 
@@ -199,7 +199,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 > [!warning] Chassis Thermal Path is Mandatory for Q1
 > Without direct chassis conduction through a mounting standoff, the primary MOSFET Q1 exceeds its target temperature by 35°C at worst-case ambient. The layout **must** include a copper thermal path from Q1 to a board mounting standoff. This is a firm design constraint, not optional.
 
-## Component Derating Guidelines
+## 7 Component Derating Guidelines
 
 ### Derating at 55°C Ambient
 
@@ -222,7 +222,7 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 | Q1 (1200 V SiC, Rdson = 1.0 ohm at 25°C) | 1.0 ohm | 1.5 ohm at 150°C Tj | Recalculate conduction loss |
 | LDO (1 A, SOT-223) | 1 A at 25°C | Check SOA at Tj = 105°C | May need to limit to 0.8 A |
 
-## Thermal Design Verification
+## 8 Thermal Design Verification
 
 ### Pre-Layout Checks
 
@@ -239,10 +239,10 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 - [ ] Board mounting standoff holes have thermal copper connection to nearest hot component
 - [ ] No high-dissipation components placed adjacent to electrolytic capacitors
 
-## Cross-References
+## 9 Cross-References
 
 - [[__init]] — Board overview, power budget
-- [[01-Stack-Up and Layer Assignment]] — Copper weights, layer assignments
+- [[07-PCB-Layout/Aux-PSU/01-Stack-Up and Layer Assignment]] — Copper weights, layer assignments
 - [[02-Isolated Converter Layout]] — Primary MOSFET and rectifier placement
 - [[04-Output Filtering and Regulation]] — LDO selection and dropout losses
 - [[05-Safety and Isolation]] — Conformal coating considerations for thermal management
@@ -252,4 +252,4 @@ For SMA/SMB package rectifiers dissipating 0.4–0.8 W each:
 
 | Rev | Date | Author | Changes |
 |-----|------|--------|---------|
-| A | 2026-02-22 | — | Initial draft: dissipation budget, natural convection design, thermal vias, derating |
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

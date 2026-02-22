@@ -424,3 +424,11 @@ At 47 nF per line: I_leak ≈ **10.2 mA** — at the industrial limit.
 - [ETH Zurich: EMI Filter Design for 10 kW Three-Phase/Level PWM Rectifier](https://www.ams-publications.ee.ethz.ch/uploads/tx_ethpublications/06_EMI_Filter_Design.pdf)
 - [SiC heatsink parasitic capacitance and EMI — Wolfspeed application note](https://assets.wolfspeed.com/uploads/2024/12/Wolfspeed_PRD-08907_Mitigating_EMI_with_SiC_Solutions_in_Renewable_Energy_and_Grid-Connected_Power_Converters.pdf)
 - [Transformer interwinding parasitic capacitance models — Shuo Wang et al.](https://peeprlgator.github.io/Shuo.Wang/publicationattachments/Two-Capacitor%20Transformer%20Winding%20Capacitance%20Models%20for%20Common-Mode%20EMI%20Noise%20Analysis%20in%20Isolated%20DC%E2%80%93DC%20Converters.pdf)
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

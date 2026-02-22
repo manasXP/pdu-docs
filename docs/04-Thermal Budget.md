@@ -370,3 +370,11 @@ All SiC devices operate well within their Tj_max limits. At Tj = 133°C (worst-c
 - ST STPSC20H065CW datasheet — LLC diode thermal data
 - JEDEC JESD51 — Thermal resistance measurement standards
 - Bergquist GP3000S datasheet — Thermal interface material
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

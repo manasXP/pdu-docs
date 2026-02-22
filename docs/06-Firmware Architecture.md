@@ -568,3 +568,11 @@ ISO 15118-2 (AC/DC charging) defines `CurrentDemand` and `PowerDelivery` message
 - ST STM32G4 HRTIM Training — [Product Training PDF](https://www.st.com/resource/en/product_training/STM32G4-WDG_TIMERS-High_Resolution_Timer_HRTIM.pdf)
 - ST AN5346 — [STM32G4 ADC Use Tips](https://www.st.com/resource/en/application_note/an5346-stm32g4-adc-use-tips-and-recommendations-stmicroelectronics.pdf)
 - OCA — [Using ISO 15118 Plug & Charge with OCPP 1.6](https://openchargealliance.org/wp-content/uploads/2023/11/ocpp_1_6_ISO_15118_v10.pdf)
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

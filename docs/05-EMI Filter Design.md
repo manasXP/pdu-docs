@@ -425,3 +425,11 @@ Alternative: active pre-charge using the PFC MOSFETs in linear mode during start
 - EPCOS/TDK B32924 — X2 capacitor datasheet
 - Microchip MSCSICPFC/REF5 — 30 kW SiC Vienna PFC reference design (EMI filter section)
 - Wolfspeed PRD-08907 — Mitigating EMI with SiC in grid-connected converters
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

@@ -6,11 +6,11 @@ status: draft
 
 # 03 — Gate Driver Layout
 
-## Purpose
+## 1. Purpose
 
 This document specifies the PCB layout requirements for the gate drivers on the DC-DC LLC resonant converter board. The board uses **STGAP2SiC** isolated gate drivers for all 12 SiC MOSFETs (6 primary, 6 secondary). The LLC board has additional layout complexity compared to the [[07-PCB-Layout/AC-DC/03-Gate Driver Layout|AC-DC board]] due to the **primary-secondary isolation barrier** that must not be breached by any copper on any layer.
 
-## Gate Driver IC Summary
+## 2. Gate Driver IC Summary
 
 | Parameter | Value |
 |-----------|-------|
@@ -38,7 +38,7 @@ This document specifies the PCB layout requirements for the gate drivers on the 
 > [!warning] Primary High-Side Driver — Maximum dV/dt Stress
 > The primary high-side drivers sit on the switching node, which swings the full 920V bus at dV/dt rates of 50–100 kV/µs. This is the most demanding position for the STGAP2SiC's CMTI (Common Mode Transient Immunity). The 150 kV/µs rating provides margin, but only if the layout minimizes parasitic capacitive coupling from the switching node to the driver's input side.
 
-## Gate Loop Design
+## 3. Gate Loop Design
 
 ### Gate Loop Budget
 
@@ -125,7 +125,7 @@ Add component pads and vias: ~1-2 nH
 Total gate loop: ~2-3 nH → well within 5 nH budget
 ```
 
-## Driver Placement — Primary Side
+## 4. Driver Placement — Primary Side
 
 ### Physical Layout
 
@@ -176,7 +176,7 @@ The STGAP2SiC has internal galvanic isolation between its input (logic) side and
 > [!note] PCB Slot Under Each Driver
 > Each of the 12 STGAP2SiC ICs requires a **PCB slot** between the input-side pins and output-side pins. This slot prevents surface tracking at high dV/dt. The slot is typically 3 mm wide × 12 mm long (spanning the IC width). Total slot area per driver: ~36 mm². For 12 drivers: 432 mm² of board area lost to slots — factor this into zone allocation.
 
-## Driver Placement — Secondary Side
+## 5. Driver Placement — Secondary Side
 
 The secondary gate drivers are placed identically to the primary but operate at lower voltage stress (up to 500V reflected vs. 920V bus). The layout rules are the same, but with slightly relaxed urgency:
 
@@ -192,7 +192,7 @@ The secondary gate drivers are placed identically to the primary but operate at 
 | Rg_off | 1.5 Ω | 1.0 Ω |
 | PCB slot under IC | Mandatory | Mandatory |
 
-## Primary-Secondary Isolation Barrier
+## 6. Primary-Secondary Isolation Barrier
 
 ### The Barrier Concept
 
@@ -251,7 +251,7 @@ These two GND domains must **never be directly connected** on the PCB. They are 
 - Y-capacitors (safety-rated, connecting primary GND to secondary GND for CM noise filtering)
 - The transformer parasitic capacitance (unintentional, minimized)
 
-## Driver Decoupling
+## 7. Driver Decoupling
 
 ### Per-Driver Decoupling (Output Side)
 
@@ -281,7 +281,7 @@ Priority 4: C5, C6 — at input-side pins (less critical, lower current)
 > [!tip] Shared Isolated Power Supply
 > Each STGAP2SiC output side needs an isolated 15–20V supply. For the primary side, a single isolated DC-DC converter (e.g., Murata MEJ2 series) can supply both high-side and low-side drivers through separate LDOs. This reduces component count but requires careful routing to avoid ground loops between the high-side and low-side driver GND references.
 
-## Driver Thermal Management
+## 8. Driver Thermal Management
 
 ### Power Dissipation per Driver
 
@@ -323,7 +323,7 @@ T_j = T_amb + P × Rth_total = 55 + 0.414 × 55 = 77.8°C
 T_j_max (STGAP2SiC) = 150°C → adequate margin
 ```
 
-## DESAT (Desaturation) Detection Layout
+## 9. DESAT (Desaturation) Detection Layout
 
 The STGAP2SiC integrates DESAT detection for short-circuit protection. Layout considerations:
 
@@ -348,7 +348,7 @@ The STGAP2SiC integrates DESAT detection for short-circuit protection. Layout co
 > [!warning] DESAT Routing on Primary High-Side
 > The DESAT sense trace on the primary high-side drivers connects to the 920V DC bus through the MOSFET drain. This trace carries minimal current but sits at lethal voltage. Route on L3 with adequate creepage to adjacent low-voltage traces. Use a keep-out zone of ≥4 mm around the DESAT trace where it connects to the drain pad.
 
-## Anti-Parallel Diode Considerations
+## 10. Anti-Parallel Diode Considerations
 
 SiC MOSFETs have a relatively poor body diode (high V_f, slow recovery compared to Si). For the LLC topology:
 
@@ -357,7 +357,7 @@ SiC MOSFETs have a relatively poor body diode (high V_f, slow recovery compared 
 
 No external anti-parallel diodes are typically needed for LLC topology, but verify with the specific MOSFET selected. If added, the diode must be placed within 3 mm of the MOSFET D-S pads to be effective.
 
-## Layout Checklist
+## 11. Layout Checklist
 
 - [ ] All 12 STGAP2SiC ICs placed with output side facing MOSFET gate pins
 - [ ] PCB slot (3 mm) under each driver IC between input and output pins
@@ -373,10 +373,18 @@ No external anti-parallel diodes are typically needed for LLC topology, but veri
 - [ ] Y-capacitors placed at barrier for CM filtering
 - [ ] Kelvin source (pin 4) used for all TO-247-4L gate returns
 
-## Cross-References
+## 12. Cross-References
 
 - [[07-PCB-Layout/DC-DC/__init|DC-DC Board Overview]] — Board-level context
 - [[07-PCB-Layout/DC-DC/02-Power Loop Analysis|Power Loop Analysis]] — Power loop interaction with gate loop
 - [[07-PCB-Layout/DC-DC/06-Creepage and Clearance|Creepage and Clearance]] — Isolation barrier and driver creepage
 - [[07-PCB-Layout/AC-DC/03-Gate Driver Layout|AC-DC Gate Driver Layout]] — Same STGAP2SiC IC, similar layout approach
 - [[SiC Device Thermal Parameters]] — MOSFET gate charge and switching characteristics
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |

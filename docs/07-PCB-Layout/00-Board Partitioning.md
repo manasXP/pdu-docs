@@ -9,7 +9,7 @@ status: draft
 > [!summary] Overview
 > The 30 kW PDU is split into **5 separate PCBs** interconnected by power bus bars and signal harnesses. This document defines the rationale for the split, the physical interfaces between boards, and the connector/harness specifications.
 
-## Rationale for 5-Board Architecture
+## 1. Rationale for 5-Board Architecture
 
 | Driver | Single-Board Problem | Multi-Board Solution |
 |--------|----------------------|----------------------|
@@ -20,7 +20,7 @@ status: draft
 | Wear item isolation | Relays (100k ops) and contactors (10k ops) mixed with long-life power electronics complicates replacement | Power Entry board consolidates all electromechanical wear items onto one replaceable PCB |
 | Stacking modularity | 5-module 150 kW system needs identical power stages | Power boards are standardized; controller can vary per application |
 
-## Board Summary
+## 2. Board Summary
 
 | PCB | Function | Layer Count | Estimated Size (mm) | Cu Weight |
 |-----|----------|-------------|----------------------|-----------|
@@ -30,7 +30,7 @@ status: draft
 | **Controller** | STM32G474RE, CAN bus, analog signal conditioning, OCPP/ISO 15118 | 4 | 120 × 100 | 1 oz |
 | **Aux PSU** | Isolated supplies — gate drives (+18 V/−5 V), logic (3.3 V/5 V), fan (12 V), standby | 4 | 100 × 80 | 1 oz (2 oz for power rails) |
 
-## Mechanical Arrangement
+## 3. Mechanical Arrangement
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
@@ -57,7 +57,7 @@ status: draft
 > [!note] Power Entry Board Placement
 > The Power Entry board sits at the enclosure edge with AC input (P1a) and DC output (P3b) connectors facing outward through panel cutouts. Internal connections (P1b to AC-DC, P3a from DC-DC, S4 from Controller) route inward. This keeps high-current external cabling short and provides direct access for connector/relay/contactor replacement.
 
-## Power Interfaces
+## 4. Power Interfaces
 
 ### P1a: AC Mains → Power Entry Board (External Input)
 
@@ -137,7 +137,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 | 3 | GND | Logic ground | — |
 | 4 | +12 V_FAN | 12 V, 2 A (fan supply) | — |
 
-## Signal Interfaces
+## 5. Signal Interfaces
 
 ### S1: Controller → AC-DC Board (Control Harness)
 
@@ -195,7 +195,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 
 > [!note] The S4 harness carries only low-current logic signals (pins 1–5, 7–8) and the 24 VDC coil supply (pin 6, ≤0.5 A). The N-channel MOSFET coil drivers reside on the Power Entry board, keeping high-current relay/contactor coil wiring local. See [[07-PCB-Layout/Power-Entry/__init|Power Entry Board]] for driver circuit details.
 
-## Harness Design Rules
+## 6. Harness Design Rules
 
 > [!warning] EMI-Critical Routing
 > Signal harnesses between controller and power boards carry HRTIM PWM signals (up to 500 kHz fundamental) adjacent to analog sense signals. Proper harness design is essential.
@@ -207,7 +207,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 5. **Separation:** Maintain ≥20 mm between power bus bar and signal harness bundles
 6. **Connector keying:** Each harness uses a unique connector keying to prevent mis-mating
 
-## Grounding Strategy
+## 7. Grounding Strategy
 
 ```
                     ┌─────────────┐
@@ -233,7 +233,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 - No ground loops between boards — star topology from chassis PE
 - Analog sense returns routed as dedicated wires in signal harness (not through power ground)
 
-## Design Verification Checklist
+## 8. Design Verification Checklist
 
 - [ ] Bus bar inductance P2 measured or simulated <5 nH
 - [ ] All connector voltage ratings exceed working voltage + 20% margin
@@ -242,7 +242,7 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 - [ ] Connector keying prevents all possible mis-mating scenarios
 - [ ] Thermal interface between boards and chassis validated (no air gaps)
 
-## Related Documents
+## 9. Related Documents
 
 - [[07-PCB-Layout/Power-Entry/__init|Power Entry Board]] — NTC, bypass relay, output contactor, external connectors
 - [[01-Topology Selection]] — Circuit topology that defines the power stages
@@ -251,3 +251,11 @@ DC output is routed through the output contactor (TE EV200) on the [[07-PCB-Layo
 - [[05-EMI Filter Design]] — EMI filter on AC-DC board, separation rules
 - [[06-Firmware Architecture]] — Control signals mapped to harness pinouts
 - [[08-Power-On Sequence and Inrush Management]] — Startup sequence, NTC/relay/contactor specifications
+
+---
+
+## Revision History
+
+| Rev | Date | Author | Changes |
+|-----|------|--------|---------|
+| 0.1 | 2026-02-22 | Manas Pradhan | Initial draft |
